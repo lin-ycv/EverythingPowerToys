@@ -9,12 +9,14 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Controls;
 using ManagedCommon;
 using Microsoft.PowerToys.Settings.UI.Library;
 using Wox.Infrastructure;
 using Wox.Plugin;
 using Wox.Plugin.Logger;
+using static Community.PowerToys.Run.Plugin.Everything.NativeMethods;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
@@ -30,6 +32,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         private bool disposedValue;
 
         private string _warningIconPath;
+        private ErrorCode errorCode;
 
         private string IconPath { get; set; }
 
@@ -42,7 +45,25 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         public List<Result> Query(Query query)
         {
-            return new List<Result>();
+            List<Result> results = new List<Result>();
+            uint major = Everything_GetMajorVersion();
+            uint minor = Everything_GetMinorVersion();
+            uint rev = Everything_GetRevision();
+            if (major == 0 && minor == 0 && rev == 0 && (ErrorCode)Everything_GetLastError() != ErrorCode.EVERYTHING_OK)
+            {
+                errorCode = (ErrorCode)Everything_GetLastError();
+                results.Add(new Result
+                {
+                    Title = Properties.Resources.Everything_not_running,
+                    IcoPath = _warningIconPath,
+                });
+            }
+            else
+            {
+                errorCode = ErrorCode.EVERYTHING_OK;
+            }
+
+            return results;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We want to keep the process alive but will log the exception")]
@@ -51,23 +72,15 @@ namespace Community.PowerToys.Run.Plugin.Everything
             List<Result> results = new List<Result>();
             if (query != null && !string.IsNullOrEmpty(query.Search))
             {
-                var searchQuery = query.Search;
+                var searchQuery = query.RawQuery;
 
                 var regexMatch = Regex.Match(searchQuery, reservedStringPattern);
 
-                if (!regexMatch.Success)
+                if (errorCode == ErrorCode.EVERYTHING_OK && !regexMatch.Success)
                 {
                     try
                     {
-                        results.AddRange(NativeMethods.EverythingSearch(searchQuery));
-                    }
-                    catch (ApplicationException)
-                    {
-                        results.Add(new Result
-                        {
-                            Title = Properties.Resources.Everything_not_running,
-                            IcoPath = _warningIconPath,
-                        });
+                        results.AddRange(EverythingSearch(searchQuery));
                     }
                     catch (Exception e)
                     {
