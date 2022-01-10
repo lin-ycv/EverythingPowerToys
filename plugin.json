@@ -1,0 +1,13 @@
+{
+  "ID": "A86867E2D932459CBD77D176373DD657",
+  "ActionKeyword": "@",
+  "IsGlobal": true,
+  "Name": "Everything",
+  "Author": "Yu Chieh (Victor) Lin",
+  "Version": "0.1.0",
+  "Language": "csharp",
+  "Website": "https://aka.ms/powertoys",
+  "ExecuteFileName": "Community.PowerToys.Run.Plugin.Everything.dll",
+  "IcoPathDark": "Images\\Everything.dark.png",
+  "IcoPathLight": "Images\\Everything.light.png"
+}
