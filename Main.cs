@@ -14,13 +14,14 @@ using System.Windows.Controls;
 using ManagedCommon;
 using Microsoft.PowerToys.Settings.UI.Library;
 using Wox.Infrastructure;
+using Wox.Infrastructure.Storage;
 using Wox.Plugin;
 using Wox.Plugin.Logger;
 using static Community.PowerToys.Run.Plugin.Everything.NativeMethods;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
-    public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin
+    public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu
     {
         private readonly string reservedStringPattern = @"^[\/\\\$\%]+$|^.*[<>].*$";
 
@@ -28,17 +29,17 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         public string Description => Properties.Resources.plugin_description;
 
-        private PluginInitContext _context;
-        private bool disposedValue;
-
-        private string _warningIconPath;
-        private ErrorCode errorCode;
-
         private string IconPath { get; set; }
+
+        private IContextMenu _contextMenuLoader;
+        private PluginInitContext _context;
+        private bool disposed;
+        private string _warningIconPath;
 
         public void Init(PluginInitContext context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _context = context;
+            _contextMenuLoader = new ContextMenuLoader(context);
             _context.API.ThemeChanged += OnThemeChanged;
             UpdateIconPath(_context.API.GetCurrentTheme());
         }
@@ -46,41 +47,39 @@ namespace Community.PowerToys.Run.Plugin.Everything
         public List<Result> Query(Query query)
         {
             List<Result> results = new List<Result>();
-            uint major = Everything_GetMajorVersion();
-            uint minor = Everything_GetMinorVersion();
-            uint rev = Everything_GetRevision();
-            if (major == 0 && minor == 0 && rev == 0 && (ErrorCode)Everything_GetLastError() != ErrorCode.EVERYTHING_OK)
-            {
-                errorCode = (ErrorCode)Everything_GetLastError();
-                results.Add(new Result
-                {
-                    Title = Properties.Resources.Everything_not_running,
-                    IcoPath = _warningIconPath,
-                });
-            }
-            else
-            {
-                errorCode = ErrorCode.EVERYTHING_OK;
-            }
-
             return results;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We want to keep the process alive but will log the exception")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Already validated")]
         public List<Result> Query(Query query, bool isFullQuery)
         {
             List<Result> results = new List<Result>();
-            if (query != null && !string.IsNullOrEmpty(query.Search))
+            if (!string.IsNullOrEmpty(query.Search))
             {
-                var searchQuery = query.RawQuery;
+                var searchQuery = query.Search;
 
                 var regexMatch = Regex.Match(searchQuery, reservedStringPattern);
 
-                if (errorCode == ErrorCode.EVERYTHING_OK && !regexMatch.Success)
+                if (!regexMatch.Success)
                 {
                     try
                     {
-                        results.AddRange(EverythingSearch(searchQuery));
+                        var found = EverythingSearch(searchQuery);
+                        if (found.ElementAt(0).Title == "!")
+                        {
+                            results.Add(new Result()
+                            {
+                                Title = Properties.Resources.Everything_not_running,
+                                SubTitle = Properties.Resources.Everything_ini,
+                                IcoPath = _warningIconPath,
+                                QueryTextDisplay = Properties.Resources.Everything_url,
+                            });
+                        }
+                        else
+                        {
+                            results.AddRange(found);
+                        }
                     }
                     catch (Exception e)
                     {
@@ -111,15 +110,20 @@ namespace Community.PowerToys.Run.Plugin.Everything
             }
         }
 
+        public List<ContextMenuResult> LoadContextMenus(Result selectedResult)
+        {
+            return _contextMenuLoader.LoadContextMenus(selectedResult);
+        }
+
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!disposed)
             {
                 if (disposing)
                 {
                 }
 
-                disposedValue = true;
+                disposed = true;
             }
         }
 

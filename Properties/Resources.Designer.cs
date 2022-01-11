@@ -61,11 +61,74 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fail to set text in clipboard.
+        /// </summary>
+        public static string clipboard_failed {
+            get {
+                return ResourceManager.GetString("clipboard_failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy path (Ctrl+C).
+        /// </summary>
+        public static string copy_path {
+            get {
+                return ResourceManager.GetString("copy_path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install Everything if not installed.
+        /// </summary>
+        public static string Everything_ini {
+            get {
+                return ResourceManager.GetString("Everything_ini", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Everything is not running.
         /// </summary>
         public static string Everything_not_running {
             get {
                 return ResourceManager.GetString("Everything_not_running", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.voidtools.com/downloads/.
+        /// </summary>
+        public static string Everything_url {
+            get {
+                return ResourceManager.GetString("Everything_url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fail to open folder at.
+        /// </summary>
+        public static string folder_open_failed {
+            get {
+                return ResourceManager.GetString("folder_open_failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open containing folder (Ctrl+Shift+E).
+        /// </summary>
+        public static string open_containing_folder {
+            get {
+                return ResourceManager.GetString("open_containing_folder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open path in console (Ctrl+Shift+C).
+        /// </summary>
+        public static string open_in_console {
+            get {
+                return ResourceManager.GetString("open_in_console", resourceCulture);
             }
         }
         
@@ -84,6 +147,15 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         public static string plugin_name {
             get {
                 return ResourceManager.GetString("plugin_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run as administrator (Ctrl+Shift+Enter).
+        /// </summary>
+        public static string run_as_admin {
+            get {
+                return ResourceManager.GetString("run_as_admin", resourceCulture);
             }
         }
     }

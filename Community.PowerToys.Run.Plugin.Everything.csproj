@@ -96,7 +96,7 @@
 
   <ItemGroup>
     <None Update="Everything64.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Images\Everything.dark.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -104,6 +104,16 @@
     <None Update="Images\Everything.light.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Images\Warning.dark.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\Warning.light.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;" />
+  </Target>
 
 </Project>

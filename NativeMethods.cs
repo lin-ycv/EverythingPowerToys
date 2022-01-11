@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.IO.Abstractions;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -18,63 +20,69 @@ namespace Community.PowerToys.Run.Plugin.Everything
     {
         internal enum ErrorCode
         {
-            EVERYTHING_OK,
-            EVERYTHING_ERROR_MEMORY,
-            EVERYTHING_ERROR_IPC,
-            EVERYTHING_ERROR_REGISTERCLASSEX,
-            EVERYTHING_ERROR_CREATEWINDOW,
-            EVERYTHING_ERROR_CREATETHREAD,
-            EVERYTHING_ERROR_INVALIDINDEX,
-            EVERYTHING_ERROR_INVALIDCALL,
+            OK,
+            ERROR_MEMORY,
+            ERROR_IPC,
+            ERROR_REGISTERCLASSEX,
+            ERROR_CREATEWINDOW,
+            ERROR_CREATETHREAD,
+            ERROR_INVALIDINDEX,
+            ERROR_INVALIDCALL,
         }
 
-        internal const int EVERYTHING_REQUEST_FILE_NAME = 0x00000001;
-        internal const int EVERYTHING_REQUEST_PATH = 0x00000002;
-        internal const int EVERYTHING_REQUEST_FULL_PATH_AND_FILE_NAME = 0x00000004;
-        internal const int EVERYTHING_REQUEST_EXTENSION = 0x00000008;
-        internal const int EVERYTHING_REQUEST_SIZE = 0x00000010;
-        internal const int EVERYTHING_REQUEST_DATE_CREATED = 0x00000020;
-        internal const int EVERYTHING_REQUEST_DATE_MODIFIED = 0x00000040;
-        internal const int EVERYTHING_REQUEST_DATE_ACCESSED = 0x00000080;
-        internal const int EVERYTHING_REQUEST_ATTRIBUTES = 0x00000100;
-        internal const int EVERYTHING_REQUEST_FILE_LIST_FILE_NAME = 0x00000200;
-        internal const int EVERYTHING_REQUEST_RUN_COUNT = 0x00000400;
-        internal const int EVERYTHING_REQUEST_DATE_RUN = 0x00000800;
-        internal const int EVERYTHING_REQUEST_DATE_RECENTLY_CHANGED = 0x00001000;
-        internal const int EVERYTHING_REQUEST_HIGHLIGHTED_FILE_NAME = 0x00002000;
-        internal const int EVERYTHING_REQUEST_HIGHLIGHTED_PATH = 0x00004000;
-        internal const int EVERYTHING_REQUEST_HIGHLIGHTED_FULL_PATH_AND_FILE_NAME = 0x00008000;
+        internal enum Request
+        {
+            FILE_NAME = 0x00000001,
+            PATH = 0x00000002,
+            FULL_PATH_AND_FILE_NAME = 0x00000004,
+            EXTENSION = 0x00000008,
+            SIZE = 0x00000010,
+            DATE_CREATED = 0x00000020,
+            DATE_MODIFIED = 0x00000040,
+            DATE_ACCESSED = 0x00000080,
+            ATTRIBUTES = 0x00000100,
+            FILE_LIST_FILE_NAME = 0x00000200,
+            RUN_COUNT = 0x00000400,
+            DATE_RUN = 0x00000800,
+            DATE_RECENTLY_CHANGED = 0x00001000,
+            HIGHLIGHTED_FILE_NAME = 0x00002000,
+            HIGHLIGHTED_PATH = 0x00004000,
+            HIGHLIGHTED_FULL_PATH_AND_FILE_NAME = 0x00008000,
+        }
 
-        internal const int EVERYTHING_SORT_NAME_ASCENDING = 1;
-        internal const int EVERYTHING_SORT_NAME_DESCENDING = 2;
-        internal const int EVERYTHING_SORT_PATH_ASCENDING = 3;
-        internal const int EVERYTHING_SORT_PATH_DESCENDING = 4;
-        internal const int EVERYTHING_SORT_SIZE_ASCENDING = 5;
-        internal const int EVERYTHING_SORT_SIZE_DESCENDING = 6;
-        internal const int EVERYTHING_SORT_EXTENSION_ASCENDING = 7;
-        internal const int EVERYTHING_SORT_EXTENSION_DESCENDING = 8;
-        internal const int EVERYTHING_SORT_TYPE_NAME_ASCENDING = 9;
-        internal const int EVERYTHING_SORT_TYPE_NAME_DESCENDING = 10;
-        internal const int EVERYTHING_SORT_DATE_CREATED_ASCENDING = 11;
-        internal const int EVERYTHING_SORT_DATE_CREATED_DESCENDING = 12;
-        internal const int EVERYTHING_SORT_DATE_MODIFIED_ASCENDING = 13;
-        internal const int EVERYTHING_SORT_DATE_MODIFIED_DESCENDING = 14;
-        internal const int EVERYTHING_SORT_ATTRIBUTES_ASCENDING = 15;
-        internal const int EVERYTHING_SORT_ATTRIBUTES_DESCENDING = 16;
-        internal const int EVERYTHING_SORT_FILE_LIST_FILENAME_ASCENDING = 17;
-        internal const int EVERYTHING_SORT_FILE_LIST_FILENAME_DESCENDING = 18;
-        internal const int EVERYTHING_SORT_RUN_COUNT_ASCENDING = 19;
-        internal const int EVERYTHING_SORT_RUN_COUNT_DESCENDING = 20;
-        internal const int EVERYTHING_SORT_DATE_RECENTLY_CHANGED_ASCENDING = 21;
-        internal const int EVERYTHING_SORT_DATE_RECENTLY_CHANGED_DESCENDING = 22;
-        internal const int EVERYTHING_SORT_DATE_ACCESSED_ASCENDING = 23;
-        internal const int EVERYTHING_SORT_DATE_ACCESSED_DESCENDING = 24;
-        internal const int EVERYTHING_SORT_DATE_RUN_ASCENDING = 25;
-        internal const int EVERYTHING_SORT_DATE_RUN_DESCENDING = 26;
+        internal enum Sort
+        {
+            NAME_ASCENDING = 1,
+            NAME_DESCENDING,
+            PATH_ASCENDING,
+            PATH_DESCENDING,
+            SIZE_ASCENDING,
+            SIZE_DESCENDING,
+            EXTENSION_ASCENDING,
+            EXTENSION_DESCENDING,
+            TYPE_NAME_ASCENDING,
+            TYPE_NAME_DESCENDING,
+            DATE_CREATED_ASCENDING,
+            DATE_CREATED_DESCENDING,
+            DATE_MODIFIED_ASCENDING,
+            DATE_MODIFIED_DESCENDING,
+            ATTRIBUTES_ASCENDING,
+            ATTRIBUTES_DESCENDING,
+            FILE_LIST_FILENAME_ASCENDING,
+            FILE_LIST_FILENAME_DESCENDING,
+            RUN_COUNT_ASCENDING,
+            RUN_COUNT_DESCENDING,
+            DATE_RECENTLY_CHANGED_ASCENDING,
+            DATE_RECENTLY_CHANGED_DESCENDING,
+            DATE_ACCESSED_ASCENDING,
+            DATE_ACCESSED_DESCENDING,
+            DATE_RUN_ASCENDING,
+            DATE_RUN_DESCENDING,
+        }
 
-        internal const int EVERYTHING_TARGET_MACHINE_X86 = 1;
-        internal const int EVERYTHING_TARGET_MACHINE_X64 = 2;
-        internal const int EVERYTHING_TARGET_MACHINE_ARM = 3;
+        internal const int TARGET_MACHINE_X86 = 1;
+        internal const int TARGET_MACHINE_X64 = 2;
+        internal const int TARGET_MACHINE_ARM = 3;
         private const string dllName = "Everything64.dll";
 
 #pragma warning disable SA1516 // Elements should be separated by blank line
@@ -216,88 +224,97 @@ namespace Community.PowerToys.Run.Plugin.Everything
         [DllImport(dllName)]
         public static extern void Everything_SetReplyID(uint nId);
         [DllImport(dllName)]
-        public static extern void Everything_SetRequestFlags(uint dwRequestFlags);
+        public static extern void Everything_SetRequestFlags(Request RequestFlags);
         [DllImport(dllName, CharSet = CharSet.Unicode)]
         public static extern bool Everything_SetRunCountFromFileName(string lpFileName, uint dwRunCount);
         [DllImport(dllName, CharSet = CharSet.Unicode)]
         public static extern uint Everything_SetSearchW(string lpSearchString);
         [DllImport(dllName)]
-        public static extern void Everything_SetSort(uint dwSortType);
+        public static extern void Everything_SetSort(Sort SortType);
 
         [DllImport(dllName)]
         public static extern void Everything_SortResultsByPath();
         [DllImport(dllName)]
         public static extern bool Everything_UpdateAllFolderIndexes();
 
+        private static readonly IFileSystem _fileSystem = new FileSystem();
+        private const int max = 5;
         private static CancellationTokenSource source;
-
+#pragma warning disable SA1503 // Braces should not be omitted
         public static IEnumerable<Result> EverythingSearch(string qry)
         {
             source?.Cancel();
             source = new CancellationTokenSource();
             CancellationToken token = source.Token;
+            source.CancelAfter(50);
 
             _ = Everything_SetSearchW(qry);
-            Everything_SetRequestFlags(EVERYTHING_REQUEST_FILE_NAME | EVERYTHING_REQUEST_PATH | EVERYTHING_REQUEST_DATE_MODIFIED | EVERYTHING_REQUEST_SIZE);
-            Everything_SetSort(EVERYTHING_SORT_DATE_MODIFIED_DESCENDING);
-            Everything_SetMax(20);
-            Everything_SetRegex(false);
-            if (qry.StartsWith("@", StringComparison.CurrentCulture))
+            if (token.IsCancellationRequested) yield return new Result();
+            Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME | Request.DATE_MODIFIED);
+            if (token.IsCancellationRequested) yield return new Result();
+            Everything_SetSort(Sort.DATE_MODIFIED_DESCENDING);
+            if (token.IsCancellationRequested) yield return new Result();
+            Everything_SetMax(max);
+            if (token.IsCancellationRequested) yield return new Result();
+
+            if (!Everything_QueryW(true))
             {
-                Everything_SetRegex(true);
-                qry = qry.Substring(1);
+                yield return new Result() { Title = "!", };
             }
 
-            _ = Everything_QueryW(true);
             uint resultCount = Everything_GetNumResults();
 
-            var t = Task.Run(
-                () =>
+            if (token.IsCancellationRequested) yield return new Result();
+            for (uint i = 0; i < resultCount; i++)
+            {
+                /*Marshal.PtrToStringUni(*/
+                StringBuilder sb = new StringBuilder(260);
+                Everything_GetResultFullPathName(i, sb, 260);
+                string fullPath = sb.ToString();
+                string name = Path.GetFileName(fullPath);
+                string path;
+                bool isFolder = _fileSystem.Directory.Exists(fullPath);
+                if (isFolder)
+                    path = fullPath;
+                else
+                    path = Path.GetDirectoryName(fullPath);
+
+                yield return new Result()
                 {
-                    var results = new List<Result>();
-                    for (uint i = 0; i < resultCount; i++)
+                    Title = name,
+                    ToolTipData = new ToolTipData("Name : " + name, "Path : " + path),
+                    SubTitle = Properties.Resources.plugin_name + ": " + fullPath,
+                    IcoPath = fullPath,
+                    Score = (int)(max - i),
+                    ContextData = new SearchResult()
                     {
-                        _ = Everything_GetResultDateModified(i, out long date_modified);
-                        _ = Everything_GetResultSize(i, out long size);
-                        string fileName = Marshal.PtrToStringUni(Everything_GetResultFileName(i));
-                        StringBuilder sb = new StringBuilder(999);
-                        Everything_GetResultFullPathName(i, sb, 999);
-                        string filePath = sb.ToString();
-
-                        results.Add(new Result()
+                        Path = path,
+                        Title = name,
+                    },
+                    Action = e =>
+                    {
+                        using (var process = new Process())
                         {
-                            Title = fileName,
-                            ToolTipData = new ToolTipData("Name : " + fileName, "Path : " + filePath),
-                            SubTitle = Properties.Resources.plugin_name + ":" + filePath,
-                            IcoPath = filePath,
-                            Score = (int)(Everything_GetTotResults() - i),
-                            Action = e =>
+                            process.StartInfo.FileName = fullPath;
+                            process.StartInfo.WorkingDirectory = path;
+                            process.StartInfo.UseShellExecute = true;
+
+                            try
                             {
-                                using (Process process = new Process())
-                                {
-                                    process.StartInfo.FileName = System.IO.Path.Combine(filePath, fileName);
-                                    process.StartInfo.WorkingDirectory = filePath;
-                                    process.StartInfo.Arguments = string.Empty;
-
-                                    process.StartInfo.UseShellExecute = true;
-
-                                    try
-                                    {
-                                        _ = process.Start();
-                                        return true;
-                                    }
-                                    catch (System.ComponentModel.Win32Exception)
-                                    {
-                                        return false;
-                                    }
-                                }
-                            },
-                        });
-                    }
-
-                    return results;
-                }, token);
-            return t.Result;
+                                process.Start();
+                                return true;
+                            }
+                            catch (System.ComponentModel.Win32Exception)
+                            {
+                                return false;
+                            }
+                        }
+                    },
+                    QueryTextDisplay = isFolder ? path : name,
+                };
+                if (token.IsCancellationRequested) break;
+            }
         }
+#pragma warning restore SA1503 // Braces should not be omitted
     }
 }

@@ -117,13 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="clipboard_failed" xml:space="preserve">
+    <value>Fail to set text in clipboard</value>
+  </data>
+  <data name="copy_path" xml:space="preserve">
+    <value>Copy path (Ctrl+C)</value>
+  </data>
+  <data name="Everything_ini" xml:space="preserve">
+    <value>Install Everything if not installed</value>
+  </data>
   <data name="Everything_not_running" xml:space="preserve">
     <value>Everything is not running</value>
+  </data>
+  <data name="Everything_url" xml:space="preserve">
+    <value>https://www.voidtools.com/downloads/</value>
+  </data>
+  <data name="folder_open_failed" xml:space="preserve">
+    <value>Fail to open folder at</value>
+  </data>
+  <data name="open_containing_folder" xml:space="preserve">
+    <value>Open containing folder (Ctrl+Shift+E)</value>
+  </data>
+  <data name="open_in_console" xml:space="preserve">
+    <value>Open path in console (Ctrl+Shift+C)</value>
   </data>
   <data name="plugin_description" xml:space="preserve">
     <value>Get search results from Everything</value>
   </data>
   <data name="plugin_name" xml:space="preserve">
     <value>Everything</value>
+  </data>
+  <data name="run_as_admin" xml:space="preserve">
+    <value>Run as administrator (Ctrl+Shift+Enter)</value>
   </data>
 </root>
