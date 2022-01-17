@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -17,15 +18,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
 {
     internal class ContextMenuLoader : IContextMenu
     {
-        private readonly IPath _path = new FileSystem().Path;
-
         private readonly PluginInitContext _context;
-
-        public enum ResultType
-        {
-            Folder,
-            File,
-        }
 
         // Extensions for adding run as admin context menu item for applications
         private readonly string[] appExtensions = { ".exe", ".bat", ".appref-ms", ".lnk" };
@@ -41,9 +34,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
             var contextMenus = new List<ContextMenuResult>();
             if (selectedResult.ContextData is SearchResult record)
             {
-                ResultType type = _path.HasExtension(record.Path) ? ResultType.File : ResultType.Folder;
+                bool isFile = Path.HasExtension(record.Path);
 
-                if (type == ResultType.File)
+                if (isFile)
                 {
                     contextMenus.Add(CreateOpenContainingFolderResult(record));
                 }
@@ -93,9 +86,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     {
                         try
                         {
-                            if (type == ResultType.File)
+                            if (isFile)
                             {
-                                Helper.OpenInConsole(_path.GetDirectoryName(record.Path));
+                                Helper.OpenInConsole(Path.GetDirectoryName(record.Path));
                             }
                             else
                             {
@@ -147,7 +140,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         // Function to test if the file can be run as admin
         private bool CanFileBeRunAsAdmin(string path)
         {
-            string fileExtension = _path.GetExtension(path);
+            string fileExtension = Path.GetExtension(path);
             foreach (string extension in appExtensions)
             {
                 // Using OrdinalIgnoreCase since this is internal

@@ -123,6 +123,9 @@
   <data name="copy_path" xml:space="preserve">
     <value>Copy path (Ctrl+C)</value>
   </data>
+  <data name="enable_wait" xml:space="preserve">
+    <value>Enable Wait setting under PowerToys Run &gt; Everything</value>
+  </data>
   <data name="Everything_ini" xml:space="preserve">
     <value>Install Everything if not installed</value>
   </data>
@@ -149,5 +152,11 @@
   </data>
   <data name="run_as_admin" xml:space="preserve">
     <value>Run as administrator (Ctrl+Shift+Enter)</value>
+  </data>
+  <data name="timeout" xml:space="preserve">
+    <value>Timed out before finishing the query</value>
+  </data>
+  <data name="Wait" xml:space="preserve">
+    <value>Wait - Wait longer for the query to finish.</value>
   </data>
 </root>
