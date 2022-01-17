@@ -237,43 +237,41 @@ namespace Community.PowerToys.Run.Plugin.Everything
         [DllImport(dllName)]
         public static extern bool Everything_UpdateAllFolderIndexes();
 
-        private static readonly IFileSystem _fileSystem = new FileSystem();
-        private const int max = 5;
+        private const int max = 20;
         private static CancellationTokenSource source;
 #pragma warning disable SA1503 // Braces should not be omitted
-        public static IEnumerable<Result> EverythingSearch(string qry)
+        public static IEnumerable<Result> EverythingSearch(string qry, bool wait)
         {
             source?.Cancel();
             source = new CancellationTokenSource();
             CancellationToken token = source.Token;
-            source.CancelAfter(50);
+            source.CancelAfter(wait ? 1000 : 75);
 
             _ = Everything_SetSearchW(qry);
-            if (token.IsCancellationRequested) yield return new Result();
-            Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME | Request.DATE_MODIFIED);
-            if (token.IsCancellationRequested) yield return new Result();
+            if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
+            Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME);
+            if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
             Everything_SetSort(Sort.DATE_MODIFIED_DESCENDING);
-            if (token.IsCancellationRequested) yield return new Result();
+            if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
             Everything_SetMax(max);
-            if (token.IsCancellationRequested) yield return new Result();
+            if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
 
             if (!Everything_QueryW(true))
             {
-                yield return new Result() { Title = "!", };
+                throw new EntryPointNotFoundException();
             }
 
             uint resultCount = Everything_GetNumResults();
 
-            if (token.IsCancellationRequested) yield return new Result();
+            if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
             for (uint i = 0; i < resultCount; i++)
             {
-                /*Marshal.PtrToStringUni(*/
                 StringBuilder sb = new StringBuilder(260);
                 Everything_GetResultFullPathName(i, sb, 260);
                 string fullPath = sb.ToString();
                 string name = Path.GetFileName(fullPath);
                 string path;
-                bool isFolder = _fileSystem.Directory.Exists(fullPath);
+                bool isFolder = Path.HasExtension(fullPath);
                 if (isFolder)
                     path = fullPath;
                 else
@@ -288,7 +286,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     Score = (int)(max - i),
                     ContextData = new SearchResult()
                     {
-                        Path = path,
+                        Path = fullPath,
                         Title = name,
                     },
                     Action = e =>
@@ -312,7 +310,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     },
                     QueryTextDisplay = isFolder ? path : name,
                 };
-                if (token.IsCancellationRequested) break;
+                if (token.IsCancellationRequested) yield break/*token.ThrowIfCancellationRequested()*/;
             }
         }
 #pragma warning restore SA1503 // Braces should not be omitted

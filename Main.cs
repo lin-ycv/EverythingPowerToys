@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Controls;
+using Community.PowerToys.Run.Plugin.Everything.Properties;
 using ManagedCommon;
 using Microsoft.PowerToys.Settings.UI.Library;
 using Wox.Infrastructure;
@@ -21,13 +22,25 @@ using static Community.PowerToys.Run.Plugin.Everything.NativeMethods;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
-    public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu
+    public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider
     {
+        private const string Wait = nameof(Wait);
         private readonly string reservedStringPattern = @"^[\/\\\$\%]+$|^.*[<>].*$";
+        private bool _wait;
 
-        public string Name => Properties.Resources.plugin_name;
+        public string Name => Resources.plugin_name;
 
-        public string Description => Properties.Resources.plugin_description;
+        public string Description => Resources.plugin_description;
+
+        public IEnumerable<PluginAdditionalOption> AdditionalOptions => new List<PluginAdditionalOption>()
+        {
+            new PluginAdditionalOption()
+            {
+                Key = Wait,
+                DisplayLabel = Resources.Wait,
+                Value = false,
+            },
+        };
 
         private string IconPath { get; set; }
 
@@ -65,21 +78,26 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 {
                     try
                     {
-                        var found = EverythingSearch(searchQuery);
-                        if (found.ElementAt(0).Title == "!")
+                        results.AddRange(EverythingSearch(searchQuery, _wait));
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        results.Add(new Result()
                         {
-                            results.Add(new Result()
-                            {
-                                Title = Properties.Resources.Everything_not_running,
-                                SubTitle = Properties.Resources.Everything_ini,
-                                IcoPath = _warningIconPath,
-                                QueryTextDisplay = Properties.Resources.Everything_url,
-                            });
-                        }
-                        else
+                            Title = Resources.timeout,
+                            SubTitle = Resources.enable_wait,
+                            IcoPath = _warningIconPath,
+                        });
+                    }
+                    catch (EntryPointNotFoundException)
+                    {
+                        results.Add(new Result()
                         {
-                            results.AddRange(found);
-                        }
+                            Title = Resources.Everything_not_running,
+                            SubTitle = Resources.Everything_ini,
+                            IcoPath = _warningIconPath,
+                            QueryTextDisplay = Resources.Everything_url,
+                        });
                     }
                     catch (Exception e)
                     {
@@ -113,6 +131,22 @@ namespace Community.PowerToys.Run.Plugin.Everything
         public List<ContextMenuResult> LoadContextMenus(Result selectedResult)
         {
             return _contextMenuLoader.LoadContextMenus(selectedResult);
+        }
+
+        public Control CreateSettingPanel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateSettings(PowerLauncherPluginSettings settings)
+        {
+            var wait = false;
+            if (settings != null && settings.AdditionalOptions != null)
+            {
+                wait = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Wait)?.Value ?? false;
+            }
+
+            _wait = wait;
         }
 
         protected virtual void Dispose(bool disposing)
