@@ -4,7 +4,7 @@
   "IsGlobal": true,
   "Name": "Everything",
   "Author": "Yu Chieh (Victor) Lin",
-  "Version": "0.2.0",
+  "Version": "0.2.1",
   "Language": "csharp",
   "Website": "https://aka.ms/powertoys",
   "ExecuteFileName": "Community.PowerToys.Run.Plugin.Everything.dll",

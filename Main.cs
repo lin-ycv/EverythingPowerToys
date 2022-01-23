@@ -25,8 +25,10 @@ namespace Community.PowerToys.Run.Plugin.Everything
     public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider
     {
         private const string Wait = nameof(Wait);
+        private const string Top = nameof(Top);
         private readonly string reservedStringPattern = @"^[\/\\\$\%]+$|^.*[<>].*$";
         private bool _wait;
+        private bool _top;
 
         public string Name => Resources.plugin_name;
 
@@ -36,18 +38,30 @@ namespace Community.PowerToys.Run.Plugin.Everything
         {
             new PluginAdditionalOption()
             {
+                Key = Top,
+                DisplayLabel = Resources.Top,
+                Value = true,
+            },
+            new PluginAdditionalOption()
+            {
                 Key = Wait,
                 DisplayLabel = Resources.Wait,
                 Value = false,
             },
         };
 
-        private string IconPath { get; set; }
-
         private IContextMenu _contextMenuLoader;
         private PluginInitContext _context;
         private bool disposed;
-        private string _warningIconPath;
+        private static string _warningIconPath;
+
+        internal static string WarningIcon
+        {
+            get
+            {
+                return _warningIconPath;
+            }
+        }
 
         public void Init(PluginInitContext context)
         {
@@ -55,6 +69,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             _contextMenuLoader = new ContextMenuLoader(context);
             _context.API.ThemeChanged += OnThemeChanged;
             UpdateIconPath(_context.API.GetCurrentTheme());
+            EverythingSetup();
         }
 
         public List<Result> Query(Query query)
@@ -78,7 +93,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 {
                     try
                     {
-                        results.AddRange(EverythingSearch(searchQuery, _wait));
+                        results.AddRange(EverythingSearch(searchQuery, _wait, _top));
                     }
                     catch (OperationCanceledException)
                     {
@@ -87,21 +102,23 @@ namespace Community.PowerToys.Run.Plugin.Everything
                             Title = Resources.timeout,
                             SubTitle = Resources.enable_wait,
                             IcoPath = _warningIconPath,
+                            Score = int.MaxValue,
                         });
                     }
-                    catch (EntryPointNotFoundException)
+                    catch (System.ComponentModel.Win32Exception)
                     {
                         results.Add(new Result()
                         {
                             Title = Resources.Everything_not_running,
                             SubTitle = Resources.Everything_ini,
                             IcoPath = _warningIconPath,
-                            QueryTextDisplay = Resources.Everything_url,
+                            QueryTextDisplay = '.' + Resources.plugin_name,
+                            Score = int.MaxValue,
                         });
                     }
                     catch (Exception e)
                     {
-                        Log.Exception("Something failed", e, GetType());
+                        Log.Exception("Everything Exception", e, GetType());
                     }
                 }
             }
@@ -114,16 +131,14 @@ namespace Community.PowerToys.Run.Plugin.Everything
             UpdateIconPath(newTheme);
         }
 
-        private void UpdateIconPath(Theme theme)
+        private static void UpdateIconPath(Theme theme)
         {
             if (theme == Theme.Light || theme == Theme.HighContrastWhite)
             {
-                IconPath = "Images/Everything.light.png";
                 _warningIconPath = "Images/Warning.light.png";
             }
             else
             {
-                IconPath = "Images/Everything.dark.png";
                 _warningIconPath = "Images/Warning.dark.png";
             }
         }
@@ -141,11 +156,14 @@ namespace Community.PowerToys.Run.Plugin.Everything
         public void UpdateSettings(PowerLauncherPluginSettings settings)
         {
             var wait = false;
+            var top = true;
             if (settings != null && settings.AdditionalOptions != null)
             {
                 wait = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Wait)?.Value ?? false;
+                top = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Top)?.Value ?? true;
             }
 
+            _top = top;
             _wait = wait;
         }
 

@@ -106,15 +106,6 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://www.voidtools.com/downloads/.
-        /// </summary>
-        public static string Everything_url {
-            get {
-                return ResourceManager.GetString("Everything_url", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Fail to open folder at.
         /// </summary>
         public static string folder_open_failed {
@@ -174,6 +165,15 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         public static string timeout {
             get {
                 return ResourceManager.GetString("timeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert result at the top of the list..
+        /// </summary>
+        public static string Top {
+            get {
+                return ResourceManager.GetString("Top", resourceCulture);
             }
         }
         

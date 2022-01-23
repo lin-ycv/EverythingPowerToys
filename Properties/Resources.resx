@@ -132,9 +132,6 @@
   <data name="Everything_not_running" xml:space="preserve">
     <value>Everything is not running</value>
   </data>
-  <data name="Everything_url" xml:space="preserve">
-    <value>https://www.voidtools.com/downloads/</value>
-  </data>
   <data name="folder_open_failed" xml:space="preserve">
     <value>Fail to open folder at</value>
   </data>
@@ -155,6 +152,9 @@
   </data>
   <data name="timeout" xml:space="preserve">
     <value>Timed out before finishing the query</value>
+  </data>
+  <data name="Top" xml:space="preserve">
+    <value>Insert result at the top of the list.</value>
   </data>
   <data name="Wait" xml:space="preserve">
     <value>Wait - Wait longer for the query to finish.</value>

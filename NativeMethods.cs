@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -12,24 +13,13 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Community.PowerToys.Run.Plugin.Everything.Properties;
 using Wox.Plugin;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
     internal static class NativeMethods
     {
-        internal enum ErrorCode
-        {
-            OK,
-            ERROR_MEMORY,
-            ERROR_IPC,
-            ERROR_REGISTERCLASSEX,
-            ERROR_CREATEWINDOW,
-            ERROR_CREATETHREAD,
-            ERROR_INVALIDINDEX,
-            ERROR_INVALIDCALL,
-        }
-
         internal enum Request
         {
             FILE_NAME = 0x00000001,
@@ -80,167 +70,35 @@ namespace Community.PowerToys.Run.Plugin.Everything
             DATE_RUN_DESCENDING,
         }
 
-        internal const int TARGET_MACHINE_X86 = 1;
-        internal const int TARGET_MACHINE_X64 = 2;
-        internal const int TARGET_MACHINE_ARM = 3;
-        private const string dllName = "Everything64.dll";
+        internal const string dllName = "Everything64.dll"; // Included dll is a modified file without locking, if this creates issues, replace with official dll
 
 #pragma warning disable SA1516 // Elements should be separated by blank line
         [DllImport(dllName)]
-        public static extern void Everything_CleanUp();
-        [DllImport(dllName)]
-        public static extern uint Everything_DeleteRunHistory();
-        [DllImport(dllName)]
-        public static extern uint Everything_Exit();
-
-        [DllImport(dllName)]
-        public static extern uint Everything_GetBuildNumber();
-        [DllImport(dllName)]
-        public static extern uint Everything_GetLastError();
-        [DllImport(dllName)]
-        public static extern uint Everything_GetMajorVersion();
-        [DllImport(dllName)]
-        public static extern bool Everything_GetMatchCase();
-        [DllImport(dllName)]
-        public static extern bool Everything_GetMatchPath();
-        [DllImport(dllName)]
-        public static extern bool Everything_GetMatchWholeWord();
-        [DllImport(dllName)]
-        public static extern uint Everything_GetMax();
-        [DllImport(dllName)]
-        public static extern uint Everything_GetMinorVersion();
-        [DllImport(dllName)]
-        public static extern uint Everything_GetNumFileResults();
-        [DllImport(dllName)]
-        public static extern uint Everything_GetNumFolderResults();
-        [DllImport(dllName)]
         public static extern uint Everything_GetNumResults();
-        [DllImport(dllName)]
-        public static extern uint Everything_GetOffset();
-        [DllImport(dllName)]
-        public static extern bool Everything_GetRegex();
-        [DllImport(dllName)]
-        public static extern uint Everything_GetReplyID();
-        [DllImport(dllName)]
-        public static extern uint Everything_GetRequestFlags();
-        [DllImport(dllName)]
-
-        public static extern uint Everything_GetResultAttributes(uint nIndex);
-        [DllImport(dllName)]
-        public static extern bool Everything_GetResultDateAccessed(uint nIndex, out long lpFileTime);
-        [DllImport(dllName)]
-        public static extern bool Everything_GetResultDateCreated(uint nIndex, out long lpFileTime);
-        [DllImport(dllName)]
-        public static extern bool Everything_GetResultDateModified(uint nIndex, out long lpFileTime);
-        [DllImport(dllName)]
-        public static extern bool Everything_GetResultDateRecentlyChanged(uint nIndex, out long lpFileTime);
-        [DllImport(dllName)]
-        public static extern bool Everything_GetResultDateRun(uint nIndex, out long lpFileTime);
-        [DllImport(dllName, CharSet = CharSet.Unicode)]
-        public static extern IntPtr Everything_GetResultExtension(uint nIndex);
-        [DllImport(dllName, CharSet = CharSet.Unicode)]
-        public static extern IntPtr Everything_GetResultFileListFileName(uint nIndex);
-        [DllImport(dllName, CharSet = CharSet.Unicode)]
-        public static extern IntPtr Everything_GetResultFileName(uint nIndex);
         [DllImport(dllName, CharSet = CharSet.Unicode)]
         public static extern void Everything_GetResultFullPathName(uint nIndex, StringBuilder lpString, uint nMaxCount);
-        [DllImport(dllName, CharSet = CharSet.Unicode)]
-        public static extern IntPtr Everything_GetResultHighlightedFileName(uint nIndex);
-        [DllImport(dllName, CharSet = CharSet.Unicode)]
-        public static extern IntPtr Everything_GetResultHighlightedFullPathAndFileName(uint nIndex);
-        [DllImport(dllName, CharSet = CharSet.Unicode)]
-        public static extern IntPtr Everything_GetResultHighlightedPath(uint nIndex);
-        [DllImport(dllName)]
-        public static extern uint Everything_GetResultListRequestFlags();
-        [DllImport(dllName)]
-        public static extern uint Everything_GetResultListSort();
-        [DllImport(dllName)]
-        public static extern IntPtr Everything_GetResultPath(uint nIndex);
-        [DllImport(dllName)]
-        public static extern uint Everything_GetResultRunCount(uint nIndex);
-        [DllImport(dllName)]
-        public static extern bool Everything_GetResultSize(uint nIndex, out long lpFileSize);
-
-        [DllImport(dllName)]
-        public static extern uint Everything_GetRevision();
-        [DllImport(dllName, CharSet = CharSet.Unicode)]
-        public static extern uint Everything_GetRunCountFromFileName(string lpFileName);
-        [DllImport(dllName)]
-        public static extern IntPtr Everything_GetSearchW();
-        [DllImport(dllName)]
-        public static extern uint Everything_GetSort();
-
-        [DllImport(dllName)]
-        public static extern uint Everything_GetTotFileResults();
-        [DllImport(dllName)]
-        public static extern uint Everything_GetTotFolderResults();
-        [DllImport(dllName)]
-        public static extern uint Everything_GetTotResults();
-
-        [DllImport(dllName, CharSet = CharSet.Unicode)]
-        public static extern uint Everything_IncRunCountFromFileName(string lpFileName);
-        [DllImport(dllName)]
-        public static extern bool Everything_IsAdmin();
-        [DllImport(dllName)]
-        public static extern bool Everything_IsAppData();
-        [DllImport(dllName)]
-        public static extern bool Everything_IsDBLoaded();
-        [DllImport(dllName)]
-        public static extern bool Everything_IsFastSort(uint sortType);
-        [DllImport(dllName)]
-        public static extern bool Everything_IsFileInfoIndexed(uint fileInfoType);
-        [DllImport(dllName)]
-        public static extern bool Everything_IsFileResult(uint nIndex);
-        [DllImport(dllName)]
-        public static extern bool Everything_IsFolderResult(uint nIndex);
-        [DllImport(dllName)]
-        public static extern bool Everything_IsQueryReply(uint message, uint wParam, long lParam, uint nId);
-        [DllImport(dllName)]
-        public static extern bool Everything_IsVolumeResult(uint nIndex);
-
         [DllImport(dllName)]
         public static extern bool Everything_QueryW(bool bWait);
         [DllImport(dllName)]
-        public static extern bool Everything_RebuildDB();
-        [DllImport(dllName)]
-        public static extern void Everything_Reset();
-        [DllImport(dllName)]
-        public static extern bool Everything_SaveDB();
-        [DllImport(dllName)]
-        public static extern bool Everything_SaveRunHistory();
-
-        [DllImport(dllName)]
-        public static extern void Everything_SetMatchCase(bool bEnable);
-        [DllImport(dllName)]
-        public static extern void Everything_SetMatchPath(bool bEnable);
-        [DllImport(dllName)]
-        public static extern void Everything_SetMatchWholeWord(bool bEnable);
-        [DllImport(dllName)]
         public static extern void Everything_SetMax(uint dwMax);
         [DllImport(dllName)]
-        public static extern void Everything_SetOffset(uint dwOffset);
-        [DllImport(dllName)]
-        public static extern void Everything_SetRegex(bool bEnable);
-        [DllImport(dllName)]
-        public static extern void Everything_SetReplyID(uint nId);
-        [DllImport(dllName)]
         public static extern void Everything_SetRequestFlags(Request RequestFlags);
-        [DllImport(dllName, CharSet = CharSet.Unicode)]
-        public static extern bool Everything_SetRunCountFromFileName(string lpFileName, uint dwRunCount);
         [DllImport(dllName, CharSet = CharSet.Unicode)]
         public static extern uint Everything_SetSearchW(string lpSearchString);
         [DllImport(dllName)]
         public static extern void Everything_SetSort(Sort SortType);
 
-        [DllImport(dllName)]
-        public static extern void Everything_SortResultsByPath();
-        [DllImport(dllName)]
-        public static extern bool Everything_UpdateAllFolderIndexes();
-
         private const int max = 20;
         private static CancellationTokenSource source;
 #pragma warning disable SA1503 // Braces should not be omitted
-        public static IEnumerable<Result> EverythingSearch(string qry, bool wait)
+        public static void EverythingSetup()
+        {
+            Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME);
+            Everything_SetSort(Sort.DATE_MODIFIED_DESCENDING);
+            Everything_SetMax(max);
+        }
+
+        public static IEnumerable<Result> EverythingSearch(string qry, bool wait, bool top)
         {
             source?.Cancel();
             source = new CancellationTokenSource();
@@ -249,23 +107,16 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
             _ = Everything_SetSearchW(qry);
             if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
-            Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME);
-            if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
-            Everything_SetSort(Sort.DATE_MODIFIED_DESCENDING);
-            if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
-            Everything_SetMax(max);
-            if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
-
             if (!Everything_QueryW(true))
             {
-                throw new EntryPointNotFoundException();
+                throw new Win32Exception("Unable to Query");
             }
 
             uint resultCount = Everything_GetNumResults();
 
-            if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
             for (uint i = 0; i < resultCount; i++)
             {
+                if (token.IsCancellationRequested) break;
                 StringBuilder sb = new StringBuilder(260);
                 Everything_GetResultFullPathName(i, sb, 260);
                 string fullPath = sb.ToString();
@@ -277,13 +128,12 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 else
                     path = Path.GetDirectoryName(fullPath);
 
-                yield return new Result()
+                var r = new Result()
                 {
                     Title = name,
                     ToolTipData = new ToolTipData("Name : " + name, "Path : " + path),
-                    SubTitle = Properties.Resources.plugin_name + ": " + fullPath,
+                    SubTitle = Resources.plugin_name + ": " + fullPath,
                     IcoPath = fullPath,
-                    Score = (int)(max - i),
                     ContextData = new SearchResult()
                     {
                         Path = fullPath,
@@ -302,7 +152,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                                 process.Start();
                                 return true;
                             }
-                            catch (System.ComponentModel.Win32Exception)
+                            catch (Win32Exception)
                             {
                                 return false;
                             }
@@ -310,7 +160,19 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     },
                     QueryTextDisplay = isFolder ? path : name,
                 };
-                if (token.IsCancellationRequested) yield break/*token.ThrowIfCancellationRequested()*/;
+                if (top) r.Score = (int)(max - i);
+                yield return r;
+            }
+
+            if (token.IsCancellationRequested)
+            {
+                yield return new Result()
+                {
+                    Title = Resources.timeout,
+                    SubTitle = Resources.enable_wait,
+                    IcoPath = Main.WarningIcon,
+                    Score = int.MaxValue,
+                };
             }
         }
 #pragma warning restore SA1503 // Braces should not be omitted
