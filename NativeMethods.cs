@@ -89,7 +89,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
         public static extern void Everything_SetSort(Sort SortType);
 
         private const int max = 20;
-        private static CancellationTokenSource source;
 #pragma warning disable SA1503 // Braces should not be omitted
         public static void EverythingSetup()
         {
@@ -98,13 +97,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
             Everything_SetMax(max);
         }
 
-        public static IEnumerable<Result> EverythingSearch(string qry, bool wait, bool top)
+        public static IEnumerable<Result> EverythingSearch(string qry, bool top, bool noPreview, CancellationToken token)
         {
-            source?.Cancel();
-            source = new CancellationTokenSource();
-            CancellationToken token = source.Token;
-            source.CancelAfter(wait ? 1000 : 75);
-
             _ = Everything_SetSearchW(qry);
             if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
             if (!Everything_QueryW(true))
@@ -133,7 +127,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     Title = name,
                     ToolTipData = new ToolTipData("Name : " + name, "Path : " + path),
                     SubTitle = Resources.plugin_name + ": " + fullPath,
-                    IcoPath = fullPath,
+                    IcoPath = noPreview ? "Images/Everything.ico.png" : fullPath,
                     ContextData = new SearchResult()
                     {
                         Path = fullPath,

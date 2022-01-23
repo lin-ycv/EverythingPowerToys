@@ -26,9 +26,11 @@ namespace Community.PowerToys.Run.Plugin.Everything
     {
         private const string Wait = nameof(Wait);
         private const string Top = nameof(Top);
+        private const string NoPreview = nameof(NoPreview);
         private readonly string reservedStringPattern = @"^[\/\\\$\%]+$|^.*[<>].*$";
         private bool _wait;
         private bool _top;
+        private bool _noPreview;
 
         public string Name => Resources.plugin_name;
 
@@ -40,12 +42,18 @@ namespace Community.PowerToys.Run.Plugin.Everything
             {
                 Key = Top,
                 DisplayLabel = Resources.Top,
-                Value = true,
+                Value = false,
             },
             new PluginAdditionalOption()
             {
                 Key = Wait,
                 DisplayLabel = Resources.Wait,
+                Value = false,
+            },
+            new PluginAdditionalOption()
+            {
+                Key = NoPreview,
+                DisplayLabel = Resources.NoPreview,
                 Value = false,
             },
         };
@@ -62,6 +70,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 return _warningIconPath;
             }
         }
+
+        private static CancellationTokenSource source;
 
         public void Init(PluginInitContext context)
         {
@@ -91,9 +101,13 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
                 if (!regexMatch.Success)
                 {
+                    source?.Cancel();
+                    source = new CancellationTokenSource();
+                    CancellationToken token = source.Token;
+                    source.CancelAfter(_wait ? 1000 : 75);
                     try
                     {
-                        results.AddRange(EverythingSearch(searchQuery, _wait, _top));
+                        results.AddRange(EverythingSearch(searchQuery, _top, _noPreview, token));
                     }
                     catch (OperationCanceledException)
                     {
@@ -118,6 +132,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     }
                     catch (Exception e)
                     {
+                        source.Dispose();
                         Log.Exception("Everything Exception", e, GetType());
                     }
                 }
@@ -156,15 +171,18 @@ namespace Community.PowerToys.Run.Plugin.Everything
         public void UpdateSettings(PowerLauncherPluginSettings settings)
         {
             var wait = false;
-            var top = true;
+            var top = false;
+            var nopreview = false;
             if (settings != null && settings.AdditionalOptions != null)
             {
                 wait = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Wait)?.Value ?? false;
-                top = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Top)?.Value ?? true;
+                top = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Top)?.Value ?? false;
+                nopreview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == NoPreview)?.Value ?? false;
             }
 
             _top = top;
             _wait = wait;
+            _noPreview = nopreview;
         }
 
         protected virtual void Dispose(bool disposing)
@@ -173,6 +191,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             {
                 if (disposing)
                 {
+                    source.Dispose();
                 }
 
                 disposed = true;

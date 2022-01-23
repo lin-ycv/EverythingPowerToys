@@ -115,6 +115,15 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fast - Disable icon preview, fetching icons for non-local files may cause freezing..
+        /// </summary>
+        public static string NoPreview {
+            get {
+                return ResourceManager.GetString("NoPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open containing folder (Ctrl+Shift+E).
         /// </summary>
         public static string open_containing_folder {
@@ -169,7 +178,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Insert result at the top of the list..
+        ///   Looks up a localized string similar to Top - Insert result at the top of the list..
         /// </summary>
         public static string Top {
             get {

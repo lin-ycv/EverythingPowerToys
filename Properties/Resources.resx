@@ -135,6 +135,9 @@
   <data name="folder_open_failed" xml:space="preserve">
     <value>Fail to open folder at</value>
   </data>
+  <data name="NoPreview" xml:space="preserve">
+    <value>Fast - Disable icon preview, fetching icons for non-local files may cause freezing.</value>
+  </data>
   <data name="open_containing_folder" xml:space="preserve">
     <value>Open containing folder (Ctrl+Shift+E)</value>
   </data>
@@ -154,7 +157,7 @@
     <value>Timed out before finishing the query</value>
   </data>
   <data name="Top" xml:space="preserve">
-    <value>Insert result at the top of the list.</value>
+    <value>Top - Insert result at the top of the list.</value>
   </data>
   <data name="Wait" xml:space="preserve">
     <value>Wait - Wait longer for the query to finish.</value>
