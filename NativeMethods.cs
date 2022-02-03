@@ -3,17 +3,20 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Community.PowerToys.Run.Plugin.Everything.Properties;
+using Microsoft.Win32;
 using Wox.Plugin;
 
 namespace Community.PowerToys.Run.Plugin.Everything
@@ -97,7 +100,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             Everything_SetMax(max);
         }
 
-        public static IEnumerable<Result> EverythingSearch(string qry, bool top, bool noPreview, CancellationToken token)
+        public static IEnumerable<Result> EverythingSearch(string qry, bool top, bool preview, CancellationToken token)
         {
             _ = Everything_SetSearchW(qry);
             if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
@@ -121,13 +124,14 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     path = fullPath;
                 else
                     path = Path.GetDirectoryName(fullPath);
+                string ext = Path.GetExtension(fullPath);
 
                 var r = new Result()
                 {
                     Title = name,
                     ToolTipData = new ToolTipData("Name : " + name, "Path : " + path),
                     SubTitle = Resources.plugin_name + ": " + fullPath,
-                    IcoPath = noPreview ? "Images/Everything.ico.png" : fullPath,
+                    IcoPath = (preview || string.IsNullOrEmpty(ext) || string.IsNullOrEmpty((string)Icons[ext])) ? fullPath : (string)Icons[ext],
                     ContextData = new SearchResult()
                     {
                         Path = fullPath,
@@ -154,7 +158,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     },
                     QueryTextDisplay = isFolder ? path : name,
                 };
-                if (top) r.Score = (int)(max - i);
+                if (top) r.Score = (int)(300 - i);
                 yield return r;
             }
 
@@ -167,6 +171,56 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     IcoPath = Main.WarningIcon,
                     Score = int.MaxValue,
                 };
+            }
+        }
+
+        // Credits https://www.codeproject.com/Articles/29137/Get-Registered-File-Types-and-Their-Associated-Ico
+        [DllImport("shell32.dll", EntryPoint = "ExtractIconA", CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
+        private static extern IntPtr ExtractIcon(int hInst, string lpszExeFileName, int nIconIndex);
+        internal static readonly Hashtable Icons = GetFileTypeAndIcon();
+        internal static Hashtable GetFileTypeAndIcon()
+        {
+            try
+            {
+                RegistryKey rkRoot = Registry.ClassesRoot;
+                string[] keyNames = rkRoot.GetSubKeyNames();
+                Hashtable iconsInfo = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
+                foreach (string keyName in keyNames)
+                {
+                    if (string.IsNullOrEmpty(keyName))
+                        continue;
+                    int indexOfPoint = keyName.IndexOf(".", StringComparison.CurrentCulture);
+                    if (indexOfPoint != 0)
+                        continue;
+                    RegistryKey rkFileType = rkRoot.OpenSubKey(keyName);
+                    if (rkFileType == null)
+                        continue;
+                    object defaultValue = rkFileType.GetValue(string.Empty);
+                    if (defaultValue == null)
+                        continue;
+                    string defaultIcon = defaultValue.ToString() + "\\DefaultIcon";
+                    RegistryKey rkFileIcon = rkRoot.OpenSubKey(defaultIcon);
+                    if (rkFileIcon != null)
+                    {
+                        object value = rkFileIcon.GetValue(string.Empty);
+                        if (value != null)
+                        {
+                            string fileParam = value.ToString().Replace("\"", string.Empty, StringComparison.CurrentCulture).Split(',')[0].Trim();
+                            iconsInfo.Add(keyName, fileParam);
+                        }
+
+                        rkFileIcon.Close();
+                    }
+
+                    rkFileType.Close();
+                }
+
+                rkRoot.Close();
+                return iconsInfo;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 #pragma warning restore SA1503 // Braces should not be omitted

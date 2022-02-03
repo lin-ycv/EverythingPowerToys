@@ -115,15 +115,6 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fast - Disable icon preview, fetching icons for non-local files may cause freezing..
-        /// </summary>
-        public static string NoPreview {
-            get {
-                return ResourceManager.GetString("NoPreview", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Open containing folder (Ctrl+Shift+E).
         /// </summary>
         public static string open_containing_folder {
@@ -160,6 +151,15 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preview - Preview file content as icon, may cause freezing if file not local..
+        /// </summary>
+        public static string Preview {
+            get {
+                return ResourceManager.GetString("Preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Run as administrator (Ctrl+Shift+Enter).
         /// </summary>
         public static string run_as_admin {
@@ -178,7 +178,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Top - Insert result at the top of the list..
+        ///   Looks up a localized string similar to Top - Insert result at the top of the list, may cause pre-selection issue..
         /// </summary>
         public static string Top {
             get {
@@ -187,7 +187,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wait - Wait longer for the query to finish..
+        ///   Looks up a localized string similar to Wait - Wait longer for the query to finish, enable only if prompted to..
         /// </summary>
         public static string Wait {
             get {
