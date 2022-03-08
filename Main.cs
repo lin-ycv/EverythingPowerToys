@@ -26,7 +26,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
     {
         private const string Wait = nameof(Wait);
         private const string Top = nameof(Top);
-        private const string Preview = nameof(Preview);
+        private const string NoPreview = nameof(NoPreview);
         private readonly string reservedStringPattern = @"^[\/\\\$\%]+$|^.*[<>].*$";
         private bool _wait;
         private bool _top;
@@ -52,7 +52,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             },
             new PluginAdditionalOption()
             {
-                Key = Preview,
+                Key = NoPreview,
                 DisplayLabel = Resources.Preview,
                 Value = false,
             },
@@ -104,7 +104,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     source?.Cancel();
                     source = new CancellationTokenSource();
                     CancellationToken token = source.Token;
-                    source.CancelAfter(_wait ? 1000 : 120);
+                    source.CancelAfter(_wait ? 1000 : 150);
                     try
                     {
                         results.AddRange(EverythingSearch(searchQuery, _top, _preview, token));
@@ -132,7 +132,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     }
                     catch (Exception e)
                     {
-                        source.Dispose();
+                        source.Cancel();
                         Log.Exception("Everything Exception", e, GetType());
                     }
                 }
@@ -177,7 +177,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             {
                 wait = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Wait)?.Value ?? false;
                 top = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Top)?.Value ?? false;
-                nopreview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Preview)?.Value ?? false;
+                nopreview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == NoPreview)?.Value ?? false;
             }
 
             _top = top;
@@ -191,7 +191,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
             {
                 if (disposing)
                 {
-                    source.Dispose();
                 }
 
                 disposed = true;

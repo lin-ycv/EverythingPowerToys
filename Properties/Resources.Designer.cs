@@ -19,7 +19,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -151,7 +151,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preview - Preview file content as icon, may cause freezing if file not local..
+        ///   Looks up a localized string similar to Preview - Preview file content as icon, may cause freezing if file is not local..
         /// </summary>
         public static string Preview {
             get {
@@ -178,7 +178,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Top - Insert result at the top of the list, may cause pre-selection issue..
+        ///   Looks up a localized string similar to Top - Insert result at the top of the list, may cause pre-selectino issue..
         /// </summary>
         public static string Top {
             get {
