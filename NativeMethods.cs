@@ -73,19 +73,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             DATE_RUN_DESCENDING,
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct SHFILEINFO
-        {
-            internal IntPtr hIcon;
-            internal int iIcon;
-            internal int dwAttributes;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
-            internal string szDisplayName;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
-            internal string szTypeName;
-        }
-
-        internal const string dllName = "Everything64.dll"; // Included dll is a modified file without locking, if this creates issues, replace with official dll
+        internal const string dllName = "Everything64.dll";
 
 #pragma warning disable SA1516 // Elements should be separated by blank line
         [DllImport(dllName)]

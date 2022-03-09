@@ -14,6 +14,9 @@
     <Platforms>x64</Platforms>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Authors>Yu Chieh (Victor) Lin</Authors>
+    <PackageProjectUrl>https://github.com/lin-ycv/EverythingPowerToys</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>Everything.light.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -107,12 +110,18 @@
     </None>
     <None Update="Images\Everything.light.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
     <None Update="Images\Warning.dark.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Images\Warning.light.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
 
