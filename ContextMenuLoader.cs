@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Abstractions;
 using System.Reflection;
@@ -166,14 +167,34 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 AcceleratorModifiers = ModifierKeys.Control | ModifierKeys.Shift,
                 Action = _ =>
                 {
-                    if (!Helper.OpenInShell("explorer.exe", $"/select,\"{record.Path}\""))
+                    try
                     {
-                        var message = $"{Properties.Resources.folder_open_failed} {record.Path}";
-                        _context.API.ShowMsg(message);
+                        var openDir = new ProcessStartInfo
+                        {
+                            FileName = $"{Path.GetDirectoryName(record.Path)}",
+                            UseShellExecute = true,
+                        };
+                        Process.Start(openDir);
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        var message = $"{Properties.Resources.folder_open_failed} {Path.GetDirectoryName(record.Path)}";
+                        MessageBox.Show(message + "\n" + e.Message);
                         return false;
                     }
 
-                    return true;
+                    // Throws exception: Reason Unknown
+                    // System.MissingMethodException: Method not found: 'Boolean Wox.Infrastructure.Helper.OpenInShell(System.String, System.String, System.String, Boolean, Boolean)'.
+
+                    // if (!Helper.OpenInShell("explorer.exe", $"/select,\"{Path.GetDirectoryName(record.Path)}\""))
+                    // {
+                    //    var message = $"{Properties.Resources.folder_open_failed} {Path.GetDirectoryName(record.Path)}";
+                    //    _context.API.ShowMsg(message);
+                    //    return false;
+                    // }
+
+                    // return true;
                 },
             };
         }
