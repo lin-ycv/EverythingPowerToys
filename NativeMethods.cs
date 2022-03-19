@@ -100,7 +100,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             Everything_SetMax(max);
         }
 
-        public static IEnumerable<Result> EverythingSearch(string qry, bool top, bool preview, CancellationToken token)
+        public static IEnumerable<Result> EverythingSearch(string qry, bool top, bool preview, CancellationToken token, bool wait)
         {
             _ = Everything_SetSearchW(qry);
             if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
@@ -162,7 +162,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 yield return r;
             }
 
-            if (token.IsCancellationRequested)
+            if (token.IsCancellationRequested && !wait)
             {
                 yield return new Result()
                 {

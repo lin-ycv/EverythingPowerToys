@@ -104,10 +104,10 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     source?.Cancel();
                     source = new CancellationTokenSource();
                     CancellationToken token = source.Token;
-                    source.CancelAfter(_wait ? 1000 : 150);
+                    source.CancelAfter(_wait ? 2500 : 150);
                     try
                     {
-                        results.AddRange(EverythingSearch(searchQuery, _top, _preview, token));
+                        results.AddRange(EverythingSearch(searchQuery, _top, _preview, token, _wait));
                     }
                     catch (OperationCanceledException)
                     {
