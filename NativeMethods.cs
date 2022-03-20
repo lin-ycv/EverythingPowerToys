@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using Community.PowerToys.Run.Plugin.Everything.Properties;
 using Microsoft.Win32;
 using Wox.Plugin;
@@ -100,10 +101,10 @@ namespace Community.PowerToys.Run.Plugin.Everything
             Everything_SetMax(max);
         }
 
-        public static IEnumerable<Result> EverythingSearch(string qry, bool top, bool preview, CancellationToken token, bool wait)
+        public static IEnumerable<Result> EverythingSearch(string qry, bool top, bool preview/*, CancellationToken token, bool wait*/)
         {
             _ = Everything_SetSearchW(qry);
-            if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
+            /*if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();*/
             if (!Everything_QueryW(true))
             {
                 throw new Win32Exception("Unable to Query");
@@ -113,7 +114,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
             for (uint i = 0; i < resultCount; i++)
             {
-                if (token.IsCancellationRequested) break;
+                /*if (token.IsCancellationRequested) break;*/
                 StringBuilder sb = new StringBuilder(260);
                 Everything_GetResultFullPathName(i, sb, 260);
                 string fullPath = sb.ToString();
@@ -162,7 +163,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 yield return r;
             }
 
-            if (token.IsCancellationRequested && !wait)
+            /*if (token.IsCancellationRequested && !wait)
             {
                 yield return new Result()
                 {
@@ -171,7 +172,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     IcoPath = Main.WarningIcon,
                     Score = int.MaxValue,
                 };
-            }
+            }*/
         }
 
         internal static readonly Hashtable Icons = GetFileTypeAndIcon();
@@ -196,13 +197,15 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     if (defaultValue == null)
                         continue;
                     string prog = defaultValue.ToString() + "\\shell\\Open\\command";
-                    RegistryKey rkFileIcon = rkRoot.OpenSubKey(prog);
+                    string deIco = defaultValue.ToString() + "\\defaulticon";
+                    RegistryKey rkFileIcon = rkRoot.OpenSubKey(deIco);
+                    if (rkFileIcon == null) rkFileIcon = rkRoot.OpenSubKey(prog);
                     if (rkFileIcon != null)
                     {
                         object value = rkFileIcon.GetValue(string.Empty);
                         if (value != null)
                         {
-                            string fileParam = value.ToString().Split("\" ")[0].Replace("\"", string.Empty, StringComparison.CurrentCulture).Trim();
+                            string fileParam = Environment.ExpandEnvironmentVariables(value.ToString().Split(new char[] { '\"', ',' }, StringSplitOptions.RemoveEmptyEntries)[0].Replace("\"", string.Empty, StringComparison.CurrentCulture).Trim());
                             iconsInfo.Add(keyName, fileParam);
                         }
 
