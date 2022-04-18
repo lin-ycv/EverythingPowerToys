@@ -157,7 +157,7 @@
     <value>Timed out before finishing the query</value>
   </data>
   <data name="Top" xml:space="preserve">
-    <value>Top - Insert result at the top of the list, may cause pre-selectino issue.</value>
+    <value>Top - Insert result at the top of the list, may cause pre-selection issue.</value>
   </data>
   <data name="Wait" xml:space="preserve">
     <value>Wait - Wait longer for the query to finish, enable only if prompted to.</value>
