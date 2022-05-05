@@ -178,7 +178,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Top - Insert result at the top of the list, may cause pre-selectino issue..
+        ///   Looks up a localized string similar to Top - Insert result at the top of the list, may cause pre-selection issue..
         /// </summary>
         public static string Top {
             get {

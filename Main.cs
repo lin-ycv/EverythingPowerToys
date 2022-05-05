@@ -28,7 +28,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
         private const string Top = nameof(Top);
         private const string NoPreview = nameof(NoPreview);
         private readonly string reservedStringPattern = @"^[\/\\\$\%]+$|^.*[<>].*$";
-        /*private bool _wait;*/
         private bool _top;
         private bool _preview;
 
@@ -44,12 +43,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 DisplayLabel = Resources.Top,
                 Value = false,
             },
-            /*new PluginAdditionalOption()
-            {
-                Key = Wait,
-                DisplayLabel = Resources.Wait,
-                Value = false,
-            },*/
             new PluginAdditionalOption()
             {
                 Key = NoPreview,
@@ -71,8 +64,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
             }
         }
 
-        /*private static CancellationTokenSource source;*/
-
         public void Init(PluginInitContext context)
         {
             _context = context;
@@ -90,7 +81,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We want to keep the process alive but will log the exception")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Already validated")]
-        public List<Result> Query(Query query, bool isFullQuery)
+        public List<Result> Query(Query query, bool delayedExecution)
         {
             List<Result> results = new List<Result>();
             if (!string.IsNullOrEmpty(query.Search))
@@ -101,13 +92,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
                 if (!regexMatch.Success)
                 {
-                    /*source?.Cancel();
-                    source = new CancellationTokenSource();
-                    CancellationToken token = source.Token;
-                    source.CancelAfter(_wait ? 2500 : 150);*/
                     try
                     {
-                        results.AddRange(EverythingSearch(searchQuery, _top, _preview/*, token, _wait*/));
+                        results.AddRange(EverythingSearch(searchQuery, _top, _preview));
                     }
                     catch (OperationCanceledException)
                     {
@@ -132,7 +119,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     }
                     catch (Exception e)
                     {
-                        /*source.Cancel();*/
                         Log.Exception("Everything Exception", e, GetType());
                     }
                 }
@@ -170,18 +156,15 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         public void UpdateSettings(PowerLauncherPluginSettings settings)
         {
-            /*var wait = false;*/
             var top = false;
             var nopreview = false;
             if (settings != null && settings.AdditionalOptions != null)
             {
-                /*wait = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Wait)?.Value ?? false;*/
                 top = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Top)?.Value ?? false;
                 nopreview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == NoPreview)?.Value ?? false;
             }
 
             _top = top;
-            /*_wait = wait;*/
             _preview = nopreview;
         }
 

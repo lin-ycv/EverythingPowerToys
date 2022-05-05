@@ -1,0 +1,13 @@
+# This is the settings file to override the behaviour for "Everything for PowerToys"
+# to override a setting, uncomment that line by uncommenting and changing the value
+# ie: "# max = 20" -> "max = 10"
+
+# Set max amount of results to return [default: 20]
+# max = 20
+
+# Set result sorting method [default: 14]
+# https://www.voidtools.com/support/everything/sdk/everything_getsort/
+# sort = 14
+
+# There are no more override options
+# Restart of powertoys is needed if values are changed

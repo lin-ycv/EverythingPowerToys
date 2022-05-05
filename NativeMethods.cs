@@ -92,19 +92,49 @@ namespace Community.PowerToys.Run.Plugin.Everything
         [DllImport(dllName)]
         public static extern void Everything_SetSort(Sort SortType);
 
-        private const int max = 20;
+        private static uint max = 20;
+        private static Sort sort = Sort.DATE_MODIFIED_DESCENDING;
 #pragma warning disable SA1503 // Braces should not be omitted
         public static void EverythingSetup()
         {
             Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME);
-            Everything_SetSort(Sort.DATE_MODIFIED_DESCENDING);
+            GetCustomSettings();
+            Everything_SetSort(sort);
             Everything_SetMax(max);
         }
 
-        public static IEnumerable<Result> EverythingSearch(string qry, bool top, bool preview/*, CancellationToken token, bool wait*/)
+        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:Braces should not be omitted", Justification = "stop wasting lines")]
+        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1501:Statement should not be on a single line", Justification = "stop wasting lines")]
+        private static void GetCustomSettings()
+        {
+            string[] strArr;
+            try { strArr = File.ReadAllLines("modules\\launcher\\Plugins\\Everything\\settings.toml"); }
+            catch { return; }
+            var culture = new System.Globalization.CultureInfo("en-US");
+            foreach (string str in strArr)
+            {
+                if (str.Length == 0 || str[0] == '#') continue;
+                string[] kv = str.Split('=');
+                if (kv.Length != 2) continue;
+                switch (kv[0].Trim())
+                {
+                    case "max":
+                        try { max = uint.Parse(kv[1].Trim(), culture.NumberFormat); }
+                        catch { }
+                        break;
+                    case "sort":
+                        try { sort = (Sort)int.Parse(kv[1].Trim(), culture.NumberFormat); }
+                        catch { }
+                        break;
+                    default:
+                        continue;
+                }
+            }
+        }
+
+        public static IEnumerable<Result> EverythingSearch(string qry, bool top, bool preview)
         {
             _ = Everything_SetSearchW(qry);
-            /*if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();*/
             if (!Everything_QueryW(true))
             {
                 throw new Win32Exception("Unable to Query");
@@ -114,7 +144,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
             for (uint i = 0; i < resultCount; i++)
             {
-                /*if (token.IsCancellationRequested) break;*/
                 StringBuilder sb = new StringBuilder(260);
                 Everything_GetResultFullPathName(i, sb, 260);
                 string fullPath = sb.ToString();
@@ -162,17 +191,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 if (top) r.Score = (int)(max - i);
                 yield return r;
             }
-
-            /*if (token.IsCancellationRequested && !wait)
-            {
-                yield return new Result()
-                {
-                    Title = Resources.timeout,
-                    SubTitle = Resources.enable_wait,
-                    IcoPath = Main.WarningIcon,
-                    Score = int.MaxValue,
-                };
-            }*/
         }
 
         internal static readonly Hashtable Icons = GetFileTypeAndIcon();
