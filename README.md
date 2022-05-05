@@ -1,6 +1,6 @@
 # Everything for PowerToys Run
 ---
-This repo is to be used as a submodule for [PowerToys repo](https://github.com/lin-ycv/PowerToys/tree/Everything), this will not compile when used standalone, as it's missing references from PowerToys.
+This repo is to be used with the [PowerToys repo](https://github.com/microsoft/PowerToys), this will not compile when used standalone, as it's missing references from PowerToys. Instructions are in the wiki.
 
 The [release](https://github.com/lin-ycv/EverythingPowerToys/releases) is the compiled result of this repo, extract the downloaded folder to `C:\Program Files\PowerToys\modules\launcher\Plugins`
 
