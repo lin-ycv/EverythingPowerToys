@@ -156,13 +156,12 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 string fullPath = sb.ToString();
                 string name = Path.GetFileName(fullPath);
                 string path;
-                bool isFolder = Path.HasExtension(fullPath);
+                bool isFolder = Path.HasExtension(fullPath.Replace(".lnk", string.Empty));
                 if (isFolder)
                     path = fullPath;
                 else
                     path = Path.GetDirectoryName(fullPath);
-                fullPath = fullPath.Replace(".lnk", string.Empty);
-                string ext = Path.GetExtension(fullPath);
+                string ext = Path.GetExtension(fullPath.Replace(".lnk", string.Empty));
 
                 var r = new Result()
                 {
