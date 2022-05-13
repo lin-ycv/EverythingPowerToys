@@ -95,6 +95,14 @@ namespace Community.PowerToys.Run.Plugin.Everything
         private static uint max = 20;
         private static Sort sort = Sort.DATE_MODIFIED_DESCENDING;
 #pragma warning disable SA1503 // Braces should not be omitted
+#if DEBUG
+        private static StringBuilder log = new StringBuilder();
+        private static void Log(string str)
+        {
+            File.AppendAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "debugLog.txt"), str + "\n");
+            return;
+        }
+#endif
         public static void EverythingSetup()
         {
             Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME);
@@ -141,7 +149,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
             }
 
             uint resultCount = Everything_GetNumResults();
-
             for (uint i = 0; i < resultCount; i++)
             {
                 StringBuilder sb = new StringBuilder(260);
@@ -154,6 +161,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     path = fullPath;
                 else
                     path = Path.GetDirectoryName(fullPath);
+                fullPath = fullPath.Replace(".lnk", string.Empty);
                 string ext = Path.GetExtension(fullPath);
 
                 var r = new Result()
@@ -161,7 +169,10 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     Title = name,
                     ToolTipData = new ToolTipData("Name : " + name, "Path : " + path),
                     SubTitle = Resources.plugin_name + ": " + fullPath,
-                    IcoPath = (preview || string.IsNullOrEmpty(ext)) ? fullPath : (string)Icons[ext],
+                    IcoPath = (preview || string.IsNullOrEmpty(ext)) ?
+                        fullPath :
+                        (string)(Icons[ext] ??
+                            "Images/NoIcon.png"),
                     ContextData = new SearchResult()
                     {
                         Path = fullPath,
@@ -196,50 +207,74 @@ namespace Community.PowerToys.Run.Plugin.Everything
         internal static readonly Hashtable Icons = GetFileTypeAndIcon();
         internal static Hashtable GetFileTypeAndIcon()
         {
+            RegistryKey rkRoot = Registry.ClassesRoot, rkKey = Registry.ClassesRoot;
+            Hashtable iconsInfo = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
             try
             {
-                RegistryKey rkRoot = Registry.ClassesRoot;
-                string[] keyNames = rkRoot.GetSubKeyNames();
-                Hashtable iconsInfo = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
-                foreach (string keyName in keyNames)
+                foreach (string keyName in rkRoot.GetSubKeyNames())
                 {
-                    if (string.IsNullOrEmpty(keyName))
-                        continue;
-                    int indexOfPoint = keyName.IndexOf(".", StringComparison.CurrentCulture);
-                    if (indexOfPoint != 0)
-                        continue;
-                    RegistryKey rkFileType = rkRoot.OpenSubKey(keyName);
-                    if (rkFileType == null)
-                        continue;
-                    object defaultValue = rkFileType.GetValue(string.Empty);
-                    if (defaultValue == null)
-                        continue;
-                    string prog = defaultValue.ToString() + "\\shell\\Open\\command";
-                    string deIco = defaultValue.ToString() + "\\defaulticon";
-                    RegistryKey rkFileIcon = rkRoot.OpenSubKey(deIco);
-                    if (rkFileIcon == null) rkFileIcon = rkRoot.OpenSubKey(prog);
-                    if (rkFileIcon != null)
+                    try
                     {
-                        object value = rkFileIcon.GetValue(string.Empty);
-                        if (value != null)
+                        if (string.IsNullOrEmpty(keyName))
+                            continue;
+                        if (keyName.IndexOf(".", StringComparison.CurrentCulture) != 0)
+                            continue;
+                        rkKey = rkRoot.OpenSubKey(keyName);
+                        if (rkKey == null)
+                            continue;
+                        object defaultValue = rkKey.GetValue(string.Empty);
+                        if (defaultValue == null)
+                            continue;
+
+                        rkKey = rkRoot.OpenSubKey(defaultValue.ToString() + "\\defaulticon");
+                        if (rkKey == null)
+                            rkKey = rkRoot.OpenSubKey(defaultValue.ToString() + "\\shell\\Open\\command");
+
+                        if (rkKey != null)
                         {
-                            string fileParam = Environment.ExpandEnvironmentVariables(value.ToString().Split(new char[] { '\"', ',' }, StringSplitOptions.RemoveEmptyEntries)[0].Replace("\"", string.Empty, StringComparison.CurrentCulture).Trim());
-                            iconsInfo.Add(keyName, fileParam);
+                            object value = rkKey.GetValue(string.Empty);
+                            if (value != null)
+                            {
+                                string[] path = value.ToString().Split(new char[] { '\"', ',' }, StringSplitOptions.RemoveEmptyEntries);
+                                if (path.Length > 0 && path[0].Contains('.'))
+                                {
+                                    string fileParam = Environment.ExpandEnvironmentVariables(path[0].Replace("\"", string.Empty, StringComparison.CurrentCulture).Trim());
+                                    iconsInfo.Add(keyName, fileParam);
+                                }
+                            }
                         }
-
-                        rkFileIcon.Close();
                     }
-
-                    rkFileType.Close();
+#if DEBUG
+                    catch (Exception e)
+                    {
+                        log.AppendLine(e.ToString());
+                        Log(log.ToString());
+#endif
+#if RELEASE
+                    catch (Exception)
+                    {
+#endif
+                    // If exceptions occurs for a key despite condition checks, just move onto the next key, plugin will still work, just without that icon info
+                    continue;
+                    }
                 }
-
-                rkRoot.Close();
-                return iconsInfo;
             }
+#if DEBUG
+            catch (Exception e)
+            {
+                log.AppendLine(e.ToString());
+                Log(log.ToString());
+#endif
+#if RELEASE
             catch (Exception)
             {
-                throw;
+#endif
+                // User privillege probably too low to access Registry Keys, plugin will still work, just without icon info
             }
+
+            rkKey.Close();
+            rkRoot.Close();
+            return iconsInfo;
         }
 #pragma warning restore SA1503 // Braces should not be omitted
     }
