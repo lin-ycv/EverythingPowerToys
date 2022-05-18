@@ -1,8 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation
-// The Microsoft Corporation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -80,7 +76,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         [DllImport(dllName)]
         public static extern uint Everything_GetNumResults();
         [DllImport(dllName, CharSet = CharSet.Unicode)]
-        public static extern void Everything_GetResultFullPathName(uint nIndex, StringBuilder lpString, uint nMaxCount);
+        public static extern void Everything_GetResultFullPathName(uint nIndex, char[] lpString, uint nMaxCount);
         [DllImport(dllName)]
         public static extern bool Everything_QueryW(bool bWait);
         [DllImport(dllName)]
@@ -94,6 +90,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         private static uint max = 20;
         private static Sort sort = Sort.DATE_MODIFIED_DESCENDING;
+        private static Dictionary<string, string> filters = new Dictionary<string, string>();
 #pragma warning disable SA1503 // Braces should not be omitted
 #if DEBUG
         private static StringBuilder log = new StringBuilder();
@@ -108,11 +105,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
             Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME);
             GetCustomSettings();
             Everything_SetSort(sort);
-            Everything_SetMax(max);
         }
 
-        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:Braces should not be omitted", Justification = "stop wasting lines")]
-        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1501:Statement should not be on a single line", Justification = "stop wasting lines")]
         private static void GetCustomSettings()
         {
             string[] strArr;
@@ -124,24 +118,37 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 if (str.Length == 0 || str[0] == '#') continue;
                 string[] kv = str.Split('=');
                 if (kv.Length != 2) continue;
-                switch (kv[0].Trim())
+                string key = kv[0].Trim();
+                if (key == "max")
                 {
-                    case "max":
-                        try { max = uint.Parse(kv[1].Trim(), culture.NumberFormat); }
-                        catch { }
-                        break;
-                    case "sort":
-                        try { sort = (Sort)int.Parse(kv[1].Trim(), culture.NumberFormat); }
-                        catch { }
-                        break;
-                    default:
-                        continue;
+                    try { max = uint.Parse(kv[1].Trim(), culture.NumberFormat); }
+                    catch { }
+                }
+                else if (key == "sort")
+                {
+                    try { sort = (Sort)int.Parse(kv[1].Trim(), culture.NumberFormat); }
+                    catch { }
+                }
+                else if (key.Contains(':'))
+                {
+                    filters.TryAdd(key.Split(':')[0].ToLowerInvariant(), kv[1].Trim());
                 }
             }
         }
 
         public static IEnumerable<Result> EverythingSearch(string qry, bool top, bool preview)
         {
+            Everything_SetMax(max);
+            if (qry.Contains(':'))
+            {
+                string[] nqry = qry.Split(':');
+                if (filters.ContainsKey(nqry[0].ToLowerInvariant()))
+                {
+                    Everything_SetMax(0xffffffff);
+                    qry = nqry[1].Trim() + " ext:" + filters[nqry[0].Trim()];
+                }
+            }
+
             _ = Everything_SetSearchW(qry);
             if (!Everything_QueryW(true))
             {
@@ -151,9 +158,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
             uint resultCount = Everything_GetNumResults();
             for (uint i = 0; i < resultCount; i++)
             {
-                StringBuilder sb = new StringBuilder(260);
-                Everything_GetResultFullPathName(i, sb, 260);
-                string fullPath = sb.ToString();
+                char[] buffer = new char[260];
+                Everything_GetResultFullPathName(i, buffer, 260);
+                string fullPath = new string(buffer);
                 string name = Path.GetFileName(fullPath);
                 string path;
                 bool isFolder = Path.HasExtension(fullPath.Replace(".lnk", string.Empty));
@@ -253,8 +260,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     catch (Exception)
                     {
 #endif
-                    // If exceptions occurs for a key despite condition checks, just move onto the next key, plugin will still work, just without that icon info
-                    continue;
+
+                        // If exceptions occurs for a key despite condition checks, just move onto the next key, plugin will still work, just without that icon info
+                        continue;
                     }
                 }
             }
@@ -268,6 +276,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             catch (Exception)
             {
 #endif
+
                 // User privillege probably too low to access Registry Keys, plugin will still work, just without icon info
             }
 

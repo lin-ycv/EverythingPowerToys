@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\..\..\Version.props" />
+  <Import Project="..\..\..\..\..\Version.props" />
 
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
@@ -17,6 +17,8 @@
     <PackageProjectUrl>https://github.com/lin-ycv/EverythingPowerToys</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>Everything.light.png</PackageIcon>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -47,23 +49,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\..\..\codeAnalysis\GlobalSuppressions.cs">
-      <Link>GlobalSuppressions.cs</Link>
-    </Compile>
-    <AdditionalFiles Include="..\..\..\..\codeAnalysis\StyleCop.json">
-      <Link>StyleCop.json</Link>
-    </AdditionalFiles>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Wox.Infrastructure\Wox.Infrastructure.csproj">
-      <Private>false</Private>
-      <CopyLocal>False</CopyLocal>
-      <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="plugin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -80,6 +65,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="System.Runtime" Version="4.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Wox.Infrastructure\Wox.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -131,7 +120,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Wox*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Ijwhost.dll&quot;" />
+    <Exec Command="del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Wox*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Ijwhost.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.xml&quot;" />
   </Target>
 
 </Project>

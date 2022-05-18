@@ -28,8 +28,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
         private const string Top = nameof(Top);
         private const string NoPreview = nameof(NoPreview);
         private readonly string reservedStringPattern = @"^[\/\\\$\%]+$|^.*[<>].*$";
-        private bool _top;
-        private bool _preview;
+        private bool top;
+        private bool preview;
 
         public string Name => Resources.plugin_name;
 
@@ -51,25 +51,25 @@ namespace Community.PowerToys.Run.Plugin.Everything
             },
         };
 
-        private IContextMenu _contextMenuLoader;
-        private PluginInitContext _context;
+        private IContextMenu contextMenuLoader;
+        private PluginInitContext context;
         private bool disposed;
-        private static string _warningIconPath;
+        private static string warningIconPath;
 
         internal static string WarningIcon
         {
             get
             {
-                return _warningIconPath;
+                return warningIconPath;
             }
         }
 
         public void Init(PluginInitContext context)
         {
-            _context = context;
-            _contextMenuLoader = new ContextMenuLoader(context);
-            _context.API.ThemeChanged += OnThemeChanged;
-            UpdateIconPath(_context.API.GetCurrentTheme());
+            this.context = context;
+            this.contextMenuLoader = new ContextMenuLoader(context);
+            this.context.API.ThemeChanged += this.OnThemeChanged;
+            UpdateIconPath(this.context.API.GetCurrentTheme());
             EverythingSetup();
         }
 
@@ -88,13 +88,13 @@ namespace Community.PowerToys.Run.Plugin.Everything
             {
                 var searchQuery = query.Search;
 
-                var regexMatch = Regex.Match(searchQuery, reservedStringPattern);
+                var regexMatch = Regex.Match(searchQuery, this.reservedStringPattern);
 
                 if (!regexMatch.Success)
                 {
                     try
                     {
-                        results.AddRange(EverythingSearch(searchQuery, _top, _preview));
+                        results.AddRange(EverythingSearch(searchQuery, this.top, this.preview));
                     }
                     catch (OperationCanceledException)
                     {
@@ -102,7 +102,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         {
                             Title = Resources.timeout,
                             SubTitle = Resources.enable_wait,
-                            IcoPath = _warningIconPath,
+                            IcoPath = warningIconPath,
                             Score = int.MaxValue,
                         });
                     }
@@ -112,14 +112,14 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         {
                             Title = Resources.Everything_not_running,
                             SubTitle = Resources.Everything_ini,
-                            IcoPath = _warningIconPath,
+                            IcoPath = warningIconPath,
                             QueryTextDisplay = '.' + Resources.plugin_name,
                             Score = int.MaxValue,
                         });
                     }
                     catch (Exception e)
                     {
-                        Log.Exception("Everything Exception", e, GetType());
+                        Log.Exception("Everything Exception", e, this.GetType());
                     }
                 }
             }
@@ -136,17 +136,17 @@ namespace Community.PowerToys.Run.Plugin.Everything
         {
             if (theme == Theme.Light || theme == Theme.HighContrastWhite)
             {
-                _warningIconPath = "Images/Warning.light.png";
+                warningIconPath = "Images/Warning.light.png";
             }
             else
             {
-                _warningIconPath = "Images/Warning.dark.png";
+                warningIconPath = "Images/Warning.dark.png";
             }
         }
 
         public List<ContextMenuResult> LoadContextMenus(Result selectedResult)
         {
-            return _contextMenuLoader.LoadContextMenus(selectedResult);
+            return this.contextMenuLoader.LoadContextMenus(selectedResult);
         }
 
         public Control CreateSettingPanel()
@@ -164,26 +164,26 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 nopreview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == NoPreview)?.Value ?? false;
             }
 
-            _top = top;
-            _preview = nopreview;
+            this.top = top;
+            this.preview = nopreview;
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (!this.disposed)
             {
                 if (disposing)
                 {
                 }
 
-                disposed = true;
+                this.disposed = true;
             }
         }
 
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
+            this.Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
     }

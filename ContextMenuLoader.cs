@@ -19,14 +19,14 @@ namespace Community.PowerToys.Run.Plugin.Everything
 {
     internal class ContextMenuLoader : IContextMenu
     {
-        private readonly PluginInitContext _context;
+        private readonly PluginInitContext context;
 
         // Extensions for adding run as admin context menu item for applications
         private readonly string[] appExtensions = { ".exe", ".bat", ".appref-ms", ".lnk" };
 
         public ContextMenuLoader(PluginInitContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We want to keep the process alive, and instead log and show an error message")]
@@ -43,7 +43,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 }
 
                 // Test to check if File can be Run as admin, if yes, we add a 'run as admin' context menu item
-                if (CanFileBeRunAsAdmin(record.Path))
+                if (this.CanFileBeRunAsAdmin(record.Path))
                 {
                     contextMenus.Add(CreateRunAsAdminContextMenu(record));
                 }
@@ -67,9 +67,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         catch (Exception e)
                         {
                             var message = Properties.Resources.clipboard_failed;
-                            Log.Exception(message, e, GetType());
+                            Log.Exception(message, e, this.GetType());
 
-                            _context.API.ShowMsg(message);
+                            this.context.API.ShowMsg(message);
                             return false;
                         }
                     },
@@ -100,7 +100,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         }
                         catch (Exception e)
                         {
-                            Log.Exception($"Failed to open {record.Path} in console, {e.Message}", e, GetType());
+                            Log.Exception($"Failed to open {record.Path} in console, {e.Message}", e, this.GetType());
                             return false;
                         }
                     },
@@ -142,7 +142,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         private bool CanFileBeRunAsAdmin(string path)
         {
             string fileExtension = Path.GetExtension(path);
-            foreach (string extension in appExtensions)
+            foreach (string extension in this.appExtensions)
             {
                 // Using OrdinalIgnoreCase since this is internal
                 if (extension.Equals(fileExtension, StringComparison.OrdinalIgnoreCase))
@@ -155,7 +155,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We want to keep the process alive, and instead log and show an error message")]
-        private ContextMenuResult CreateOpenContainingFolderResult(SearchResult record)
+        private static ContextMenuResult CreateOpenContainingFolderResult(SearchResult record)
         {
             return new ContextMenuResult
             {
