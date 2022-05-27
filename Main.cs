@@ -22,7 +22,7 @@ using static Community.PowerToys.Run.Plugin.Everything.NativeMethods;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
-    public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider
+    public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider, IPluginI18n
     {
         private const string Wait = nameof(Wait);
         private const string Top = nameof(Top);
@@ -31,7 +31,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         private bool top;
         private bool preview;
 
-        public string Name => Resources.plugin_name;
+        public string Name => Resources.plugin_name + "-WIP";
 
         public string Description => Resources.plugin_description;
 
@@ -185,6 +185,16 @@ namespace Community.PowerToys.Run.Plugin.Everything
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             this.Dispose(disposing: true);
             GC.SuppressFinalize(this);
+        }
+
+        public string GetTranslatedPluginTitle()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetTranslatedPluginDescription()
+        {
+            throw new NotImplementedException();
         }
     }
 }

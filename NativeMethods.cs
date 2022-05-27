@@ -14,6 +14,7 @@ using System.Windows;
 using Community.PowerToys.Run.Plugin.Everything.Properties;
 using Microsoft.Win32;
 using Wox.Plugin;
+using Wox.Plugin.Logger;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
@@ -72,7 +73,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         internal const string dllName = "Everything64.dll";
 
-#pragma warning disable SA1516 // Elements should be separated by blank line
         [DllImport(dllName)]
         public static extern uint Everything_GetNumResults();
         [DllImport(dllName, CharSet = CharSet.Unicode)]
@@ -91,15 +91,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
         private static uint max = 20;
         private static Sort sort = Sort.DATE_MODIFIED_DESCENDING;
         private static Dictionary<string, string> filters = new Dictionary<string, string>();
-#pragma warning disable SA1503 // Braces should not be omitted
-#if DEBUG
+
         private static StringBuilder log = new StringBuilder();
-        private static void Log(string str)
-        {
-            File.AppendAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "debugLog.txt"), str + "\n");
-            return;
-        }
-#endif
+
         public static void EverythingSetup()
         {
             Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME);
@@ -213,77 +207,54 @@ namespace Community.PowerToys.Run.Plugin.Everything
         internal static readonly Hashtable Icons = GetFileTypeAndIcon();
         internal static Hashtable GetFileTypeAndIcon()
         {
-            RegistryKey rkRoot = Registry.ClassesRoot, rkKey = Registry.ClassesRoot;
             Hashtable iconsInfo = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
             try
             {
-                foreach (string keyName in rkRoot.GetSubKeyNames())
+                using (RegistryKey rkRoot = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry64))
                 {
-                    try
+                    foreach (string keyName in rkRoot.GetSubKeyNames())
                     {
-                        if (string.IsNullOrEmpty(keyName))
+                        if (string.IsNullOrWhiteSpace(keyName) || keyName[0] != '.' || iconsInfo.ContainsKey(keyName))
                             continue;
-                        if (keyName.IndexOf(".", StringComparison.CurrentCulture) != 0)
-                            continue;
-                        rkKey = rkRoot.OpenSubKey(keyName);
-                        if (rkKey == null)
-                            continue;
-                        object defaultValue = rkKey.GetValue(string.Empty);
-                        if (defaultValue == null)
-                            continue;
-
-                        rkKey = rkRoot.OpenSubKey(defaultValue.ToString() + "\\defaulticon");
-                        if (rkKey == null)
-                            rkKey = rkRoot.OpenSubKey(defaultValue.ToString() + "\\shell\\Open\\command");
-
-                        if (rkKey != null)
+                        try
                         {
-                            object value = rkKey.GetValue(string.Empty);
-                            if (value != null)
+                            object defaultValue = null;
+                            using (RegistryKey rkKey = rkRoot.OpenSubKey(keyName))
                             {
-                                string[] path = value.ToString().Split(new char[] { '\"', ',' }, StringSplitOptions.RemoveEmptyEntries);
-                                if (path.Length > 0 && path[0].Contains('.'))
-                                {
-                                    string fileParam = Environment.ExpandEnvironmentVariables(path[0].Replace("\"", string.Empty, StringComparison.CurrentCulture).Trim());
-                                    iconsInfo.Add(keyName, fileParam);
-                                }
+                                defaultValue = rkKey.GetValue(string.Empty);
+                                if (defaultValue == null)
+                                    continue;
+                            }
+
+                            object iconValue = null;
+                            using (RegistryKey rkIcon = rkRoot.OpenSubKey(defaultValue.ToString() + "\\defaulticon"), rkOpen = rkRoot.OpenSubKey(defaultValue.ToString() + "\\shell\\Open\\command"))
+                            {
+                                iconValue = rkIcon == null ? rkOpen?.GetValue(string.Empty) : rkIcon.GetValue(string.Empty);
+                                if (iconValue != null)
+                                    continue;
+                            }
+
+                            string[] path = iconValue.ToString().Split(new char[] { '\"', ',' }, StringSplitOptions.RemoveEmptyEntries);
+                            if (path.Length > 0 && path[0].Contains('.'))
+                            {
+                                string fileParam = Environment.ExpandEnvironmentVariables(path[0].Replace("\"", string.Empty, StringComparison.CurrentCulture).Trim());
+                                iconsInfo.Add(keyName, fileParam);
                             }
                         }
-                    }
-#if DEBUG
-                    catch (Exception e)
-                    {
-                        log.AppendLine(e.ToString());
-                        Log(log.ToString());
-#endif
-#if RELEASE
-                    catch (Exception)
-                    {
-#endif
-
-                        // If exceptions occurs for a key despite condition checks, just move onto the next key, plugin will still work, just without that icon info
-                        continue;
+                        catch (Exception e)
+                        {
+                            log.AppendLine(keyName + "：" + e.ToString());
+                            continue; // something wrong with this key, move on
+                        }
                     }
                 }
             }
-#if DEBUG
             catch (Exception e)
             {
-                log.AppendLine(e.ToString());
-                Log(log.ToString());
-#endif
-#if RELEASE
-            catch (Exception)
-            {
-#endif
-
-                // User privillege probably too low to access Registry Keys, plugin will still work, just without icon info
+                Log.Exception(log.ToString(), e, null);
             }
 
-            rkKey.Close();
-            rkRoot.Close();
             return iconsInfo;
         }
-#pragma warning restore SA1503 // Braces should not be omitted
     }
 }
