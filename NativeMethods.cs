@@ -71,28 +71,77 @@ namespace Community.PowerToys.Run.Plugin.Everything
             DATE_RUN_DESCENDING,
         }
 
+        [Flags]
+        internal enum AssocF
+        {
+            NONE = 0x00000000,
+            INIT_NOREMAPCLSID = 0x00000001,
+            INIT_BYEXENAME = 0x00000002,
+            INIT_DEFAULTTOSTAR = 0x00000004,
+            INIT_DEFAULTTOFOLDER = 0x00000008,
+            NOUSERSETTINGS = 0x00000010,
+            NOTRUNCATE = 0x00000020,
+            VERIFY = 0x00000040,
+            REMAPRUNDLL = 0x00000080,
+            NOFIXUPS = 0x00000100,
+            IGNOREBASECLASS = 0x00000200,
+            INIT_IGNOREUNKNOWN = 0x00000400,
+            INIT_FIXED_PROGID = 0x00000800,
+            IS_PROTOCOL = 0x00001000,
+            INIT_FOR_FILE = 0x00002000,
+        }
+
+        internal enum AssocStr
+        {
+            COMMAND = 1,
+            EXECUTABLE,
+            FRIENDLYDOCNAME,
+            FRIENDLYAPPNAME,
+            NOOPEN,
+            SHELLNEWVALUE,
+            DDECOMMAND,
+            DDEIFEXEC,
+            DDEAPPLICATION,
+            DDETOPIC,
+            INFOTIP,
+            QUICKTIP,
+            TILEINFO,
+            CONTENTTYPE,
+            DEFAULTICON,
+            SHELLEXTENSION,
+            DROPTARGET,
+            DELEGATEEXECUTE,
+            SUPPORTED_URI_PROTOCOLS,
+            PROGID,
+            APPID,
+            APPPUBLISHER,
+            APPICONREFERENCE,
+            MAX,
+        }
+
         internal const string dllName = "Everything64.dll";
 
         [DllImport(dllName)]
-        public static extern uint Everything_GetNumResults();
+        internal static extern uint Everything_GetNumResults();
         [DllImport(dllName, CharSet = CharSet.Unicode)]
-        public static extern void Everything_GetResultFullPathName(uint nIndex, char[] lpString, uint nMaxCount);
+        internal static extern void Everything_GetResultFullPathName(uint nIndex, char[] lpString, uint nMaxCount);
         [DllImport(dllName)]
-        public static extern bool Everything_QueryW(bool bWait);
+        internal static extern bool Everything_QueryW(bool bWait);
         [DllImport(dllName)]
-        public static extern void Everything_SetMax(uint dwMax);
+        internal static extern void Everything_SetMax(uint dwMax);
         [DllImport(dllName)]
-        public static extern void Everything_SetRequestFlags(Request RequestFlags);
+        internal static extern void Everything_SetRequestFlags(Request RequestFlags);
         [DllImport(dllName, CharSet = CharSet.Unicode)]
-        public static extern uint Everything_SetSearchW(string lpSearchString);
+        internal static extern uint Everything_SetSearchW(string lpSearchString);
         [DllImport(dllName)]
-        public static extern void Everything_SetSort(Sort SortType);
+        internal static extern void Everything_SetSort(Sort SortType);
+        [DllImport("Shlwapi.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        internal static extern uint AssocQueryString(AssocF flags, AssocStr str, string pszAssoc, string pszExtra, [Out] char[] pszOut, [In][Out] ref uint pcchOut);
 
         private static uint max = 20;
         private static Sort sort = Sort.DATE_MODIFIED_DESCENDING;
         private static Dictionary<string, string> filters = new Dictionary<string, string>();
-
-        private static StringBuilder log = new StringBuilder();
+        private static bool firstrun = true;
 
         public static void EverythingSetup()
         {
@@ -130,8 +179,10 @@ namespace Community.PowerToys.Run.Plugin.Everything
             }
         }
 
-        public static IEnumerable<Result> EverythingSearch(string qry, bool top, bool preview)
+        public static IEnumerable<Result> EverythingSearch(string qry, bool top, bool preview, bool legacy)
         {
+            if (legacy && firstrun)
+                Icons = GetFileTypeAndIcon();
             Everything_SetMax(max);
             if (qry.Contains(':'))
             {
@@ -157,7 +208,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 string fullPath = new string(buffer);
                 string name = Path.GetFileName(fullPath);
                 string path;
-                bool isFolder = Path.HasExtension(fullPath.Replace(".lnk", string.Empty));
+                bool isFolder = !Path.HasExtension(fullPath.Replace(".lnk", string.Empty));
                 if (isFolder)
                     path = fullPath;
                 else
@@ -169,10 +220,10 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     Title = name,
                     ToolTipData = new ToolTipData("Name : " + name, "Path : " + path),
                     SubTitle = Resources.plugin_name + ": " + fullPath,
-                    IcoPath = (preview || string.IsNullOrEmpty(ext)) ?
+                    IcoPath = isFolder ? "Images/folder.png" : (preview ?
                         fullPath :
-                        (string)(Icons[ext] ??
-                            "Images/NoIcon.png"),
+                        (string)((legacy ? Icons[ext] : Icon(ext)) ??
+                            "Images/file.png")),
                     ContextData = new SearchResult()
                     {
                         Path = fullPath,
@@ -197,64 +248,98 @@ namespace Community.PowerToys.Run.Plugin.Everything
                             }
                         }
                     },
-                    QueryTextDisplay = isFolder ? path : name,
+
+                    // QueryTextDisplay = isFolder ? path : name,
                 };
                 if (top) r.Score = (int)(max - i);
                 yield return r;
             }
         }
 
-        internal static readonly Hashtable Icons = GetFileTypeAndIcon();
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+        internal static string? Icon(string doctype)
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+        {
+            uint pcchOut = 0;
+            _ = AssocQueryString(AssocF.NONE, AssocStr.DEFAULTICON, doctype, null, null, ref pcchOut);
+            char[] pszOut = new char[pcchOut];
+            _ = AssocQueryString(AssocF.NONE, AssocStr.DEFAULTICON, doctype, null, pszOut, ref pcchOut);
+            string doc = Environment.ExpandEnvironmentVariables(new string(pszOut).Split(new char[] { '\"', ',' }, StringSplitOptions.RemoveEmptyEntries)[0].Replace("\"", string.Empty, StringComparison.CurrentCulture).Trim());
+
+            if (File.Exists(doc))
+                return doc;
+
+            return null;
+        }
+
+        //Manually traverse the registry
+        private static Hashtable Icons = new Hashtable();
         internal static Hashtable GetFileTypeAndIcon()
         {
-            Hashtable iconsInfo = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
+            Hashtable iconsInfo = new Hashtable(StringComparer.CurrentCultureIgnoreCase);
             try
             {
                 using (RegistryKey rkRoot = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry64))
                 {
-                    foreach (string keyName in rkRoot.GetSubKeyNames())
-                    {
-                        if (string.IsNullOrWhiteSpace(keyName) || keyName[0] != '.' || iconsInfo.ContainsKey(keyName))
-                            continue;
-                        try
-                        {
-                            object defaultValue = null;
-                            using (RegistryKey rkKey = rkRoot.OpenSubKey(keyName))
-                            {
-                                defaultValue = rkKey.GetValue(string.Empty);
-                                if (defaultValue == null)
-                                    continue;
-                            }
+                    FindExt(rkRoot);
+                }
 
-                            object iconValue = null;
-                            using (RegistryKey rkIcon = rkRoot.OpenSubKey(defaultValue.ToString() + "\\defaulticon"), rkOpen = rkRoot.OpenSubKey(defaultValue.ToString() + "\\shell\\Open\\command"))
-                            {
-                                iconValue = rkIcon == null ? rkOpen?.GetValue(string.Empty) : rkIcon.GetValue(string.Empty);
-                                if (iconValue != null)
-                                    continue;
-                            }
-
-                            string[] path = iconValue.ToString().Split(new char[] { '\"', ',' }, StringSplitOptions.RemoveEmptyEntries);
-                            if (path.Length > 0 && path[0].Contains('.'))
-                            {
-                                string fileParam = Environment.ExpandEnvironmentVariables(path[0].Replace("\"", string.Empty, StringComparison.CurrentCulture).Trim());
-                                iconsInfo.Add(keyName, fileParam);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            log.AppendLine(keyName + "：" + e.ToString());
-                            continue; // something wrong with this key, move on
-                        }
-                    }
+                using (RegistryKey rkRoot = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32))
+                {
+                    FindExt(rkRoot);
                 }
             }
             catch (Exception e)
             {
-                Log.Exception(log.ToString(), e, null);
+                Log.Exception(e.Message, e, typeof(NativeMethods));
             }
 
+            firstrun = false;
             return iconsInfo;
+
+            void FindExt(RegistryKey rkRoot)
+            {
+                foreach (string keyName in rkRoot.GetSubKeyNames())
+                {
+                    if (string.IsNullOrWhiteSpace(keyName) || keyName[0] != '.' || iconsInfo.ContainsKey(keyName))
+                        continue;
+
+                    try
+                    {
+                        object defaultValue = null;
+                        using (RegistryKey rkKey = rkRoot.OpenSubKey(keyName))
+                        {
+                            defaultValue = rkKey.GetValue(string.Empty);
+                            if (defaultValue == null)
+                                continue;
+                        }
+
+                        Log.Info((defaultValue == null) + string.Empty, typeof(NativeMethods));
+
+                        object iconValue = null;
+                        using (RegistryKey rkIcon = rkRoot.OpenSubKey(defaultValue.ToString() + "\\defaulticon"), rkOpen = rkRoot.OpenSubKey(defaultValue.ToString() + "\\shell\\Open\\command"))
+                        {
+                            iconValue = (rkIcon == null) ? rkOpen?.GetValue(string.Empty) : rkIcon.GetValue(string.Empty);
+                            if (iconValue == null)
+                                continue;
+                        }
+
+                        Log.Info((iconValue == null) + string.Empty, typeof(NativeMethods));
+
+                        string[] path = iconValue.ToString().Split(new char[] { '\"', ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (path.Length > 0 && path[0].Contains('.'))
+                        {
+                            string fileParam = Environment.ExpandEnvironmentVariables(path[0].Replace("\"", string.Empty, StringComparison.CurrentCulture).Trim());
+                            iconsInfo.Add(keyName, fileParam);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Exception(keyName + "：" + e.ToString(), e, typeof(NativeMethods));
+                        continue; // something wrong with this key, move on
+                    }
+                }
+            }
         }
     }
 }

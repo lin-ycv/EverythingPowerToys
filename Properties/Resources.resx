@@ -123,9 +123,6 @@
   <data name="copy_path" xml:space="preserve">
     <value>Copy path (Ctrl+C)</value>
   </data>
-  <data name="enable_wait" xml:space="preserve">
-    <value>Enable Wait setting under PowerToys Run &gt; Everything</value>
-  </data>
   <data name="Everything_ini" xml:space="preserve">
     <value>Install Everything if not installed</value>
   </data>
@@ -153,13 +150,7 @@
   <data name="run_as_admin" xml:space="preserve">
     <value>Run as administrator (Ctrl+Shift+Enter)</value>
   </data>
-  <data name="timeout" xml:space="preserve">
-    <value>Timed out before finishing the query</value>
-  </data>
   <data name="Top" xml:space="preserve">
     <value>Top - Insert result at the top of the list, may cause pre-selection issue.</value>
-  </data>
-  <data name="Wait" xml:space="preserve">
-    <value>Wait - Wait longer for the query to finish, enable only if prompted to.</value>
   </data>
 </root>

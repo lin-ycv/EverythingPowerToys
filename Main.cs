@@ -24,14 +24,15 @@ namespace Community.PowerToys.Run.Plugin.Everything
 {
     public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider, IPluginI18n
     {
-        private const string Wait = nameof(Wait);
+        private const string Legacy = nameof(Legacy);
         private const string Top = nameof(Top);
         private const string NoPreview = nameof(NoPreview);
         private readonly string reservedStringPattern = @"^[\/\\\$\%]+$|^.*[<>].*$";
         private bool top;
         private bool preview;
+        private bool legacy;
 
-        public string Name => Resources.plugin_name + "-WIP";
+        public string Name => Resources.plugin_name;
 
         public string Description => Resources.plugin_description;
 
@@ -49,27 +50,22 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 DisplayLabel = Resources.Preview,
                 Value = false,
             },
+            new PluginAdditionalOption()
+            {
+                Key = Legacy,
+                DisplayLabel = "Legacy Icon Logic",
+                Value = false,
+            },
         };
 
         private IContextMenu contextMenuLoader;
         private PluginInitContext context;
         private bool disposed;
-        private static string warningIconPath;
-
-        internal static string WarningIcon
-        {
-            get
-            {
-                return warningIconPath;
-            }
-        }
 
         public void Init(PluginInitContext context)
         {
             this.context = context;
             this.contextMenuLoader = new ContextMenuLoader(context);
-            this.context.API.ThemeChanged += this.OnThemeChanged;
-            UpdateIconPath(this.context.API.GetCurrentTheme());
             EverythingSetup();
         }
 
@@ -79,8 +75,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
             return results;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We want to keep the process alive but will log the exception")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Already validated")]
         public List<Result> Query(Query query, bool delayedExecution)
         {
             List<Result> results = new List<Result>();
@@ -94,17 +88,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 {
                     try
                     {
-                        results.AddRange(EverythingSearch(searchQuery, this.top, this.preview));
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        results.Add(new Result()
-                        {
-                            Title = Resources.timeout,
-                            SubTitle = Resources.enable_wait,
-                            IcoPath = warningIconPath,
-                            Score = int.MaxValue,
-                        });
+                        results.AddRange(EverythingSearch(searchQuery, this.top, this.preview, this.legacy));
                     }
                     catch (System.ComponentModel.Win32Exception)
                     {
@@ -112,7 +96,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         {
                             Title = Resources.Everything_not_running,
                             SubTitle = Resources.Everything_ini,
-                            IcoPath = warningIconPath,
+                            IcoPath = "Images/warning.png",
                             QueryTextDisplay = '.' + Resources.plugin_name,
                             Score = int.MaxValue,
                         });
@@ -125,23 +109,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
             }
 
             return results;
-        }
-
-        private void OnThemeChanged(Theme oldtheme, Theme newTheme)
-        {
-            UpdateIconPath(newTheme);
-        }
-
-        private static void UpdateIconPath(Theme theme)
-        {
-            if (theme == Theme.Light || theme == Theme.HighContrastWhite)
-            {
-                warningIconPath = "Images/Warning.light.png";
-            }
-            else
-            {
-                warningIconPath = "Images/Warning.dark.png";
-            }
         }
 
         public List<ContextMenuResult> LoadContextMenus(Result selectedResult)
@@ -158,14 +125,17 @@ namespace Community.PowerToys.Run.Plugin.Everything
         {
             var top = false;
             var nopreview = false;
+            var leg = false;
             if (settings != null && settings.AdditionalOptions != null)
             {
                 top = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Top)?.Value ?? false;
                 nopreview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == NoPreview)?.Value ?? false;
+                leg = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Legacy)?.Value ?? false;
             }
 
             this.top = top;
             this.preview = nopreview;
+            this.legacy = leg;
         }
 
         protected virtual void Dispose(bool disposing)
@@ -189,12 +159,12 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         public string GetTranslatedPluginTitle()
         {
-            throw new NotImplementedException();
+            return Resources.plugin_name;
         }
 
         public string GetTranslatedPluginDescription()
         {
-            throw new NotImplementedException();
+            return Resources.plugin_description;
         }
     }
 }

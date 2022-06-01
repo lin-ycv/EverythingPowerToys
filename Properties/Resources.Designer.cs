@@ -79,15 +79,6 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable Wait setting under PowerToys Run &gt; Everything.
-        /// </summary>
-        public static string enable_wait {
-            get {
-                return ResourceManager.GetString("enable_wait", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Install Everything if not installed.
         /// </summary>
         public static string Everything_ini {
@@ -169,29 +160,11 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Timed out before finishing the query.
-        /// </summary>
-        public static string timeout {
-            get {
-                return ResourceManager.GetString("timeout", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Top - Insert result at the top of the list, may cause pre-selection issue..
         /// </summary>
         public static string Top {
             get {
                 return ResourceManager.GetString("Top", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Wait - Wait longer for the query to finish, enable only if prompted to..
-        /// </summary>
-        public static string Wait {
-            get {
-                return ResourceManager.GetString("Wait", resourceCulture);
             }
         }
     }
