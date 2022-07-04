@@ -39,7 +39,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
                 if (isFile)
                 {
-                    contextMenus.Add(CreateOpenContainingFolderResult(record));
+                    contextMenus.Add(this.CreateOpenContainingFolderResult(record));
                 }
 
                 // Test to check if File can be Run as admin, if yes, we add a 'run as admin' context menu item
@@ -155,7 +155,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We want to keep the process alive, and instead log and show an error message")]
-        private static ContextMenuResult CreateOpenContainingFolderResult(SearchResult record)
+        private ContextMenuResult CreateOpenContainingFolderResult(SearchResult record)
         {
             return new ContextMenuResult
             {
@@ -167,34 +167,14 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 AcceleratorModifiers = ModifierKeys.Control | ModifierKeys.Shift,
                 Action = _ =>
                 {
-                    try
-                    {
-                        var openDir = new ProcessStartInfo
-                        {
-                            FileName = $"{Path.GetDirectoryName(record.Path)}",
-                            UseShellExecute = true,
-                        };
-                        Process.Start(openDir);
-                        return true;
-                    }
-                    catch (Exception e)
+                    if (!Helper.OpenInShell("explorer.exe", $"/select,\"{record.Path}\""))
                     {
                         var message = $"{Properties.Resources.folder_open_failed} {Path.GetDirectoryName(record.Path)}";
-                        MessageBox.Show(message + "\n" + e.Message);
+                        this.context.API.ShowMsg(message);
                         return false;
                     }
 
-                    // Throws exception: Reason Unknown
-                    // System.MissingMethodException: Method not found: 'Boolean Wox.Infrastructure.Helper.OpenInShell(System.String, System.String, System.String, Boolean, Boolean)'.
-
-                    // if (!Helper.OpenInShell("explorer.exe", $"/select,\"{Path.GetDirectoryName(record.Path)}\""))
-                    // {
-                    //    var message = $"{Properties.Resources.folder_open_failed} {Path.GetDirectoryName(record.Path)}";
-                    //    _context.API.ShowMsg(message);
-                    //    return false;
-                    // }
-
-                    // return true;
+                    return true;
                 },
             };
         }

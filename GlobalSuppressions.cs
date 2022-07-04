@@ -15,3 +15,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1516:Elements should be separated by blank line", Justification = "don't care")]
 [assembly: SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:Braces should not be omitted", Justification = "don't care")]
 [assembly: SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1005:Single line comments should begin with single space", Justification = "don't care")]
+[assembly: SuppressMessage("Performance", "CA1838:Avoid 'StringBuilder' parameters for P/Invokes", Justification = "breaks icon preview for some reason when using char[]", Scope = "member", Target = "~M:Community.PowerToys.Run.Plugin.Everything.NativeMethods.Everything_GetResultFullPathName(System.UInt32,System.Text.StringBuilder,System.UInt32)")]

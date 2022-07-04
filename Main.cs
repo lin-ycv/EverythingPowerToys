@@ -24,13 +24,13 @@ namespace Community.PowerToys.Run.Plugin.Everything
 {
     public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider, IPluginI18n
     {
-        private const string Legacy = nameof(Legacy);
+        private const string AltIcon = nameof(AltIcon);
         private const string Top = nameof(Top);
         private const string NoPreview = nameof(NoPreview);
         private readonly string reservedStringPattern = @"^[\/\\\$\%]+$|^.*[<>].*$";
         private bool top;
         private bool preview;
-        private bool legacy;
+        private bool altIcon;
 
         public string Name => Resources.plugin_name;
 
@@ -40,8 +40,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
         {
             new PluginAdditionalOption()
             {
-                Key = Top,
-                DisplayLabel = Resources.Top,
+                Key = AltIcon,
+                DisplayLabel = Resources.AltIcon,
                 Value = false,
             },
             new PluginAdditionalOption()
@@ -52,8 +52,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
             },
             new PluginAdditionalOption()
             {
-                Key = Legacy,
-                DisplayLabel = "Legacy Icon Logic",
+                Key = Top,
+                DisplayLabel = Resources.Top,
                 Value = false,
             },
         };
@@ -88,7 +88,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 {
                     try
                     {
-                        results.AddRange(EverythingSearch(searchQuery, this.top, this.preview, this.legacy));
+                        results.AddRange(EverythingSearch(searchQuery, this.top, this.preview, this.altIcon));
                     }
                     catch (System.ComponentModel.Win32Exception)
                     {
@@ -125,17 +125,17 @@ namespace Community.PowerToys.Run.Plugin.Everything
         {
             var top = false;
             var nopreview = false;
-            var leg = false;
+            var alt = false;
             if (settings != null && settings.AdditionalOptions != null)
             {
                 top = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Top)?.Value ?? false;
                 nopreview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == NoPreview)?.Value ?? false;
-                leg = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Legacy)?.Value ?? false;
+                alt = settings.AdditionalOptions.FirstOrDefault(x => x.Key == AltIcon)?.Value ?? false;
             }
 
             this.top = top;
             this.preview = nopreview;
-            this.legacy = leg;
+            this.altIcon = alt;
         }
 
         protected virtual void Dispose(bool disposing)

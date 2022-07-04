@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -124,7 +125,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         [DllImport(dllName)]
         internal static extern uint Everything_GetNumResults();
         [DllImport(dllName, CharSet = CharSet.Unicode)]
-        internal static extern void Everything_GetResultFullPathName(uint nIndex, char[] lpString, uint nMaxCount);
+        internal static extern void Everything_GetResultFullPathName(uint nIndex, StringBuilder lpString, uint nMaxCount);
         [DllImport(dllName)]
         internal static extern bool Everything_QueryW(bool bWait);
         [DllImport(dllName)]
@@ -177,11 +178,18 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     filters.TryAdd(key.Split(':')[0].ToLowerInvariant(), kv[1].Trim());
                 }
             }
+#if DEBUG
+            string msg = $"Max: {max}\nSort: {sort}\nFilters: {string.Join("\n - ", filters.Select(x => { return x.Key + "_" + x.Value; }))}";
+            Log.Info(msg, typeof(NativeMethods));
+#endif
         }
 
         public static IEnumerable<Result> EverythingSearch(string qry, bool top, bool preview, bool legacy)
         {
-            if (legacy && firstrun)
+#if DEBUG
+            string orgqry = qry;
+#endif
+            if (!preview && legacy && firstrun)
                 Icons = GetFileTypeAndIcon();
             Everything_SetMax(max);
             if (qry.Contains(':'))
@@ -203,9 +211,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
             uint resultCount = Everything_GetNumResults();
             for (uint i = 0; i < resultCount; i++)
             {
-                char[] buffer = new char[260];
+                StringBuilder buffer = new StringBuilder(260);
                 Everything_GetResultFullPathName(i, buffer, 260);
-                string fullPath = new string(buffer);
+                string fullPath = buffer.ToString();
                 string name = Path.GetFileName(fullPath);
                 string path;
                 bool isFolder = !Path.HasExtension(fullPath.Replace(".lnk", string.Empty));
@@ -218,7 +226,12 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 var r = new Result()
                 {
                     Title = name,
-                    ToolTipData = new ToolTipData("Name : " + name, "Path : " + path),
+                    ToolTipData =
+#if DEBUG
+                    new ToolTipData(orgqry, qry),
+#else
+                    new ToolTipData("Name : " + name, fullPath),
+#endif
                     SubTitle = Resources.plugin_name + ": " + fullPath,
                     IcoPath = isFolder ? "Images/folder.png" : (preview ?
                         fullPath :
@@ -249,7 +262,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         }
                     },
 
-                    // QueryTextDisplay = isFolder ? path : name,
+                    QueryTextDisplay = isFolder ? path : name,
                 };
                 if (top) r.Score = (int)(max - i);
                 yield return r;
@@ -330,7 +343,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         if (path.Length > 0 && path[0].Contains('.'))
                         {
                             string fileParam = Environment.ExpandEnvironmentVariables(path[0].Replace("\"", string.Empty, StringComparison.CurrentCulture).Trim());
-                            iconsInfo.Add(keyName, fileParam);
+                            if (!fileParam.EndsWith("dll", StringComparison.CurrentCulture))
+                                iconsInfo.Add(keyName, fileParam);
                         }
                     }
                     catch (Exception e)
