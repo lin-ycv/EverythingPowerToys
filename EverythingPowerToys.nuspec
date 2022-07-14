@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>everythingpowertoys</id>
+    <version>x.xx.x</version>
+    <title>EverythingPowerToys</title>
+    <authors>Lin Yu-Chieh (Victor)</authors>
+    <owners>linycv</owners>
+    <projectUrl>https://github.com/lin-ycv/EverythingPowerToys</projectUrl>
+    <iconUrl>https://rawcdn.githack.com/lin-ycv/EverythingPowerToys/v0.60.1/Images/Everything.light.png?min=1</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Everything integration for PowerToys Run</description>
+    <summary>Everything integration for PowerToys Run</summary>
+    <tags>everythingpowertoys everything powertoys search</tags>
+    <packageSourceUrl>https://github.com/lin-ycv/EverythingPowerToys</packageSourceUrl>
+  </metadata>
+</package>
