@@ -150,7 +150,4 @@
   <data name="run_as_admin" xml:space="preserve">
     <value>Esegui come amministratore (Ctrl+Maiusc+Invio)</value>
   </data>
-  <data name="Top" xml:space="preserve">
-    <value>In alto: inserire il risultato in cima all'elenco, potrebbe causare problemi di preselezione.</value>
-  </data>
 </root>

@@ -150,7 +150,4 @@
   <data name="run_as_admin" xml:space="preserve">
     <value>تشغيل كمسؤول (Ctrl + Shift + Enter)</value>
   </data>
-  <data name="Top" xml:space="preserve">
-    <value>أعلى القائمة - قد يتسبب إدراج النتيجة في أعلى القائمة في حدوث مشكلة في الاختيار المسبق.</value>
-  </data>
 </root>

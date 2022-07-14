@@ -150,7 +150,4 @@
   <data name="run_as_admin" xml:space="preserve">
     <value>Rulați ca administrator (Ctrl+Shift+Enter)</value>
   </data>
-  <data name="Top" xml:space="preserve">
-    <value>Sus - Introduceți rezultatul în partea de sus a listei, poate cauza probleme de preselecție.</value>
-  </data>
 </root>

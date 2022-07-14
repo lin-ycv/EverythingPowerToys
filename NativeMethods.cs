@@ -131,6 +131,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
         [DllImport(dllName)]
         internal static extern void Everything_SetMax(uint dwMax);
         [DllImport(dllName)]
+        internal static extern void Everything_SetRegex(bool bEnable);
+        [DllImport(dllName)]
         internal static extern void Everything_SetRequestFlags(Request RequestFlags);
         [DllImport(dllName, CharSet = CharSet.Unicode)]
         internal static extern uint Everything_SetSearchW(string lpSearchString);
@@ -184,7 +186,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
 #endif
         }
 
-        public static IEnumerable<Result> EverythingSearch(string qry, bool top, bool preview, bool legacy)
+        public static IEnumerable<Result> EverythingSearch(string qry, bool preview, bool legacy)
         {
 #if DEBUG
             string orgqry = qry;
@@ -261,10 +263,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
                             }
                         }
                     },
-
                     QueryTextDisplay = isFolder ? path : name,
                 };
-                if (top) r.Score = (int)(max - i);
                 yield return r;
             }
         }

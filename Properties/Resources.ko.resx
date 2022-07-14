@@ -150,7 +150,4 @@
   <data name="run_as_admin" xml:space="preserve">
     <value>관리자 권한으로 실행(Ctrl+Shift+Enter)</value>
   </data>
-  <data name="Top" xml:space="preserve">
-    <value>상단 - 목록 상단에 결과를 삽입하면 사전 선택 문제가 발생할 수 있습니다.</value>
-  </data>
 </root>

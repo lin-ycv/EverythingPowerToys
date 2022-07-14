@@ -150,7 +150,4 @@
   <data name="run_as_admin" xml:space="preserve">
     <value>Kör som administratör (Ctrl+Skift+Enter)</value>
   </data>
-  <data name="Top" xml:space="preserve">
-    <value>Topp - Infoga resultat högst upp i listan, kan orsaka förvalsproblem.</value>
-  </data>
 </root>

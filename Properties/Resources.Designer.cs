@@ -160,20 +160,20 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to RegEx - Enable regular expression in search..
+        /// </summary>
+        public static string RegEx {
+            get {
+                return ResourceManager.GetString("RegEx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Run as administrator (Ctrl+Shift+Enter).
         /// </summary>
         public static string run_as_admin {
             get {
                 return ResourceManager.GetString("run_as_admin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Top - Insert result at the top of the list, may cause pre-selection issue..
-        /// </summary>
-        public static string Top {
-            get {
-                return ResourceManager.GetString("Top", resourceCulture);
             }
         }
     }

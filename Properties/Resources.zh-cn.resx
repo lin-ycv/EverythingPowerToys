@@ -150,7 +150,4 @@
   <data name="run_as_admin" xml:space="preserve">
     <value>以管理员身份运行 (Ctrl+Shift+Enter)</value>
   </data>
-  <data name="Top" xml:space="preserve">
-    <value>顶部 - 在列表顶部插入结果，可能会导致预选问题</value>
-  </data>
 </root>

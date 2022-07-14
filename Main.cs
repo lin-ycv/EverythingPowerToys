@@ -25,10 +25,10 @@ namespace Community.PowerToys.Run.Plugin.Everything
     public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider, IPluginI18n
     {
         private const string AltIcon = nameof(AltIcon);
-        private const string Top = nameof(Top);
+        private const string RegEx = nameof(RegEx);
         private const string NoPreview = nameof(NoPreview);
         private readonly string reservedStringPattern = @"^[\/\\\$\%]+$|^.*[<>].*$";
-        private bool top;
+        private bool regEx;
         private bool preview;
         private bool altIcon;
 
@@ -52,8 +52,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
             },
             new PluginAdditionalOption()
             {
-                Key = Top,
-                DisplayLabel = Resources.Top,
+                Key = RegEx,
+                DisplayLabel = Resources.RegEx,
                 Value = false,
             },
         };
@@ -88,7 +88,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 {
                     try
                     {
-                        results.AddRange(EverythingSearch(searchQuery, this.top, this.preview, this.altIcon));
+                        results.AddRange(EverythingSearch(searchQuery, this.preview, this.altIcon));
                     }
                     catch (System.ComponentModel.Win32Exception)
                     {
@@ -123,17 +123,18 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         public void UpdateSettings(PowerLauncherPluginSettings settings)
         {
-            var top = false;
+            var regX = false;
             var nopreview = false;
             var alt = false;
             if (settings != null && settings.AdditionalOptions != null)
             {
-                top = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Top)?.Value ?? false;
+                regX = settings.AdditionalOptions.FirstOrDefault(x => x.Key == RegEx)?.Value ?? false;
                 nopreview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == NoPreview)?.Value ?? false;
                 alt = settings.AdditionalOptions.FirstOrDefault(x => x.Key == AltIcon)?.Value ?? false;
             }
 
-            this.top = top;
+            this.regEx = regX;
+            Everything_SetRegex(this.regEx);
             this.preview = nopreview;
             this.altIcon = alt;
         }

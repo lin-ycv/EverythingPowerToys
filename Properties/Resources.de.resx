@@ -150,7 +150,4 @@
   <data name="run_as_admin" xml:space="preserve">
     <value>Als Administrator ausführen (Strg+Shift+Enter)</value>
   </data>
-  <data name="Top" xml:space="preserve">
-    <value>Oben – Ergebnis am Anfang der Liste einfügen, kann zu Problemen bei der Vorauswahl führen.</value>
-  </data>
 </root>

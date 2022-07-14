@@ -150,10 +150,10 @@
   <data name="Preview" xml:space="preserve">
     <value>Preview - Preview file content as icon, may cause freezing if file is not local.</value>
   </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>RegEx - Enable regular expression in search.</value>
+  </data>
   <data name="run_as_admin" xml:space="preserve">
     <value>Run as administrator (Ctrl+Shift+Enter)</value>
-  </data>
-  <data name="Top" xml:space="preserve">
-    <value>Top - Insert result at the top of the list, may cause pre-selection issue.</value>
   </data>
 </root>

@@ -150,7 +150,4 @@
   <data name="run_as_admin" xml:space="preserve">
     <value>管理者として実行（Ctrl + Shift + Enter）</value>
   </data>
-  <data name="Top" xml:space="preserve">
-    <value>トップ-リストの一番上に結果を挿入します。事前選択の問題が発生する可能性があります。</value>
-  </data>
 </root>
