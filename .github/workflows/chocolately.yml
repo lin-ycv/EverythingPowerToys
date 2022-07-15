@@ -1,0 +1,33 @@
+name: sync to chocolately
+
+on:
+  release:
+    type: [published]
+
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: chocolatey
+      
+      - name: Config and Push
+        run: |
+          $response=curl.exe -s https://api.github.com/repos/lin-ycv/everythingpowertoys/releases/latest
+          $browser=($response | select-string "browser_").Line
+          if($browser.Count>1){ $browser=$browser[-1] }
+          $url=$browser.Split("`"")[3]
+          $ver=($response | select-string 'tag_').Line.Split("`"")[3].substring(1)
+          Invoke-WebRequest $url -O e.zip
+          $sum=(Get-FileHash e.zip -Algorithm SHA256).Hash
+          rm e.zip
+          echo $ver $url $sum
+          Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $ver} | ForEach  {$_ -Replace '_URL_', $url} | ForEach  {$_ -Replace '_CRC_', $sum} | Set-Content $_  | echo $_}
+          choco pack
+          ls
+          choco apikey --key ${{ secrets.CHOCOLATEY }} --source https://push.chocolatey.org/
+          choco push everythingpowertoys.$ver.nupkg --source https://push.chocolatey.org/
