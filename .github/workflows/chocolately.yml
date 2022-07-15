@@ -27,7 +27,7 @@ jobs:
           $sum=(Get-FileHash e.zip -Algorithm SHA256).Hash
           rm e.zip
           echo $ver $url $sum
-          Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $ver} | ForEach  {$_ -Replace '_URL_', $url} | ForEach  {$_ -Replace '_CRC_', $sum} | Set-Content $_  | echo $_}
+          Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $ver} | ForEach  {$_ -Replace '_URL_', $url} | ForEach  {$_ -Replace '_CRC_', $sum} | Set-Content $_ }
           rm 1
           choco pack
           ls
