@@ -1,7 +1,7 @@
 ﻿
 $ErrorActionPreference = 'Stop';
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url        = 'https://github.com/lin-ycv/EverythingPowerToys/releases/download/vx.xx.x/Everything-x.xx.x-x64.zip'
+$url        = '_URL_'
 
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
@@ -10,7 +10,7 @@ $packageArgs = @{
 
   softwareName  = 'EverythingPowerToys*'
 
-  checksum      = 'xxx'
+  checksum      = '_CRC_'
   checksumType  = 'sha256'
 }
 
