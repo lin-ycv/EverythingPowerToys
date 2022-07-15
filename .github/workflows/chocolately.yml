@@ -17,7 +17,7 @@ jobs:
       
       - name: Config and Push
         run: |
-          rm .github -Recurse -Force -Confirm:$false
+          rm .git -Recurse -Force -Confirm:$false
           $response=curl.exe -s https://api.github.com/repos/lin-ycv/everythingpowertoys/releases/latest
           $browser=($response | select-string "browser_").Line
           if($browser.Count>1){ $browser=$browser[-1] }
