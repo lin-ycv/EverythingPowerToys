@@ -127,6 +127,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
         [DllImport(dllName, CharSet = CharSet.Unicode)]
         internal static extern void Everything_GetResultFullPathName(uint nIndex, StringBuilder lpString, uint nMaxCount);
         [DllImport(dllName)]
+        internal static extern bool Everything_IsFolderResult(uint index);
+        [DllImport(dllName)]
         internal static extern bool Everything_QueryW(bool bWait);
         [DllImport(dllName)]
         internal static extern void Everything_SetMax(uint dwMax);
@@ -211,20 +213,21 @@ namespace Community.PowerToys.Run.Plugin.Everything
             }
 
             uint resultCount = Everything_GetNumResults();
+#if DEBUG
+            Log.Info(qry + " => " + resultCount, typeof(NativeMethods), "EverythingSearch.ResultCount", string.Empty, 217);
+#endif
             for (uint i = 0; i < resultCount; i++)
             {
                 StringBuilder buffer = new StringBuilder(260);
                 Everything_GetResultFullPathName(i, buffer, 260);
                 string fullPath = buffer.ToString();
                 string name = Path.GetFileName(fullPath);
-                string path;
-                bool isFolder = !Path.HasExtension(fullPath.Replace(".lnk", string.Empty));
-                if (isFolder)
-                    path = fullPath;
-                else
-                    path = Path.GetDirectoryName(fullPath);
+                bool isFolder = Everything_IsFolderResult(i);
+                string path = isFolder ? fullPath : Path.GetDirectoryName(fullPath);
                 string ext = Path.GetExtension(fullPath.Replace(".lnk", string.Empty));
-
+#if DEBUG
+                Log.Info(i + " : " + name + " = " + fullPath, typeof(NativeMethods), "EverythingSearch.Result", string.Empty, 229);
+#endif
                 var r = new Result()
                 {
                     Title = name,
@@ -235,6 +238,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     new ToolTipData("Name : " + name, fullPath),
 #endif
                     SubTitle = Resources.plugin_name + ": " + fullPath,
+
                     IcoPath = isFolder ? "Images/folder.png" : (preview ?
                         fullPath :
                         (string)((legacy ? Icons[ext] : Icon(ext)) ??

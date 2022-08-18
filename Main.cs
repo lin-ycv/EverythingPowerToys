@@ -32,6 +32,11 @@ namespace Community.PowerToys.Run.Plugin.Everything
         private bool preview;
         private bool altIcon;
 
+#if DEBUG
+        private const string Debug = nameof(Debug);
+        private bool debug;
+#endif
+
         public string Name => Resources.plugin_name;
 
         public string Description => Resources.plugin_description;
@@ -56,6 +61,14 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 DisplayLabel = Resources.RegEx,
                 Value = false,
             },
+#if DEBUG
+            new PluginAdditionalOption()
+            {
+                Key = Debug,
+                DisplayLabel = "Output debug data",
+                Value = true,
+            },
+#endif
         };
 
         private IContextMenu contextMenuLoader;
@@ -126,17 +139,26 @@ namespace Community.PowerToys.Run.Plugin.Everything
             var regX = false;
             var nopreview = false;
             var alt = false;
+#if DEBUG
+            var debuging = true;
+#endif
             if (settings != null && settings.AdditionalOptions != null)
             {
                 regX = settings.AdditionalOptions.FirstOrDefault(x => x.Key == RegEx)?.Value ?? false;
                 nopreview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == NoPreview)?.Value ?? false;
                 alt = settings.AdditionalOptions.FirstOrDefault(x => x.Key == AltIcon)?.Value ?? false;
+#if DEBUG
+                debuging = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Debug)?.Value ?? true;
+#endif
             }
 
             this.regEx = regX;
             Everything_SetRegex(this.regEx);
             this.preview = nopreview;
             this.altIcon = alt;
+#if DEBUG
+            this.debug = debuging;
+#endif
         }
 
         protected virtual void Dispose(bool disposing)
