@@ -115,6 +115,15 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Path - Search path in additional to file/folder name..
+        /// </summary>
+        public static string Match_path {
+            get {
+                return ResourceManager.GetString("Match_path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open containing folder (Ctrl+Shift+E).
         /// </summary>
         public static string open_containing_folder {

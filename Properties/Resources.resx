@@ -135,6 +135,9 @@
   <data name="folder_open_failed" xml:space="preserve">
     <value>Fail to open folder at</value>
   </data>
+  <data name="Match_path" xml:space="preserve">
+    <value>Path - Search path in additional to file/folder name.</value>
+  </data>
   <data name="open_containing_folder" xml:space="preserve">
     <value>Open containing folder (Ctrl+Shift+E)</value>
   </data>

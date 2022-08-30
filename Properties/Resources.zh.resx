@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AltIcon" xml:space="preserve">
+    <value>變更圖示邏輯</value>
+  </data>
   <data name="clipboard_failed" xml:space="preserve">
     <value>複製到剪貼簿失敗</value>
   </data>
@@ -132,6 +135,9 @@
   <data name="folder_open_failed" xml:space="preserve">
     <value>無法啟動資料夾</value>
   </data>
+  <data name="Match_path" xml:space="preserve">
+    <value>也收尋路徑</value>
+  </data>
   <data name="open_containing_folder" xml:space="preserve">
     <value>開啟檔案位置 (Ctrl+Shift+E)</value>
   </data>
@@ -146,6 +152,9 @@
   </data>
   <data name="Preview" xml:space="preserve">
     <value>預覽 - 將檔案內容顯示為預覽圖示, 非本機的檔案可能會造成停頓.</value>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>RegEx 正規表示式搜尋</value>
   </data>
   <data name="run_as_admin" xml:space="preserve">
     <value>以系統管理員身分執行 (Ctrl+Shift+Enter)</value>

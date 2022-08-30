@@ -27,15 +27,19 @@ namespace Community.PowerToys.Run.Plugin.Everything
         private const string AltIcon = nameof(AltIcon);
         private const string RegEx = nameof(RegEx);
         private const string NoPreview = nameof(NoPreview);
+        private const string MatchPath = nameof(MatchPath);
         private readonly string reservedStringPattern = @"^[\/\\\$\%]+$|^.*[<>].*$";
         private bool regEx;
         private bool preview;
         private bool altIcon;
+        private bool matchPath;
 
-#if DEBUG
+#pragma warning disable SA1401
+#pragma warning disable SA1307
         private const string Debug = nameof(Debug);
-        private bool debug;
-#endif
+        internal bool debug;
+#pragma warning restore SA1307
+#pragma warning restore SA1401
 
         public string Name => Resources.plugin_name;
 
@@ -51,6 +55,12 @@ namespace Community.PowerToys.Run.Plugin.Everything
             },
             new PluginAdditionalOption()
             {
+                Key = MatchPath,
+                DisplayLabel = Resources.Match_path,
+                Value = false,
+            },
+            new PluginAdditionalOption()
+            {
                 Key = NoPreview,
                 DisplayLabel = Resources.Preview,
                 Value = false,
@@ -61,14 +71,12 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 DisplayLabel = Resources.RegEx,
                 Value = false,
             },
-#if DEBUG
             new PluginAdditionalOption()
             {
                 Key = Debug,
-                DisplayLabel = "Output debug data",
+                DisplayLabel = "Log debug data",
                 Value = true,
             },
-#endif
         };
 
         private IContextMenu contextMenuLoader;
@@ -79,7 +87,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         {
             this.context = context;
             this.contextMenuLoader = new ContextMenuLoader(context);
-            EverythingSetup();
+            EverythingSetup(debug);
         }
 
         public List<Result> Query(Query query)
@@ -101,7 +109,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 {
                     try
                     {
-                        results.AddRange(EverythingSearch(searchQuery, this.preview, this.altIcon));
+                        results.AddRange(EverythingSearch(searchQuery, this.preview, this.altIcon, debug));
                     }
                     catch (System.ComponentModel.Win32Exception)
                     {
@@ -139,26 +147,25 @@ namespace Community.PowerToys.Run.Plugin.Everything
             var regX = false;
             var nopreview = false;
             var alt = false;
-#if DEBUG
-            var debuging = true;
-#endif
+            var debuging = false;
+            var searchpath = false;
+
             if (settings != null && settings.AdditionalOptions != null)
             {
                 regX = settings.AdditionalOptions.FirstOrDefault(x => x.Key == RegEx)?.Value ?? false;
                 nopreview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == NoPreview)?.Value ?? false;
                 alt = settings.AdditionalOptions.FirstOrDefault(x => x.Key == AltIcon)?.Value ?? false;
-#if DEBUG
                 debuging = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Debug)?.Value ?? true;
-#endif
+                searchpath = settings.AdditionalOptions.FirstOrDefault(x => x.Key == MatchPath)?.Value ?? false;
             }
 
             this.regEx = regX;
             Everything_SetRegex(this.regEx);
             this.preview = nopreview;
             this.altIcon = alt;
-#if DEBUG
             this.debug = debuging;
-#endif
+            this.matchPath = searchpath;
+            Everything_SetMatchPath(this.matchPath);
         }
 
         protected virtual void Dispose(bool disposing)

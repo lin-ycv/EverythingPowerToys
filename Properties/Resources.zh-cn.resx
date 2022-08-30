@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AltIcon" xml:space="preserve">
+    <value>替代图示</value>
+  </data>
   <data name="clipboard_failed" xml:space="preserve">
     <value>无法拷贝路径</value>
   </data>
@@ -132,6 +135,9 @@
   <data name="folder_open_failed" xml:space="preserve">
     <value>无法打开所属文件夹</value>
   </data>
+  <data name="Match_path" xml:space="preserve">
+    <value>也收寻路径</value>
+  </data>
   <data name="open_containing_folder" xml:space="preserve">
     <value>打开所属文件夹 (Ctrl+Shift+E)</value>
   </data>
@@ -146,6 +152,9 @@
   </data>
   <data name="Preview" xml:space="preserve">
     <value>预览 - 以图标形式预览文件内容，如果文件不是本地文件，可能会导致冻结</value>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>RegEx 正规表示式搜寻</value>
   </data>
   <data name="run_as_admin" xml:space="preserve">
     <value>以管理员身份运行 (Ctrl+Shift+Enter)</value>

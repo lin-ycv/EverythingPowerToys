@@ -139,6 +139,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
         [DllImport(dllName, CharSet = CharSet.Unicode)]
         internal static extern uint Everything_SetSearchW(string lpSearchString);
         [DllImport(dllName)]
+        internal static extern bool Everything_SetMatchPath(bool bEnable);
+        [DllImport(dllName)]
         internal static extern void Everything_SetSort(Sort SortType);
         [DllImport("Shlwapi.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         internal static extern uint AssocQueryString(AssocF flags, AssocStr str, string pszAssoc, string pszExtra, [Out] char[] pszOut, [In][Out] ref uint pcchOut);
@@ -148,14 +150,14 @@ namespace Community.PowerToys.Run.Plugin.Everything
         private static Dictionary<string, string> filters = new Dictionary<string, string>();
         private static bool firstrun = true;
 
-        public static void EverythingSetup()
+        public static void EverythingSetup(bool debug)
         {
             Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME);
-            GetCustomSettings();
+            GetCustomSettings(debug);
             Everything_SetSort(sort);
         }
 
-        private static void GetCustomSettings()
+        private static void GetCustomSettings(bool debug)
         {
             string[] strArr;
             try { strArr = File.ReadAllLines("modules\\launcher\\Plugins\\Everything\\settings.toml"); }
@@ -182,17 +184,17 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     filters.TryAdd(key.Split(':')[0].ToLowerInvariant(), kv[1].Trim());
                 }
             }
-#if DEBUG
-            string msg = $"Max: {max}\nSort: {sort}\nFilters: {string.Join("\n - ", filters.Select(x => { return x.Key + "_" + x.Value; }))}";
-            Log.Info(msg, typeof(NativeMethods));
-#endif
+
+            if (debug)
+            {
+                string msg = $"Max: {max}\nSort: {sort}\nFilters: {string.Join("\n - ", filters.Select(x => { return x.Key + "_" + x.Value; }))}";
+                Log.Info(msg, typeof(NativeMethods));
+            }
         }
 
-        public static IEnumerable<Result> EverythingSearch(string qry, bool preview, bool legacy)
+        public static IEnumerable<Result> EverythingSearch(string qry, bool preview, bool legacy, bool debug)
         {
-#if DEBUG
             string orgqry = qry;
-#endif
             if (!preview && legacy && firstrun)
                 Icons = GetFileTypeAndIcon();
             Everything_SetMax(max);
@@ -213,9 +215,12 @@ namespace Community.PowerToys.Run.Plugin.Everything
             }
 
             uint resultCount = Everything_GetNumResults();
-#if DEBUG
-            Log.Info(qry + " => " + resultCount, typeof(NativeMethods), "EverythingSearch.ResultCount", string.Empty, 217);
-#endif
+
+            if (debug)
+            {
+                Log.Info(qry + " => " + resultCount, typeof(NativeMethods), "EverythingSearch.ResultCount", string.Empty, 217);
+            }
+
             for (uint i = 0; i < resultCount; i++)
             {
                 StringBuilder buffer = new StringBuilder(260);
@@ -225,18 +230,18 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 bool isFolder = Everything_IsFolderResult(i);
                 string path = isFolder ? fullPath : Path.GetDirectoryName(fullPath);
                 string ext = Path.GetExtension(fullPath.Replace(".lnk", string.Empty));
-#if DEBUG
-                Log.Info(i + " : " + name + " = " + fullPath, typeof(NativeMethods), "EverythingSearch.Result", string.Empty, 229);
-#endif
+
+                if (debug)
+                {
+                    Log.Info(i + " : " + name + " = " + fullPath, typeof(NativeMethods), "EverythingSearch.Result", string.Empty, 229);
+                }
+
                 var r = new Result()
                 {
                     Title = name,
-                    ToolTipData =
-#if DEBUG
-                    new ToolTipData(orgqry, qry),
-#else
+                    ToolTipData = debug ?
+                    new ToolTipData(orgqry, qry) :
                     new ToolTipData("Name : " + name, fullPath),
-#endif
                     SubTitle = Resources.plugin_name + ": " + fullPath,
 
                     IcoPath = isFolder ? "Images/folder.png" : (preview ?

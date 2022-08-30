@@ -82,38 +82,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.ar.resx">
-      <LastGenOutput>Resources.ar.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\Resources.ko.resx">
-      <LastGenOutput>Resources.ko.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\Resources.sv.resx">
-      <LastGenOutput>Resources.sv.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\Resources.it.resx">
-      <LastGenOutput>Resources.it.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\Resources.ro.resx">
-      <LastGenOutput>Resources.ro.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\Resources.hi.resx">
-      <LastGenOutput>Resources.hi.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\Resources.ja.resx">
-      <LastGenOutput>Resources.ja.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\Resources.de.resx">
-      <LastGenOutput>Resources.de.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Properties\Resources.zh-cn.resx">
       <CustomToolNamespace>Community.PowerToys.Run.Plugin.Everything.Language</CustomToolNamespace>
       <LastGenOutput>Resources - Copy.zh.Designer.cs</LastGenOutput>
