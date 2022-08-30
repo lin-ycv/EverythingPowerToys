@@ -2,7 +2,7 @@ name: sync to chocolately
 
 on:
   release:
-    types: [published]
+    type: [published]
 
   workflow_dispatch:
   
