@@ -30,5 +30,7 @@ jobs:
         stale-issue-label: 'stale'
         stale-pr-label: 'stale'
         days-before-issue-stale: 7
+        days-before-close: 7
+        close-issue-message: 'Close: no response'
         exempt-issue-labels: todo, help wanted
         exempt-pr-labels: todo, help wanted
