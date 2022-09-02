@@ -1,9 +1,9 @@
 # Everything for PowerToys Run
-![GitHub repo size](https://img.shields.io/github/repo-size/lin-ycv/everythingpowertoys)
-![GitHub release (release name instead of tag name)](https://img.shields.io/github/v/release/lin-ycv/everythingpowertoys?include_prereleases)
-![Chocolatey Version](https://img.shields.io/chocolatey/v/everythingpowertoys)
-![GitHub all releases](https://img.shields.io/github/downloads/lin-ycv/EverythingPowerToys/total)
-![GitHub release (latest by date)](https://img.shields.io/github/downloads/lin-ycv/everythingpowertoys/latest/total)
+[![GitHub repo size](https://img.shields.io/github/repo-size/lin-ycv/everythingpowertoys)](#)
+[![GitHub release (release name instead of tag name)](https://img.shields.io/github/v/release/lin-ycv/everythingpowertoys?include_prereleases)](https://github.com/lin-ycv/EverythingPowerToys/releases/latest)
+[![Chocolatey Version](https://img.shields.io/chocolatey/v/everythingpowertoys)](https://community.chocolatey.org/packages/everythingpowertoys)
+[![GitHub all releases](https://img.shields.io/github/downloads/lin-ycv/EverythingPowerToys/total)](https://github.com/lin-ycv/EverythingPowerToys/releases/)
+[![GitHub release (latest by date)](https://img.shields.io/github/downloads/lin-ycv/everythingpowertoys/latest/total)](https://github.com/lin-ycv/EverythingPowerToys/releases/latest)
 
 
 This repo is to be used with the [PowerToys repo](https://github.com/microsoft/PowerToys), this will not compile when used standalone, as it's missing references from PowerToys. Instructions are in the wiki.
