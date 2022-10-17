@@ -61,15 +61,6 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Alternative - if the icon for your files aren&apos;t displaying correctly, try this alternative method of getting icons..
-        /// </summary>
-        public static string AltIcon {
-            get {
-                return ResourceManager.GetString("AltIcon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Fail to set text in clipboard.
         /// </summary>
         public static string clipboard_failed {

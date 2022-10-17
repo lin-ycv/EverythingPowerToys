@@ -148,7 +148,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
         private static uint max = 20;
         private static Sort sort = Sort.DATE_MODIFIED_DESCENDING;
         private static Dictionary<string, string> filters = new Dictionary<string, string>();
-        private static bool firstrun = true;
 
         public static void EverythingSetup(bool debug)
         {
@@ -192,12 +191,15 @@ namespace Community.PowerToys.Run.Plugin.Everything
             }
         }
 
-        public static IEnumerable<Result> EverythingSearch(string qry, bool preview, bool legacy, bool debug)
+        public static IEnumerable<Result> EverythingSearch(string qry, bool preview, bool matchpath, bool debug)
         {
             string orgqry = qry;
-            if (!preview && legacy && firstrun)
-                Icons = GetFileTypeAndIcon();
             Everything_SetMax(max);
+            if (qry.Contains('\"') && !matchpath)
+            {
+                Everything_SetMatchPath(true);
+            }
+
             if (qry.Contains(':'))
             {
                 string[] nqry = qry.Split(':');
@@ -212,6 +214,11 @@ namespace Community.PowerToys.Run.Plugin.Everything
             if (!Everything_QueryW(true))
             {
                 throw new Win32Exception("Unable to Query");
+            }
+
+            if (qry.Contains('\"') && !matchpath)
+            {
+                Everything_SetMatchPath(false);
             }
 
             uint resultCount = Everything_GetNumResults();
@@ -245,9 +252,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     SubTitle = Resources.plugin_name + ": " + fullPath,
 
                     IcoPath = isFolder ? "Images/folder.png" : (preview ?
-                        fullPath :
-                        (string)((legacy ? Icons[ext] : Icon(ext)) ??
-                            "Images/file.png")),
+                        fullPath : (Icon(ext) ?? "Images/file.png")),
                     ContextData = new SearchResult()
                     {
                         Path = fullPath,
@@ -285,84 +290,10 @@ namespace Community.PowerToys.Run.Plugin.Everything
             uint pcchOut = 0;
             _ = AssocQueryString(AssocF.NONE, AssocStr.DEFAULTICON, doctype, null, null, ref pcchOut);
             char[] pszOut = new char[pcchOut];
-            _ = AssocQueryString(AssocF.NONE, AssocStr.DEFAULTICON, doctype, null, pszOut, ref pcchOut);
+            if (AssocQueryString(AssocF.NONE, AssocStr.DEFAULTICON, doctype, null, pszOut, ref pcchOut) != 0) return null;
             string doc = Environment.ExpandEnvironmentVariables(new string(pszOut).Split(new char[] { '\"', ',' }, StringSplitOptions.RemoveEmptyEntries)[0].Replace("\"", string.Empty, StringComparison.CurrentCulture).Trim());
 
-            if (File.Exists(doc))
-                return doc;
-
-            return null;
-        }
-
-        //Manually traverse the registry
-        private static Hashtable Icons = new Hashtable();
-        internal static Hashtable GetFileTypeAndIcon()
-        {
-            Hashtable iconsInfo = new Hashtable(StringComparer.CurrentCultureIgnoreCase);
-            try
-            {
-                using (RegistryKey rkRoot = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry64))
-                {
-                    FindExt(rkRoot);
-                }
-
-                using (RegistryKey rkRoot = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32))
-                {
-                    FindExt(rkRoot);
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e.Message, e, typeof(NativeMethods));
-            }
-
-            firstrun = false;
-            return iconsInfo;
-
-            void FindExt(RegistryKey rkRoot)
-            {
-                foreach (string keyName in rkRoot.GetSubKeyNames())
-                {
-                    if (string.IsNullOrWhiteSpace(keyName) || keyName[0] != '.' || iconsInfo.ContainsKey(keyName))
-                        continue;
-
-                    try
-                    {
-                        object defaultValue = null;
-                        using (RegistryKey rkKey = rkRoot.OpenSubKey(keyName))
-                        {
-                            defaultValue = rkKey.GetValue(string.Empty);
-                            if (defaultValue == null)
-                                continue;
-                        }
-
-                        Log.Info((defaultValue == null) + string.Empty, typeof(NativeMethods));
-
-                        object iconValue = null;
-                        using (RegistryKey rkIcon = rkRoot.OpenSubKey(defaultValue.ToString() + "\\defaulticon"), rkOpen = rkRoot.OpenSubKey(defaultValue.ToString() + "\\shell\\Open\\command"))
-                        {
-                            iconValue = (rkIcon == null) ? rkOpen?.GetValue(string.Empty) : rkIcon.GetValue(string.Empty);
-                            if (iconValue == null)
-                                continue;
-                        }
-
-                        Log.Info((iconValue == null) + string.Empty, typeof(NativeMethods));
-
-                        string[] path = iconValue.ToString().Split(new char[] { '\"', ',' }, StringSplitOptions.RemoveEmptyEntries);
-                        if (path.Length > 0 && path[0].Contains('.'))
-                        {
-                            string fileParam = Environment.ExpandEnvironmentVariables(path[0].Replace("\"", string.Empty, StringComparison.CurrentCulture).Trim());
-                            if (!fileParam.EndsWith("dll", StringComparison.CurrentCulture))
-                                iconsInfo.Add(keyName, fileParam);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Exception(keyName + "：" + e.ToString(), e, typeof(NativeMethods));
-                        continue; // something wrong with this key, move on
-                    }
-                }
-            }
+            return File.Exists(doc) ? doc : null;
         }
     }
 }

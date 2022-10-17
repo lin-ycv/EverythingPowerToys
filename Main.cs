@@ -24,14 +24,12 @@ namespace Community.PowerToys.Run.Plugin.Everything
 {
     public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider, IPluginI18n
     {
-        private const string AltIcon = nameof(AltIcon);
         private const string RegEx = nameof(RegEx);
         private const string NoPreview = nameof(NoPreview);
         private const string MatchPath = nameof(MatchPath);
         private readonly string reservedStringPattern = @"^[\/\\\$\%]+$|^.*[<>].*$";
         private bool regEx;
         private bool preview;
-        private bool altIcon;
         private bool matchPath;
 
 #pragma warning disable SA1401
@@ -47,12 +45,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         public IEnumerable<PluginAdditionalOption> AdditionalOptions => new List<PluginAdditionalOption>()
         {
-            new PluginAdditionalOption()
-            {
-                Key = AltIcon,
-                DisplayLabel = Resources.AltIcon,
-                Value = false,
-            },
             new PluginAdditionalOption()
             {
                 Key = MatchPath,
@@ -75,7 +67,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             {
                 Key = Debug,
                 DisplayLabel = "Log debug data",
-                Value = true,
+                Value = false,
             },
         };
 
@@ -109,7 +101,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 {
                     try
                     {
-                        results.AddRange(EverythingSearch(searchQuery, this.preview, this.altIcon, debug));
+                        results.AddRange(EverythingSearch(searchQuery, this.preview, this.matchPath, debug));
                     }
                     catch (System.ComponentModel.Win32Exception)
                     {
@@ -146,7 +138,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
         {
             var regX = false;
             var nopreview = false;
-            var alt = false;
             var debuging = false;
             var searchpath = false;
 
@@ -154,7 +145,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
             {
                 regX = settings.AdditionalOptions.FirstOrDefault(x => x.Key == RegEx)?.Value ?? false;
                 nopreview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == NoPreview)?.Value ?? false;
-                alt = settings.AdditionalOptions.FirstOrDefault(x => x.Key == AltIcon)?.Value ?? false;
                 debuging = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Debug)?.Value ?? true;
                 searchpath = settings.AdditionalOptions.FirstOrDefault(x => x.Key == MatchPath)?.Value ?? false;
             }
@@ -162,7 +152,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             this.regEx = regX;
             Everything_SetRegex(this.regEx);
             this.preview = nopreview;
-            this.altIcon = alt;
+
             this.debug = debuging;
             this.matchPath = searchpath;
             Everything_SetMatchPath(this.matchPath);
