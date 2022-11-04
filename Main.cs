@@ -27,17 +27,12 @@ namespace Community.PowerToys.Run.Plugin.Everything
         private const string RegEx = nameof(RegEx);
         private const string NoPreview = nameof(NoPreview);
         private const string MatchPath = nameof(MatchPath);
-        private readonly string reservedStringPattern = @"^[\/\\\$\%]+$|^.*[<>].*$";
         private bool regEx;
         private bool preview;
         private bool matchPath;
 
-#pragma warning disable SA1401
-#pragma warning disable SA1307
         private const string Debug = nameof(Debug);
-        internal bool debug;
-#pragma warning restore SA1307
-#pragma warning restore SA1401
+        private bool debug;
 
         public string Name => Resources.plugin_name;
 
@@ -95,29 +90,24 @@ namespace Community.PowerToys.Run.Plugin.Everything
             {
                 var searchQuery = query.Search;
 
-                var regexMatch = Regex.Match(searchQuery, this.reservedStringPattern);
-
-                if (!regexMatch.Success)
+                try
                 {
-                    try
+                    results.AddRange(EverythingSearch(searchQuery, this.preview, this.matchPath, debug));
+                }
+                catch (System.ComponentModel.Win32Exception)
+                {
+                    results.Add(new Result()
                     {
-                        results.AddRange(EverythingSearch(searchQuery, this.preview, this.matchPath, debug));
-                    }
-                    catch (System.ComponentModel.Win32Exception)
-                    {
-                        results.Add(new Result()
-                        {
-                            Title = Resources.Everything_not_running,
-                            SubTitle = Resources.Everything_ini,
-                            IcoPath = "Images/warning.png",
-                            QueryTextDisplay = '.' + Resources.plugin_name,
-                            Score = int.MaxValue,
-                        });
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Exception("Everything Exception", e, this.GetType());
-                    }
+                        Title = Resources.Everything_not_running,
+                        SubTitle = Resources.Everything_ini,
+                        IcoPath = "Images/warning.png",
+                        QueryTextDisplay = '.' + Resources.plugin_name,
+                        Score = int.MaxValue,
+                    });
+                }
+                catch (Exception e)
+                {
+                    Log.Exception("Everything Exception", e, this.GetType());
                 }
             }
 

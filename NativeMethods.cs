@@ -195,12 +195,12 @@ namespace Community.PowerToys.Run.Plugin.Everything
         {
             string orgqry = qry;
             Everything_SetMax(max);
-            if (qry.Contains('\"') && !matchpath)
+            if (orgqry.Contains('\"') && !matchpath)
             {
                 Everything_SetMatchPath(true);
             }
 
-            if (qry.Contains(':'))
+            if (orgqry.Contains(':'))
             {
                 string[] nqry = qry.Split(':');
                 if (filters.ContainsKey(nqry[0].ToLowerInvariant()))
@@ -216,7 +216,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 throw new Win32Exception("Unable to Query");
             }
 
-            if (qry.Contains('\"') && !matchpath)
+            if (orgqry.Contains('\"') && !matchpath)
             {
                 Everything_SetMatchPath(false);
             }
@@ -257,6 +257,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     {
                         Path = fullPath,
                         Title = name,
+                        File = !isFolder,
                     },
                     Action = e =>
                     {

@@ -29,13 +29,12 @@ namespace Community.PowerToys.Run.Plugin.Everything
             this.context = context;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We want to keep the process alive, and instead log and show an error message")]
         public List<ContextMenuResult> LoadContextMenus(Result selectedResult)
         {
             var contextMenus = new List<ContextMenuResult>();
             if (selectedResult.ContextData is SearchResult record)
             {
-                bool isFile = Path.HasExtension(record.Path);
+                bool isFile = record.File; //Path.HasExtension(record.Path);
 
                 if (isFile)
                 {
@@ -111,7 +110,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
         }
 
         // Function to add the context menu item to run as admin
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We want to keep the process alive, and instead log the exception message")]
         private static ContextMenuResult CreateRunAsAdminContextMenu(SearchResult record)
         {
             return new ContextMenuResult
@@ -154,7 +152,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
             return false;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We want to keep the process alive, and instead log and show an error message")]
         private ContextMenuResult CreateOpenContainingFolderResult(SearchResult record)
         {
             return new ContextMenuResult
