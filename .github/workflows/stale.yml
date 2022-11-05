@@ -11,7 +11,7 @@ permissions:
 
 on:
   schedule:
-  - cron: '16 16 * * *'
+  - cron: '16 16 * * 0'
 
 jobs:
   stale:
