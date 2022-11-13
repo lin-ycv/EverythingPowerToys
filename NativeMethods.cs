@@ -21,6 +21,11 @@ namespace Community.PowerToys.Run.Plugin.Everything
 {
     internal static class NativeMethods
     {
+        private static readonly Dictionary<string, string> Filters = new Dictionary<string, string>();
+        private static uint max = 20;
+        private static Sort sort = Sort.DATE_MODIFIED_DESCENDING;
+
+        #region FlagsEnums
         [Flags]
         internal enum Request
         {
@@ -119,7 +124,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
             APPICONREFERENCE,
             MAX,
         }
-
+        #endregion
+        #region DllImports
         internal const string dllName = "Everything64.dll";
 
         [DllImport(dllName)]
@@ -144,11 +150,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         internal static extern void Everything_SetSort(Sort SortType);
         [DllImport("Shlwapi.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         internal static extern uint AssocQueryString(AssocF flags, AssocStr str, string pszAssoc, string pszExtra, [Out] char[] pszOut, [In][Out] ref uint pcchOut);
-
-        private static uint max = 20;
-        private static Sort sort = Sort.DATE_MODIFIED_DESCENDING;
-        private static Dictionary<string, string> filters = new Dictionary<string, string>();
-
+        #endregion
         public static void EverythingSetup(bool debug)
         {
             Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME);
@@ -180,13 +182,13 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 }
                 else if (key.Contains(':'))
                 {
-                    filters.TryAdd(key.Split(':')[0].ToLowerInvariant(), kv[1].Trim());
+                    Filters.TryAdd(key.Split(':')[0].ToLowerInvariant(), kv[1].Trim());
                 }
             }
 
             if (debug)
             {
-                string msg = $"Max: {max}\nSort: {sort}\nFilters: {string.Join("\n - ", filters.Select(x => { return x.Key + "_" + x.Value; }))}";
+                string msg = $"Max: {max}\nSort: {sort}\nFilters: {string.Join("\n - ", Filters.Select(x => { return x.Key + "_" + x.Value; }))}";
                 Log.Info(msg, typeof(NativeMethods));
             }
         }
@@ -203,10 +205,10 @@ namespace Community.PowerToys.Run.Plugin.Everything
             if (orgqry.Contains(':'))
             {
                 string[] nqry = qry.Split(':');
-                if (filters.ContainsKey(nqry[0].ToLowerInvariant()))
+                if (Filters.ContainsKey(nqry[0].ToLowerInvariant()))
                 {
                     Everything_SetMax(0xffffffff);
-                    qry = nqry[1].Trim() + " ext:" + filters[nqry[0].Trim()];
+                    qry = nqry[1].Trim() + " ext:" + Filters[nqry[0].Trim()];
                 }
             }
 
@@ -261,24 +263,25 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     },
                     Action = e =>
                     {
-                        using (var process = new Process())
-                        {
-                            process.StartInfo.FileName = fullPath;
-                            process.StartInfo.WorkingDirectory = path;
-                            process.StartInfo.UseShellExecute = true;
+                        using var process = new Process();
+                        process.StartInfo.FileName = fullPath;
+                        process.StartInfo.WorkingDirectory = path;
+                        process.StartInfo.UseShellExecute = true;
 
-                            try
-                            {
-                                process.Start();
-                                return true;
-                            }
-                            catch (Win32Exception)
-                            {
-                                return false;
-                            }
+                        try
+                        {
+                            process.Start();
+                            return true;
+                        }
+                        catch (Win32Exception)
+                        {
+                            return false;
                         }
                     },
-                    QueryTextDisplay = isFolder ? path : name,
+
+                    // Changing query text will cause new query, changing results, not desirable
+                    // QueryTextDisplay = isFolder ? path : name,
+                    QueryTextDisplay = orgqry,
                 };
                 yield return r;
             }
