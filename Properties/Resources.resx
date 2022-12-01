@@ -120,6 +120,9 @@
   <data name="clipboard_failed" xml:space="preserve">
     <value>Fail to set text in clipboard</value>
   </data>
+  <data name="copy_file" xml:space="preserve">
+    <value>Copy (Ctrl+C)</value>
+  </data>
   <data name="copy_path" xml:space="preserve">
     <value>Copy path (Ctrl+C)</value>
   </data>
@@ -133,7 +136,10 @@
     <value>Fail to open folder at</value>
   </data>
   <data name="Match_path" xml:space="preserve">
-    <value>Path - Search path in additional to file/folder name.</value>
+    <value>Match Path</value>
+  </data>
+  <data name="Match_path_Description" xml:space="preserve">
+    <value>Search path in additional to file/folder name.</value>
   </data>
   <data name="open_containing_folder" xml:space="preserve">
     <value>Open containing folder (Ctrl+Shift+E)</value>
@@ -148,12 +154,30 @@
     <value>Everything</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Preview - Preview file content as icon, may cause freezing if file is not local.</value>
+    <value>Preview</value>
+  </data>
+  <data name="Preview_Description" xml:space="preserve">
+    <value>Preview file content as icon, may cause freezing if file is not local.</value>
+  </data>
+  <data name="QueryText" xml:space="preserve">
+    <value>Query Text</value>
+  </data>
+  <data name="QueryText_Description" xml:space="preserve">
+    <value>Selected result can update query text. Helps Display additional info, but may change display results.</value>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>RegEx - Enable regular expression in search.</value>
+    <value>RegEx</value>
+  </data>
+  <data name="RegEx_Description" xml:space="preserve">
+    <value>Enable regular expression in search.</value>
   </data>
   <data name="run_as_admin" xml:space="preserve">
     <value>Run as administrator (Ctrl+Shift+Enter)</value>
+  </data>
+  <data name="SwapCopy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="SwapCopy_Description" xml:space="preserve">
+    <value>Set Ctrl+C to copy file/folder, Ctrl+Alt+C to copy path.</value>
   </data>
 </root>

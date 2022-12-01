@@ -70,6 +70,15 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy (Ctrl+C).
+        /// </summary>
+        public static string copy_file {
+            get {
+                return ResourceManager.GetString("copy_file", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy path (Ctrl+C).
         /// </summary>
         public static string copy_path {
@@ -106,11 +115,20 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Path - Search path in additional to file/folder name..
+        ///   Looks up a localized string similar to Match Path.
         /// </summary>
         public static string Match_path {
             get {
                 return ResourceManager.GetString("Match_path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search path in additional to file/folder name..
+        /// </summary>
+        public static string Match_path_Description {
+            get {
+                return ResourceManager.GetString("Match_path_Description", resourceCulture);
             }
         }
         
@@ -151,7 +169,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preview - Preview file content as icon, may cause freezing if file is not local..
+        ///   Looks up a localized string similar to Preview.
         /// </summary>
         public static string Preview {
             get {
@@ -160,11 +178,47 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RegEx - Enable regular expression in search..
+        ///   Looks up a localized string similar to Preview file content as icon, may cause freezing if file is not local..
+        /// </summary>
+        public static string Preview_Description {
+            get {
+                return ResourceManager.GetString("Preview_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Query Text.
+        /// </summary>
+        public static string QueryText {
+            get {
+                return ResourceManager.GetString("QueryText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected result can update query text. Helps Display additional info, but may change display results..
+        /// </summary>
+        public static string QueryText_Description {
+            get {
+                return ResourceManager.GetString("QueryText_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RegEx.
         /// </summary>
         public static string RegEx {
             get {
                 return ResourceManager.GetString("RegEx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable regular expression in search..
+        /// </summary>
+        public static string RegEx_Description {
+            get {
+                return ResourceManager.GetString("RegEx_Description", resourceCulture);
             }
         }
         
@@ -174,6 +228,24 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         public static string run_as_admin {
             get {
                 return ResourceManager.GetString("run_as_admin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy.
+        /// </summary>
+        public static string SwapCopy {
+            get {
+                return ResourceManager.GetString("SwapCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Ctrl+C to copy file/folder, Ctrl+Alt+C to copy path..
+        /// </summary>
+        public static string SwapCopy_Description {
+            get {
+                return ResourceManager.GetString("SwapCopy_Description", resourceCulture);
             }
         }
     }

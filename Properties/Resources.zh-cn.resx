@@ -120,6 +120,9 @@
   <data name="clipboard_failed" xml:space="preserve">
     <value>无法设置剪贴板中的文本</value>
   </data>
+  <data name="copy_file" xml:space="preserve">
+    <value>复制 (Ctrl+C)</value>
+  </data>
   <data name="copy_path" xml:space="preserve">
     <value>复制路径 (Ctrl+C)</value>
   </data>
@@ -132,7 +135,7 @@
   <data name="folder_open_failed" xml:space="preserve">
     <value>无法打开所在文件夹</value>
   </data>
-  <data name="Match_path" xml:space="preserve">
+  <data name="Match_path_Description" xml:space="preserve">
     <value>匹配路径</value>
   </data>
   <data name="open_containing_folder" xml:space="preserve">
@@ -147,13 +150,19 @@
   <data name="plugin_name" xml:space="preserve">
     <value>Everything</value>
   </data>
-  <data name="Preview" xml:space="preserve">
-    <value>预览 - 以图标形式预览文件内容，如果文件不是本地文件，可能会导致冻结</value>
+  <data name="Preview_Description" xml:space="preserve">
+    <value>以图标形式预览文件内容，如果文件不是本地文件，可能会导致冻结</value>
   </data>
-  <data name="RegEx" xml:space="preserve">
+  <data name="QueryText_Description" xml:space="preserve">
+    <value>选取结果时更新搜寻词，获得更多资讯，但可能会变更搜寻结果</value>
+  </data>
+  <data name="RegEx_Description" xml:space="preserve">
     <value>RegEx 正则表达式搜索</value>
   </data>
   <data name="run_as_admin" xml:space="preserve">
     <value>以管理员身份运行 (Ctrl+Shift+Enter)</value>
+  </data>
+  <data name="SwapCopy_Description" xml:space="preserve">
+    <value>使用 Ctrl+C 复制档案，Ctrl+Alt+C 复制路径</value>
   </data>
 </root>

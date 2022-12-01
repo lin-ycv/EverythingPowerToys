@@ -193,7 +193,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             }
         }
 
-        public static IEnumerable<Result> EverythingSearch(string qry, bool preview, bool matchpath, bool debug)
+        public static IEnumerable<Result> EverythingSearch(string qry, bool preview, bool matchpath, bool updateQuery, bool debug)
         {
             string orgqry = qry;
             Everything_SetMax(max);
@@ -242,7 +242,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
                 if (debug)
                 {
-                    Log.Info(i + " : " + name + " = " + fullPath, typeof(NativeMethods), "EverythingSearch.Result", string.Empty, 229);
+                    Log.Info(i + " : " + ext, typeof(NativeMethods), "EverythingSearch.Result", string.Empty, 229);
                 }
 
                 var r = new Result()
@@ -279,9 +279,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         }
                     },
 
-                    // Changing query text will cause new query, changing results, not desirable
-                    // QueryTextDisplay = isFolder ? path : name,
-                    QueryTextDisplay = orgqry,
+                    QueryTextDisplay = updateQuery ? (isFolder ? path : name) : orgqry,
                 };
                 yield return r;
             }

@@ -19,14 +19,20 @@ namespace Community.PowerToys.Run.Plugin.Everything
 {
     internal class ContextMenuLoader : IContextMenu
     {
-        private readonly PluginInitContext context;
+        private readonly PluginInitContext _context;
 
         // Extensions for adding run as admin context menu item for applications
-        private readonly string[] appExtensions = { ".exe", ".bat", ".appref-ms", ".lnk" };
+        private readonly string[] _appExtensions = { ".exe", ".bat", ".appref-ms", ".lnk" };
+
+        private bool _swapCopy;
+        internal void UpdateCopy(bool swapCopy)
+        {
+            _swapCopy = swapCopy;
+        }
 
         public ContextMenuLoader(PluginInitContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
         public List<ContextMenuResult> LoadContextMenus(Result selectedResult)
@@ -34,27 +40,54 @@ namespace Community.PowerToys.Run.Plugin.Everything
             var contextMenus = new List<ContextMenuResult>();
             if (selectedResult.ContextData is SearchResult record)
             {
-                bool isFile = record.File; //Path.HasExtension(record.Path);
+                bool isFile = record.File;
 
                 if (isFile)
                 {
-                    contextMenus.Add(this.CreateOpenContainingFolderResult(record));
+                    contextMenus.Add(CreateOpenContainingFolderResult(record));
                 }
 
                 // Test to check if File can be Run as admin, if yes, we add a 'run as admin' context menu item
-                if (this.CanFileBeRunAsAdmin(record.Path))
+                if (CanFileBeRunAsAdmin(record.Path))
                 {
                     contextMenus.Add(CreateRunAsAdminContextMenu(record));
                 }
 
+                // https://learn.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font
                 contextMenus.Add(new ContextMenuResult
                 {
                     PluginName = Assembly.GetExecutingAssembly().GetName().Name,
-                    Title = Properties.Resources.copy_path,
+                    Title = _swapCopy ? Properties.Resources.copy_file : Properties.Resources.copy_file.Replace("Ctrl", "Ctrl+Alt"),
                     Glyph = "\xE8C8",
                     FontFamily = "Segoe MDL2 Assets",
                     AcceleratorKey = Key.C,
-                    AcceleratorModifiers = ModifierKeys.Control,
+                    AcceleratorModifiers = _swapCopy ? ModifierKeys.Control : ModifierKeys.Control | ModifierKeys.Alt,
+
+                    Action = (context) =>
+                    {
+                        try
+                        {
+                            Clipboard.SetData(DataFormats.FileDrop, new string[] { record.Path });
+                            return true;
+                        }
+                        catch (Exception e)
+                        {
+                            var message = Properties.Resources.clipboard_failed;
+                            Log.Exception(message, e, GetType());
+
+                            _context.API.ShowMsg(message);
+                            return false;
+                        }
+                    },
+                });
+                contextMenus.Add(new ContextMenuResult
+                {
+                    PluginName = Assembly.GetExecutingAssembly().GetName().Name,
+                    Title = _swapCopy ? Properties.Resources.copy_path.Replace("Ctrl", "Ctrl+Alt") : Properties.Resources.copy_path,
+                    Glyph = "\xE71B",
+                    FontFamily = "Segoe MDL2 Assets",
+                    AcceleratorKey = Key.C,
+                    AcceleratorModifiers = _swapCopy ? ModifierKeys.Control | ModifierKeys.Alt : ModifierKeys.Control,
 
                     Action = (context) =>
                     {
@@ -66,9 +99,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         catch (Exception e)
                         {
                             var message = Properties.Resources.clipboard_failed;
-                            Log.Exception(message, e, this.GetType());
+                            Log.Exception(message, e, GetType());
 
-                            this.context.API.ShowMsg(message);
+                            _context.API.ShowMsg(message);
                             return false;
                         }
                     },
@@ -99,7 +132,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         }
                         catch (Exception e)
                         {
-                            Log.Exception($"Failed to open {record.Path} in console, {e.Message}", e, this.GetType());
+                            Log.Exception($"Failed to open {record.Path} in console, {e.Message}", e, GetType());
                             return false;
                         }
                     },
@@ -140,7 +173,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         private bool CanFileBeRunAsAdmin(string path)
         {
             string fileExtension = Path.GetExtension(path);
-            foreach (string extension in this.appExtensions)
+            foreach (string extension in _appExtensions)
             {
                 // Using OrdinalIgnoreCase since this is internal
                 if (extension.Equals(fileExtension, StringComparison.OrdinalIgnoreCase))
@@ -167,7 +200,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     if (!Helper.OpenInShell("explorer.exe", $"/select,\"{record.Path}\""))
                     {
                         var message = $"{Properties.Resources.folder_open_failed} {Path.GetDirectoryName(record.Path)}";
-                        this.context.API.ShowMsg(message);
+                        _context.API.ShowMsg(message);
                         return false;
                     }
 

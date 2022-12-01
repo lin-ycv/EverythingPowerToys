@@ -27,12 +27,19 @@ namespace Community.PowerToys.Run.Plugin.Everything
         private const string RegEx = nameof(RegEx);
         private const string NoPreview = nameof(NoPreview);
         private const string MatchPath = nameof(MatchPath);
-        private bool regEx;
-        private bool preview;
-        private bool matchPath;
+        private const string SwapCopy = nameof(SwapCopy);
+        private const string QueryTextDisplay = nameof(QueryTextDisplay);
+        private bool _regEx;
+        private bool _preview;
+        private bool _matchPath;
+        private bool _swapCopy;
+        private bool _queryTextDisplay;
+        private IContextMenu _contextMenuLoader;
+        private PluginInitContext _context;
+        private bool _disposed;
 
         private const string Debug = nameof(Debug);
-        private bool debug;
+        private bool _debug;
 
         public string Name => Resources.plugin_name;
 
@@ -44,18 +51,35 @@ namespace Community.PowerToys.Run.Plugin.Everything
             {
                 Key = MatchPath,
                 DisplayLabel = Resources.Match_path,
+                DisplayDescription = Resources.Match_path_Description,
                 Value = false,
             },
             new PluginAdditionalOption()
             {
                 Key = NoPreview,
                 DisplayLabel = Resources.Preview,
+                DisplayDescription = Resources.Preview_Description,
                 Value = false,
             },
             new PluginAdditionalOption()
             {
                 Key = RegEx,
                 DisplayLabel = Resources.RegEx,
+                DisplayDescription = Resources.RegEx_Description,
+                Value = false,
+            },
+            new PluginAdditionalOption()
+            {
+                Key = SwapCopy,
+                DisplayLabel = Resources.SwapCopy,
+                DisplayDescription = Resources.SwapCopy_Description,
+                Value = false,
+            },
+            new PluginAdditionalOption()
+            {
+                Key = QueryTextDisplay,
+                DisplayLabel = Resources.QueryText,
+                DisplayDescription = Resources.QueryText_Description,
                 Value = false,
             },
             new PluginAdditionalOption()
@@ -66,15 +90,12 @@ namespace Community.PowerToys.Run.Plugin.Everything
             },
         };
 
-        private IContextMenu contextMenuLoader;
-        private PluginInitContext context;
-        private bool disposed;
-
         public void Init(PluginInitContext context)
         {
-            this.context = context;
-            this.contextMenuLoader = new ContextMenuLoader(context);
-            EverythingSetup(debug);
+            _context = context;
+            _contextMenuLoader = new ContextMenuLoader(context);
+            ((ContextMenuLoader)_contextMenuLoader).UpdateCopy(_swapCopy);
+            EverythingSetup(_debug);
         }
 
         public List<Result> Query(Query query)
@@ -92,7 +113,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
                 try
                 {
-                    results.AddRange(EverythingSearch(searchQuery, this.preview, this.matchPath, debug));
+                    results.AddRange(EverythingSearch(searchQuery, _preview, _matchPath, _queryTextDisplay, _debug));
                 }
                 catch (System.ComponentModel.Win32Exception)
                 {
@@ -107,7 +128,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 }
                 catch (Exception e)
                 {
-                    Log.Exception("Everything Exception", e, this.GetType());
+                    Log.Exception("Everything Exception", e, GetType());
                 }
             }
 
@@ -116,7 +137,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         public List<ContextMenuResult> LoadContextMenus(Result selectedResult)
         {
-            return this.contextMenuLoader.LoadContextMenus(selectedResult);
+            return _contextMenuLoader.LoadContextMenus(selectedResult);
         }
 
         public Control CreateSettingPanel()
@@ -126,44 +147,38 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         public void UpdateSettings(PowerLauncherPluginSettings settings)
         {
-            var regX = false;
-            var nopreview = false;
-            var debuging = false;
-            var searchpath = false;
-
             if (settings != null && settings.AdditionalOptions != null)
             {
-                regX = settings.AdditionalOptions.FirstOrDefault(x => x.Key == RegEx)?.Value ?? false;
-                nopreview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == NoPreview)?.Value ?? false;
-                debuging = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Debug)?.Value ?? true;
-                searchpath = settings.AdditionalOptions.FirstOrDefault(x => x.Key == MatchPath)?.Value ?? false;
+                _regEx = settings.AdditionalOptions.FirstOrDefault(x => x.Key == RegEx)?.Value ?? false;
+                _preview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == NoPreview)?.Value ?? false;
+                _matchPath = settings.AdditionalOptions.FirstOrDefault(x => x.Key == MatchPath)?.Value ?? false;
+                _swapCopy = settings.AdditionalOptions.FirstOrDefault(x => x.Key == SwapCopy)?.Value ?? false;
+                _queryTextDisplay = settings.AdditionalOptions.FirstOrDefault(x => x.Key == QueryTextDisplay)?.Value ?? false;
+                _debug = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Debug)?.Value ?? true;
+
+                if (_contextMenuLoader != null) ((ContextMenuLoader)_contextMenuLoader).UpdateCopy(_swapCopy);
+
+                Everything_SetRegex(_regEx);
+                Everything_SetMatchPath(_matchPath);
             }
-
-            this.regEx = regX;
-            Everything_SetRegex(this.regEx);
-            this.preview = nopreview;
-
-            this.debug = debuging;
-            this.matchPath = searchpath;
-            Everything_SetMatchPath(this.matchPath);
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!_disposed)
             {
                 if (disposing)
                 {
                 }
 
-                this.disposed = true;
+                _disposed = true;
             }
         }
 
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            this.Dispose(disposing: true);
+            Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
 
