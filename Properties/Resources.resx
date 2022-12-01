@@ -163,7 +163,7 @@
     <value>Query Text</value>
   </data>
   <data name="QueryText_Description" xml:space="preserve">
-    <value>Selected result can update query text. Helps Display additional info, but may change display results.</value>
+    <value>Selected result can update query text. Helps display additional info, but may change display results.</value>
   </data>
   <data name="RegEx" xml:space="preserve">
     <value>RegEx</value>
