@@ -162,6 +162,9 @@
   <data name="run_as_admin" xml:space="preserve">
     <value>以管理员身份运行 (Ctrl+Shift+Enter)</value>
   </data>
+  <data name="run_as_user" xml:space="preserve">
+    <value>以不同的使用者身份运行(Ctrl+Shift+U)</value>
+  </data>
   <data name="SwapCopy_Description" xml:space="preserve">
     <value>使用 Ctrl+C 复制档案，Ctrl+Alt+C 复制路径</value>
   </data>

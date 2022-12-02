@@ -196,7 +196,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selected result can update query text. Helps Display additional info, but may change display results..
+        ///   Looks up a localized string similar to Selected result can update query text. Helps display additional info, but may change display results..
         /// </summary>
         public static string QueryText_Description {
             get {
@@ -228,6 +228,15 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         public static string run_as_admin {
             get {
                 return ResourceManager.GetString("run_as_admin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run as different user (Ctrl+Shift+U).
+        /// </summary>
+        public static string run_as_user {
+            get {
+                return ResourceManager.GetString("run_as_user", resourceCulture);
             }
         }
         
