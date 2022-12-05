@@ -121,10 +121,10 @@
     <value>无法设置剪贴板中的文本</value>
   </data>
   <data name="copy_file" xml:space="preserve">
-    <value>复制 (Ctrl+C)</value>
+    <value>复制</value>
   </data>
   <data name="copy_path" xml:space="preserve">
-    <value>复制路径 (Ctrl+C)</value>
+    <value>复制路径</value>
   </data>
   <data name="Everything_ini" xml:space="preserve">
     <value>是否安装了 Everything?</value>

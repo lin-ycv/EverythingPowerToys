@@ -121,10 +121,10 @@
     <value>複製到剪貼簿失敗</value>
   </data>
   <data name="copy_file" xml:space="preserve">
-    <value>複製 (Ctrl+C)</value>
+    <value>複製</value>
   </data>
   <data name="copy_path" xml:space="preserve">
-    <value>複製路徑 (Ctrl+C)</value>
+    <value>複製路徑</value>
   </data>
   <data name="Everything_ini" xml:space="preserve">
     <value>是否有安裝 Everything?</value>

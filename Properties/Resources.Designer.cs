@@ -70,7 +70,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy (Ctrl+C).
+        ///   Looks up a localized string similar to Copy .
         /// </summary>
         public static string copy_file {
             get {
@@ -79,11 +79,29 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy path (Ctrl+C).
+        ///   Looks up a localized string similar to Copy path .
         /// </summary>
         public static string copy_path {
             get {
                 return ResourceManager.GetString("copy_path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Ctrl+C).
+        /// </summary>
+        public static string copy_shortcut {
+            get {
+                return ResourceManager.GetString("copy_shortcut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Ctrl+Alt+C).
+        /// </summary>
+        public static string copy_shortcutAlt {
+            get {
+                return ResourceManager.GetString("copy_shortcutAlt", resourceCulture);
             }
         }
         

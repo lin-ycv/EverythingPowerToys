@@ -58,7 +58,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 contextMenus.Add(new ContextMenuResult
                 {
                     PluginName = Assembly.GetExecutingAssembly().GetName().Name,
-                    Title = _swapCopy ? Properties.Resources.copy_file : Properties.Resources.copy_file.Replace("Ctrl", "Ctrl+Alt"),
+                    Title = Properties.Resources.copy_file + (_swapCopy ? Properties.Resources.copy_shortcut : Properties.Resources.copy_shortcutAlt),
                     Glyph = "\xE8C8",
                     FontFamily = "Segoe MDL2 Assets",
                     AcceleratorKey = Key.C,
@@ -84,7 +84,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 contextMenus.Add(new ContextMenuResult
                 {
                     PluginName = Assembly.GetExecutingAssembly().GetName().Name,
-                    Title = _swapCopy ? Properties.Resources.copy_path.Replace("Ctrl", "Ctrl+Alt") : Properties.Resources.copy_path,
+                    Title = Properties.Resources.copy_path + (_swapCopy ? Properties.Resources.copy_shortcutAlt : Properties.Resources.copy_shortcut),
                     Glyph = "\xE71B",
                     FontFamily = "Segoe MDL2 Assets",
                     AcceleratorKey = Key.C,

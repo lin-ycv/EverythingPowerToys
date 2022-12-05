@@ -121,10 +121,16 @@
     <value>Fail to set text in clipboard</value>
   </data>
   <data name="copy_file" xml:space="preserve">
-    <value>Copy (Ctrl+C)</value>
+    <value>Copy </value>
   </data>
   <data name="copy_path" xml:space="preserve">
-    <value>Copy path (Ctrl+C)</value>
+    <value>Copy path </value>
+  </data>
+  <data name="copy_shortcut" xml:space="preserve">
+    <value>(Ctrl+C)</value>
+  </data>
+  <data name="copy_shortcutAlt" xml:space="preserve">
+    <value>(Ctrl+Alt+C)</value>
   </data>
   <data name="Everything_ini" xml:space="preserve">
     <value>Install Everything if not installed</value>

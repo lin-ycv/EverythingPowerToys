@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO.Abstractions;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -86,6 +87,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             {
                 Key = Debug,
                 DisplayLabel = "Log debug data",
+                DisplayDescription = $"v{Assembly.GetExecutingAssembly().GetName().Version}",
                 Value = false,
             },
         };
