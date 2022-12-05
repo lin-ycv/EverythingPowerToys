@@ -136,7 +136,7 @@
     <value>Ordner konnte nicht geöffnet werden: </value>
   </data>
   <data name="Match_path" xml:space="preserve">
-    <value>Pfad beachten</value>
+    <value>Pfad suchen</value>
   </data>
   <data name="Match_path_Description" xml:space="preserve">
     <value>Pfad zusätzlich zum Datei-/Ordnernamen suchen</value>
