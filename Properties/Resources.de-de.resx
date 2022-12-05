@@ -121,10 +121,16 @@
     <value>Text konnte nicht in die Zwischenablage kopiert werden</value>
   </data>
   <data name="copy_file" xml:space="preserve">
-    <value>Kopieren (Ctrl+C)</value>
+    <value>Kopieren </value>
   </data>
   <data name="copy_path" xml:space="preserve">
-    <value>Pfad kopieren (Ctrl+C)</value>
+    <value>Pfad kopieren </value>
+  </data>
+  <data name="copy_shortcut" xml:space="preserve">
+    <value>(Strg+C)</value>
+  </data>
+  <data name="copy_shortcutAlt" xml:space="preserve">
+    <value>(Strg+Alt+C)</value>
   </data>
   <data name="Everything_ini" xml:space="preserve">
     <value>Everything installieren falls es nicht installiert ist</value>
@@ -142,10 +148,10 @@
     <value>Pfad zusätzlich zum Datei-/Ordnernamen suchen</value>
   </data>
   <data name="open_containing_folder" xml:space="preserve">
-    <value>Ordner öffnen (Ctrl+Shift+E)</value>
+    <value>Ordner öffnen (Strg+Shift+E)</value>
   </data>
   <data name="open_in_console" xml:space="preserve">
-    <value>Pfad in der Konsole öffnen (Ctrl+Shift+C)</value>
+    <value>Pfad in der Konsole öffnen (Strg+Shift+C)</value>
   </data>
   <data name="plugin_description" xml:space="preserve">
     <value>Everything-Suchergebnisse anzeigen</value>
@@ -172,10 +178,10 @@
     <value>Aktiviert reguläre Ausdrücke in der Suche.</value>
   </data>
   <data name="run_as_admin" xml:space="preserve">
-    <value>Als Administrator ausführen (Ctrl+Shift+Enter)</value>
+    <value>Als Administrator ausführen (Strg+Shift+Enter)</value>
   </data>
   <data name="run_as_user" xml:space="preserve">
-    <value>Als anderer Benutzer ausführen (Ctrl+Shift+U)</value>
+    <value>Als anderer Benutzer ausführen (Strg+Shift+U)</value>
   </data>
   <data name="SwapCopy" xml:space="preserve">
     <value>Tastenkürzel zum Kopieren tauschen</value>
