@@ -4,13 +4,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO.Abstractions;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Windows.Controls;
 using Community.PowerToys.Run.Plugin.Everything.Properties;
 using ManagedCommon;

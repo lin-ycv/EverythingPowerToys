@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.IO.Abstractions;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using Community.PowerToys.Run.Plugin.Everything.Properties;
-using Microsoft.Win32;
 using Wox.Plugin;
 using Wox.Plugin.Logger;
 
