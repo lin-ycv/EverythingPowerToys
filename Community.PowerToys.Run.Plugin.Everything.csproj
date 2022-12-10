@@ -49,6 +49,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="NativeMethods.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="plugin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

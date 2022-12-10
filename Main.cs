@@ -1,41 +1,26 @@
-﻿// Copyright (c) Microsoft Corporation
-// The Microsoft Corporation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Controls;
-using Community.PowerToys.Run.Plugin.Everything.Properties;
-using ManagedCommon;
-using Microsoft.PowerToys.Settings.UI.Library;
-using Wox.Infrastructure;
-using Wox.Infrastructure.Storage;
-using Wox.Plugin;
-using Wox.Plugin.Logger;
-using static Community.PowerToys.Run.Plugin.Everything.NativeMethods;
-
-namespace Community.PowerToys.Run.Plugin.Everything
+﻿namespace Community.PowerToys.Run.Plugin.Everything
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading.Tasks;
+    using System.Windows.Controls;
+    using Community.PowerToys.Run.Plugin.Everything.Properties;
+    using ManagedCommon;
+    using Microsoft.PowerToys.Settings.UI.Library;
+    using Wox.Infrastructure;
+    using Wox.Infrastructure.Storage;
+    using Wox.Plugin;
+    using Wox.Plugin.Logger;
+    using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
     public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider, IPluginI18n
     {
-        private const string RegEx = nameof(RegEx);
-        private const string NoPreview = nameof(NoPreview);
-        private const string MatchPath = nameof(MatchPath);
-        private const string SwapCopy = nameof(SwapCopy);
-        private const string QueryTextDisplay = nameof(QueryTextDisplay);
-        private bool _regEx;
-        private bool _preview;
-        private bool _matchPath;
-        private bool _swapCopy;
-        private bool _queryTextDisplay;
         private IContextMenu _contextMenuLoader;
         private PluginInitContext _context;
         private bool _disposed;
-
-        private const string Debug = nameof(Debug);
-        private bool _debug;
+        private Settings _setting;
+        private Everything _everything;
 
         public string Name => Resources.plugin_name;
 
@@ -45,42 +30,42 @@ namespace Community.PowerToys.Run.Plugin.Everything
         {
             new PluginAdditionalOption()
             {
-                Key = MatchPath,
-                DisplayLabel = Resources.Match_path,
-                DisplayDescription = Resources.Match_path_Description,
-                Value = false,
-            },
-            new PluginAdditionalOption()
-            {
-                Key = NoPreview,
-                DisplayLabel = Resources.Preview,
-                DisplayDescription = Resources.Preview_Description,
-                Value = false,
-            },
-            new PluginAdditionalOption()
-            {
-                Key = RegEx,
-                DisplayLabel = Resources.RegEx,
-                DisplayDescription = Resources.RegEx_Description,
-                Value = false,
-            },
-            new PluginAdditionalOption()
-            {
-                Key = SwapCopy,
+                Key = nameof(Settings.Copy),
                 DisplayLabel = Resources.SwapCopy,
                 DisplayDescription = Resources.SwapCopy_Description,
                 Value = false,
             },
             new PluginAdditionalOption()
             {
-                Key = QueryTextDisplay,
+                Key = nameof(Settings.MatchPath),
+                DisplayLabel = Resources.Match_path,
+                DisplayDescription = Resources.Match_path_Description,
+                Value = false,
+            },
+            new PluginAdditionalOption()
+            {
+                Key = nameof(Settings.Preview),
+                DisplayLabel = Resources.Preview,
+                DisplayDescription = Resources.Preview_Description,
+                Value = false,
+            },
+            new PluginAdditionalOption()
+            {
+                Key = nameof(Settings.QueryText),
                 DisplayLabel = Resources.QueryText,
                 DisplayDescription = Resources.QueryText_Description,
                 Value = false,
             },
             new PluginAdditionalOption()
             {
-                Key = Debug,
+                Key = nameof(Settings.RegEx),
+                DisplayLabel = Resources.RegEx,
+                DisplayDescription = Resources.RegEx_Description,
+                Value = false,
+            },
+            new PluginAdditionalOption()
+            {
+                Key = nameof(Settings.Debug),
                 DisplayLabel = "Log debug data",
                 DisplayDescription = $"v{Assembly.GetExecutingAssembly().GetName().Version}",
                 Value = false,
@@ -89,10 +74,12 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         public void Init(PluginInitContext context)
         {
+            Task.Run(() => new Update(Assembly.GetExecutingAssembly().GetName().Version));
             _context = context;
             _contextMenuLoader = new ContextMenuLoader(context);
-            ((ContextMenuLoader)_contextMenuLoader).UpdateCopy(_swapCopy);
-            EverythingSetup(_debug);
+            ((ContextMenuLoader)_contextMenuLoader).UpdateCopy(_setting.Copy);
+            _everything = new Everything(_setting);
+            if (_setting.SkipUpdate) return;
         }
 
         public List<Result> Query(Query query)
@@ -110,7 +97,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
                 try
                 {
-                    results.AddRange(EverythingSearch(searchQuery, _preview, _matchPath, _queryTextDisplay, _debug));
+                    results.AddRange(_everything.Query(searchQuery, _setting));
                 }
                 catch (System.ComponentModel.Win32Exception)
                 {
@@ -119,7 +106,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         Title = Resources.Everything_not_running,
                         SubTitle = Resources.Everything_ini,
                         IcoPath = "Images/warning.png",
-                        QueryTextDisplay = '.' + Resources.plugin_name,
                         Score = int.MaxValue,
                     });
                 }
@@ -146,17 +132,18 @@ namespace Community.PowerToys.Run.Plugin.Everything
         {
             if (settings != null && settings.AdditionalOptions != null)
             {
-                _regEx = settings.AdditionalOptions.FirstOrDefault(x => x.Key == RegEx)?.Value ?? false;
-                _preview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == NoPreview)?.Value ?? false;
-                _matchPath = settings.AdditionalOptions.FirstOrDefault(x => x.Key == MatchPath)?.Value ?? false;
-                _swapCopy = settings.AdditionalOptions.FirstOrDefault(x => x.Key == SwapCopy)?.Value ?? false;
-                _queryTextDisplay = settings.AdditionalOptions.FirstOrDefault(x => x.Key == QueryTextDisplay)?.Value ?? false;
-                _debug = settings.AdditionalOptions.FirstOrDefault(x => x.Key == Debug)?.Value ?? true;
+                _setting ??= new Settings();
+                _setting.RegEx = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.RegEx))?.Value ?? false;
+                _setting.Preview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Preview))?.Value ?? false;
+                _setting.MatchPath = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.MatchPath))?.Value ?? false;
+                _setting.Copy = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Copy))?.Value ?? false;
+                _setting.QueryText = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.QueryText))?.Value ?? false;
+                _setting.Debug = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Debug))?.Value ?? true;
 
-                if (_contextMenuLoader != null) ((ContextMenuLoader)_contextMenuLoader).UpdateCopy(_swapCopy);
+                if (_contextMenuLoader != null) ((ContextMenuLoader)_contextMenuLoader).UpdateCopy(_setting.Copy);
 
-                Everything_SetRegex(_regEx);
-                Everything_SetMatchPath(_matchPath);
+                Everything_SetRegex(_setting.RegEx);
+                Everything_SetMatchPath(_setting.MatchPath);
             }
         }
 
