@@ -7,7 +7,6 @@
     using System.Text;
     using Community.PowerToys.Run.Plugin.Everything.Properties;
     using Wox.Plugin;
-    using Wox.Plugin.Logger;
     using static Interop.NativeMethods;
 
     internal class Everything
@@ -50,11 +49,6 @@
 
             uint resultCount = Everything_GetNumResults();
 
-            if (setting.Debug)
-            {
-                Log.Info(query + " => " + resultCount, typeof(Everything), "EverythingSearch.ResultCount", string.Empty, 217);
-            }
-
             for (uint i = 0; i < resultCount; i++)
             {
                 StringBuilder buffer = new StringBuilder(260);
@@ -65,17 +59,10 @@
                 string path = isFolder ? fullPath : Path.GetDirectoryName(fullPath);
                 string ext = Path.GetExtension(fullPath.Replace(".lnk", string.Empty));
 
-                if (setting.Debug)
-                {
-                    Log.Info(i + " : " + ext, typeof(Everything), "EverythingSearch.Result", string.Empty, 229);
-                }
-
                 var r = new Result()
                 {
                     Title = name,
-                    ToolTipData = setting.Debug ?
-                    new ToolTipData(orgqry, query) :
-                    new ToolTipData("Name : " + name, fullPath),
+                    ToolTipData = new ToolTipData(name, fullPath),
                     SubTitle = Resources.plugin_name + ": " + fullPath,
 
                     IcoPath = isFolder ? "Images/folder.png" : (setting.Preview ?

@@ -275,5 +275,14 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
                 return ResourceManager.GetString("SwapCopy_Description", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check for updates.
+        /// </summary>
+        public static string Updates {
+            get {
+                return ResourceManager.GetString("Updates", resourceCulture);
+            }
+        }
     }
 }

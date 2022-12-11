@@ -2,9 +2,6 @@
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
-    using Community.PowerToys.Run.Plugin.Everything.Interop;
-    using Wox.Plugin.Logger;
 
     internal class Settings
     {
@@ -14,13 +11,13 @@
         internal bool Preview { get; set; } = false;
         internal bool QueryText { get; set; } = false;
         internal bool RegEx { get; set; } = false;
-        internal bool Debug { get; set; } = false;
+        internal bool Updates { get; set; } = true;
 
         // Settings from settings.toml
-        internal uint Max { get; set; } = 20;
-        internal int Sort { get; set; } = 14;
-        internal Dictionary<string, string> Filters { get; set; } = new Dictionary<string, string>();
-        internal bool SkipUpdate { get; set; } = false;
+        internal uint Max { get; } = 20;
+        internal int Sort { get; } = 14;
+        internal string[] Options { get; }
+        internal Dictionary<string, string> Filters { get; } = new Dictionary<string, string>();
         internal Settings()
         {
             string[] strArr;
@@ -42,8 +39,8 @@
                         try { Sort = int.Parse(kv[1], culture.NumberFormat); }
                         catch { }
                         break;
-                    case "skip":
-                        if (kv[1][0] == 'Y') SkipUpdate = true;
+                    case "options":
+                        Options = kv[1].Split(';', System.StringSplitOptions.RemoveEmptyEntries | System.StringSplitOptions.TrimEntries);
                         break;
                     default:
                         if (kv[0].Contains(':'))
@@ -52,11 +49,7 @@
                 }
             }
 
-            if (Debug)
-            {
-                string msg = $"Max: {Max}\nSort: {Sort}\nFilters: {string.Join("\n - ", Filters.Select(x => { return x.Key + "_" + x.Value; }))}";
-                Log.Info(msg, typeof(NativeMethods));
-            }
+            Options ??= new string[] { "0", "1", "2", "3", "4", "5" };
         }
     }
 }

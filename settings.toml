@@ -10,8 +10,9 @@
 # https://www.voidtools.com/support/everything/sdk/everything_getsort/
 # sort = 14
 
-# Skip update check at start [Y/N default: N]
-# skip = N
+# Configure context menu options and order[default: 0;1;2;3;4;5]
+# 0:Open folder; 1:Run as Admin; 2:Run as User; 3:Copy; 4:Copy Path; 5:Open in Console
+# options = 0;1;3;4;5
 
 # Search filters, filters result with extension type, seperated by ;
 Audio: = aac;ac3;aif;aifc;aiff;amr;ape;au;cda;dts;fla;flac;it;m1a;m2a;m3u;m4a;m4b;m4p;mid;midi;mka;mod;mp2;mp3;mpa;ogg;opus;ra;rmi;spc;rmi;snd;umx;voc;wav;weba;wma;xm

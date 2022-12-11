@@ -65,21 +65,21 @@
             },
             new PluginAdditionalOption()
             {
-                Key = nameof(Settings.Debug),
-                DisplayLabel = "Log debug data",
+                Key = nameof(Settings.Updates),
+                DisplayLabel = Resources.Updates,
                 DisplayDescription = $"v{Assembly.GetExecutingAssembly().GetName().Version}",
-                Value = false,
+                Value = true,
             },
         };
 
         public void Init(PluginInitContext context)
         {
-            Task.Run(() => new Update(Assembly.GetExecutingAssembly().GetName().Version));
+            if (_setting.Updates)
+                Task.Run(() => new Update(Assembly.GetExecutingAssembly().GetName().Version));
             _context = context;
-            _contextMenuLoader = new ContextMenuLoader(context);
+            _contextMenuLoader = new ContextMenuLoader(context, _setting.Options);
             ((ContextMenuLoader)_contextMenuLoader).UpdateCopy(_setting.Copy);
             _everything = new Everything(_setting);
-            if (_setting.SkipUpdate) return;
         }
 
         public List<Result> Query(Query query)
@@ -138,7 +138,7 @@
                 _setting.MatchPath = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.MatchPath))?.Value ?? false;
                 _setting.Copy = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Copy))?.Value ?? false;
                 _setting.QueryText = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.QueryText))?.Value ?? false;
-                _setting.Debug = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Debug))?.Value ?? true;
+                _setting.Updates = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Updates))?.Value ?? true;
 
                 if (_contextMenuLoader != null) ((ContextMenuLoader)_contextMenuLoader).UpdateCopy(_setting.Copy);
 

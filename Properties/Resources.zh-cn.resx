@@ -168,4 +168,7 @@
   <data name="SwapCopy_Description" xml:space="preserve">
     <value>使用 Ctrl+C 复制档案，Ctrl+Alt+C 复制路径</value>
   </data>
+  <data name="Updates" xml:space="preserve">
+    <value>检查是否有更新</value>
+  </data>
 </root>
