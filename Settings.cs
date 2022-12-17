@@ -1,7 +1,9 @@
 ﻿namespace Community.PowerToys.Run.Plugin.Everything
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Reflection;
 
     internal class Settings
     {
@@ -16,18 +18,18 @@
         // Settings from settings.toml
         internal uint Max { get; } = 20;
         internal int Sort { get; } = 14;
-        internal string[] Options { get; }
+        internal int[] Options { get; } = new int[] { 0, 1, 2, 3, 4, 5 };
         internal Dictionary<string, string> Filters { get; } = new Dictionary<string, string>();
         internal Settings()
         {
             string[] strArr;
-            try { strArr = File.ReadAllLines("modules\\launcher\\Plugins\\Everything\\settings.toml"); }
+            try { strArr = File.ReadAllLines(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "settings.toml")); }
             catch { return; }
             var culture = new System.Globalization.CultureInfo("en-US");
             foreach (string str in strArr)
             {
                 if (str.Length == 0 || str[0] == '#') continue;
-                string[] kv = str.Split('=', System.StringSplitOptions.RemoveEmptyEntries | System.StringSplitOptions.TrimEntries);
+                string[] kv = str.Split('=', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
                 if (kv.Length != 2) continue;
                 switch (kv[0])
                 {
@@ -40,7 +42,7 @@
                         catch { }
                         break;
                     case "options":
-                        Options = kv[1].Split(';', System.StringSplitOptions.RemoveEmptyEntries | System.StringSplitOptions.TrimEntries);
+                        Options = Array.ConvertAll(kv[1].Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries), int.Parse);
                         break;
                     default:
                         if (kv[0].Contains(':'))
@@ -48,8 +50,6 @@
                         break;
                 }
             }
-
-            Options ??= new string[] { "0", "1", "2", "3", "4", "5" };
         }
     }
 }

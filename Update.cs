@@ -7,14 +7,13 @@
 
     internal class Update
     {
-        private const string URL = "https://img.shields.io/github/v/release/lin-ycv/everythingpowertoys";
         internal Update(Version v)
         {
             try
             {
                 XmlDocument doc = new XmlDocument();
-                doc.Load(URL);
-                Version latest = Version.Parse(doc.GetElementsByTagName("title")[0].InnerXml.Split(':', StringSplitOptions.TrimEntries)[1].Remove(0, 1));
+                doc.Load("https://img.shields.io/github/v/release/lin-ycv/everythingpowertoys");
+                Version latest = Version.Parse(doc.GetElementsByTagName("title")[0].InnerXml.Split(':', StringSplitOptions.TrimEntries)[1].AsSpan(1));
                 if (latest > v)
                 {
                     MessageBoxResult mbox = MessageBox.Show($"New version available for EverythingPowerToys.\n\nInstalled:\t {v}\nLatest:\t {latest}", "Download Update?", MessageBoxButton.OKCancel);
@@ -29,7 +28,7 @@
                     }
                 }
             }
-            catch (Exception e) { MessageBox.Show(e.ToString()); }
+            catch { }
         }
     }
 }

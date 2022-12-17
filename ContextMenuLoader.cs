@@ -18,13 +18,13 @@ namespace Community.PowerToys.Run.Plugin.Everything
         private readonly string[] _appExtensions = { ".exe", ".bat", ".appref-ms", ".lnk" };
 
         private bool _swapCopy;
-        private string[] _options;
+        private int[] _options;
         internal void UpdateCopy(bool swapCopy)
         {
             _swapCopy = swapCopy;
         }
 
-        public ContextMenuLoader(PluginInitContext context, string[] options)
+        public ContextMenuLoader(PluginInitContext context, int[] options)
         {
             _context = context;
             _options = options;
@@ -36,11 +36,11 @@ namespace Community.PowerToys.Run.Plugin.Everything
             if (selectedResult.ContextData is SearchResult record)
             {
                 bool isFile = record.File, runAs = CanFileBeRunAsAdmin(record.Path);
-                foreach (string o in _options)
+                foreach (int o in _options)
                 {
                     switch (o)
                     {
-                        case "0":
+                        case 0:
                             // Open folder
                             if (isFile)
                             {
@@ -67,7 +67,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                             }
 
                             break;
-                        case "1":
+                        case 1:
                             // Run as Adsmin
                             if (runAs)
                             {
@@ -96,7 +96,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                             }
 
                             break;
-                        case "2":
+                        case 2:
                             // Run as User
                             if (runAs)
                             {
@@ -125,7 +125,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                             }
 
                             break;
-                        case "3":
+                        case 3:
                             // Copy File/Folder
                             contextMenus.Add(new ContextMenuResult
                             {
@@ -154,7 +154,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                                 },
                             });
                             break;
-                        case "4":
+                        case 4:
                             // Copy Path
                             contextMenus.Add(new ContextMenuResult
                             {
@@ -183,7 +183,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                                 },
                             });
                             break;
-                        case "5":
+                        case 5:
                             // Open in Shell
                             contextMenus.Add(new ContextMenuResult
                             {
