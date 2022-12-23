@@ -20,9 +20,9 @@ jobs:
           rm .git -Recurse -Force -Confirm:$false
           $response=curl.exe -s https://api.github.com/repos/lin-ycv/everythingpowertoys/releases/latest
           $browser=($response | select-string "browser_").Line
-          if($browser.Count>1){ $browser=$browser[-1] }
+          if($browser.Count -gt 1){ $browser=$browser[$browser.Count-1] }
           $url=$browser.Split("`"")[3]
-          $ver=($response | select-string 'tag_').Line.Split("`"")[3].substring(1)
+          $ver=($response | select-string '"name":').Line[0].Split("`"")[3].Split(" ")[0].substring(1)
           Invoke-WebRequest $url -O e.zip
           $sum=(Get-FileHash e.zip -Algorithm SHA256).Hash
           rm e.zip
