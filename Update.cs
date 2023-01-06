@@ -1,10 +1,10 @@
-﻿namespace Community.PowerToys.Run.Plugin.Everything
-{
-    using System;
-    using System.Diagnostics;
-    using System.Windows;
-    using System.Xml;
+﻿using System;
+using System.Diagnostics;
+using System.Windows;
+using System.Xml;
 
+namespace Community.PowerToys.Run.Plugin.Everything
+{
     internal class Update
     {
         internal Update(Version v)

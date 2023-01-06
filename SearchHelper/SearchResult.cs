@@ -1,7 +1,7 @@
-﻿namespace Community.PowerToys.Run.Plugin.Everything
-{
-    using Wox.Plugin.Interfaces;
+﻿using Wox.Plugin.Interfaces;
 
+namespace Community.PowerToys.Run.Plugin.Everything
+{
     public class SearchResult : IFileDropResult
     {
         // Contains the Path of the file or folder

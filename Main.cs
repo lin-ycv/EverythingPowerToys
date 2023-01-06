@@ -1,19 +1,20 @@
-﻿namespace Community.PowerToys.Run.Plugin.Everything
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using System.Windows.Controls;
+using Community.PowerToys.Run.Plugin.Everything.Properties;
+using ManagedCommon;
+using Microsoft.PowerToys.Settings.UI.Library;
+using Wox.Infrastructure;
+using Wox.Infrastructure.Storage;
+using Wox.Plugin;
+using Wox.Plugin.Logger;
+using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
+
+namespace Community.PowerToys.Run.Plugin.Everything
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using System.Threading.Tasks;
-    using System.Windows.Controls;
-    using Community.PowerToys.Run.Plugin.Everything.Properties;
-    using ManagedCommon;
-    using Microsoft.PowerToys.Settings.UI.Library;
-    using Wox.Infrastructure;
-    using Wox.Infrastructure.Storage;
-    using Wox.Plugin;
-    using Wox.Plugin.Logger;
-    using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
     public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider, IPluginI18n
     {
         private IContextMenu _contextMenuLoader;

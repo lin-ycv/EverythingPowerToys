@@ -1,15 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using Wox.Infrastructure;
+using Wox.Plugin;
+using Wox.Plugin.Logger;
+
 namespace Community.PowerToys.Run.Plugin.Everything
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Reflection;
-    using System.Threading.Tasks;
-    using System.Windows;
-    using System.Windows.Input;
-    using Wox.Infrastructure;
-    using Wox.Plugin;
-    using Wox.Plugin.Logger;
     internal class ContextMenuLoader : IContextMenu
     {
         private readonly PluginInitContext _context;

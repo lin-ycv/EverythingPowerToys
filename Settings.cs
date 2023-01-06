@@ -1,10 +1,10 @@
-﻿namespace Community.PowerToys.Run.Plugin.Everything
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 
+namespace Community.PowerToys.Run.Plugin.Everything
+{
     internal class Settings
     {
         // Settings from PTR settings

@@ -1,9 +1,9 @@
-﻿namespace Community.PowerToys.Run.Plugin.Everything.Interop
-{
-    using System;
-    using System.Runtime.InteropServices;
-    using System.Text;
+﻿using System;
+using System.Runtime.InteropServices;
+using System.Text;
 
+namespace Community.PowerToys.Run.Plugin.Everything.Interop
+{
     internal class NativeMethods
     {
         #region FlagsEnums
