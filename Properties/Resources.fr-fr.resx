@@ -142,7 +142,7 @@
     <value>Le dossier n'a pas pu être ouvert : </value>
   </data>
   <data name="Match_path" xml:space="preserve">
-    <value>Chemin de correspondance</value>
+    <value>Respecter le chemin</value>
   </data>
   <data name="Match_path_Description" xml:space="preserve">
     <value>Rechercher le chemin en complément du nom de fichier/dossier</value>
