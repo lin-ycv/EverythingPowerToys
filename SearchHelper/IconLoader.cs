@@ -4,7 +4,7 @@ using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
 
 namespace Community.PowerToys.Run.Plugin.Everything.SearchHelper
 {
-    internal class IconLoader
+    internal sealed class IconLoader
     {
 #pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         internal static string? Icon(string doctype)

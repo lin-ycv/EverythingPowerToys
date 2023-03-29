@@ -11,7 +11,7 @@ using Wox.Plugin.Logger;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
-    internal class ContextMenuLoader : IContextMenu
+    internal sealed class ContextMenuLoader : IContextMenu
     {
         private readonly PluginInitContext _context;
 

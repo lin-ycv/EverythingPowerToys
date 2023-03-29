@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Community.PowerToys.Run.Plugin.Everything.Interop
 {
-    internal class NativeMethods
+    internal sealed class NativeMethods
     {
         #region FlagsEnums
         [Flags]

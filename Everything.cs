@@ -9,7 +9,7 @@ using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
-    internal class Everything
+    internal sealed class Everything
     {
         internal Everything(Settings setting)
         {
@@ -29,10 +29,10 @@ namespace Community.PowerToys.Run.Plugin.Everything
             if (orgqry.Contains(':'))
             {
                 string[] nqry = query.Split(':');
-                if (setting.Filters.ContainsKey(nqry[0].ToLowerInvariant()))
+                if (setting.Filters.TryGetValue(nqry[0].ToLowerInvariant(), out string value))
                 {
                     Everything_SetMax(0xffffffff);
-                    query = nqry[1].Trim() + " ext:" + setting.Filters[nqry[0].Trim()];
+                    query = nqry[1].Trim() + " ext:" + value;
                 }
             }
 

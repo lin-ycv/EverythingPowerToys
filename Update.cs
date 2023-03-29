@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
-    internal class Update
+    internal sealed class Update
     {
         internal Update(Version v)
         {

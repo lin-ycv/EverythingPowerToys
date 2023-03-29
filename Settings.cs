@@ -5,14 +5,14 @@ using System.Reflection;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
-    internal class Settings
+    internal sealed class Settings
     {
         // Settings from PTR settings
-        internal bool Copy { get; set; } = false;
-        internal bool MatchPath { get; set; } = false;
-        internal bool Preview { get; set; } = false;
-        internal bool QueryText { get; set; } = false;
-        internal bool RegEx { get; set; } = false;
+        internal bool Copy { get; set; }
+        internal bool MatchPath { get; set; }
+        internal bool Preview { get; set; }
+        internal bool QueryText { get; set; }
+        internal bool RegEx { get; set; }
         internal bool Updates { get; set; } = true;
 
         // Settings from settings.toml
