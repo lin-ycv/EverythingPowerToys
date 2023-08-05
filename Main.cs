@@ -48,7 +48,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 Key = nameof(Settings.Preview),
                 DisplayLabel = Resources.Preview,
                 DisplayDescription = Resources.Preview_Description,
-                Value = false,
+                Value = true,
             },
             new PluginAdditionalOption()
             {
@@ -135,7 +135,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             {
                 _setting ??= new Settings();
                 _setting.RegEx = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.RegEx))?.Value ?? false;
-                _setting.Preview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Preview))?.Value ?? false;
+                _setting.Preview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Preview))?.Value ?? true;
                 _setting.MatchPath = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.MatchPath))?.Value ?? false;
                 _setting.Copy = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Copy))?.Value ?? false;
                 _setting.QueryText = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.QueryText))?.Value ?? false;

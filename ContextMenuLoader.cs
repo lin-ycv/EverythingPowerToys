@@ -170,7 +170,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                                 {
                                     try
                                     {
-                                        Clipboard.SetText(record.Path);
+                                        Clipboard.SetDataObject(record.Path);
                                         return true;
                                     }
                                     catch (Exception e)
