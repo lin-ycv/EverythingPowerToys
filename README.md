@@ -8,7 +8,7 @@
 
 This repo is to be used with the [PowerToys repo](https://github.com/microsoft/PowerToys), this will not compile when used standalone, as it's missing references from PowerToys. Instructions are in the wiki.
 
-The [release](https://github.com/lin-ycv/EverythingPowerToys/releases) is the compiled result of this repo, extract the downloaded folder to `C:\Program Files\PowerToys\modules\launcher\Plugins`
+The [release](https://github.com/lin-ycv/EverythingPowerToys/releases) is the compiled result of this repo, extract the downloaded folder to `C:\Program Files\PowerToys\RunPlugins`
 
 [Everything](https://www.voidtools.com/downloads/) has to be downloaded seperately, and be running in order for this plugin to work.<br>
 **\*This does not work with the lite version of Everything, it does not support IPC**<br>
