@@ -5,6 +5,17 @@
 [![GitHub all releases](https://img.shields.io/github/downloads/lin-ycv/EverythingPowerToys/total)](https://github.com/lin-ycv/EverythingPowerToys/releases/)
 [![GitHub release (latest by date)](https://img.shields.io/github/downloads/lin-ycv/everythingpowertoys/latest/total)](https://github.com/lin-ycv/EverythingPowerToys/releases/latest)
 
+## How To Install
+1. Download the latest release from [here](https://github.com/octo-org/octo-repo/releases/latest).
+2. Unzip.
+3. Copy the `Everything` folder to `C:\Program Files\PowerToys\RunPlugins` or `%LOCALAPPDATA%\PowerToys\RunPlugins`.
+4. Restart PowerToys.
+
+## Requirements
+1. [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/)
+2. [Everything](https://www.voidtools.com/) needs to be installed separately and **running**.
+
+---
 
 This repo is to be used with the [PowerToys repo](https://github.com/microsoft/PowerToys), this will not compile when used standalone, as it's missing references from PowerToys. Instructions are in the wiki.
 
