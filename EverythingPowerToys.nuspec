@@ -15,5 +15,9 @@
     <bugTrackerUrl>https://github.com/lin-ycv/EverythingPowerToys/issues</bugTrackerUrl>
     <packageSourceUrl>https://github.com/lin-ycv/EverythingPowerToys</packageSourceUrl>
     <projectSourceUrl>https://github.com/lin-ycv/EverythingPowerToys</projectSourceUrl>
+    <dependencies>
+      <dependency id="everything" version="1.4.11023" />
+      <dependency id="powertoys" version="_VERSION_" />
+    </dependencies>
   </metadata>
 </package>
