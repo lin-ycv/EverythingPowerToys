@@ -17,7 +17,7 @@ Dev instructions are in the wiki.
 
 #### Requirements
 * [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/)
-* [Everything]([https://www.voidtools.com/](https://github.com/lin-ycv/EverythingPowerToys/releases)) (non-lite version) needs to be installed separately and **running**.
+* [Everything](https://www.voidtools.com/) (non-lite version) needs to be installed separately and **running**.
   * *if you are on 1.5 alpha, you need to [Disable 1.5a Instance](http://www.voidtools.com/forum/viewtopic.php?f=12&t=9799#instance)*
 
 

@@ -23,14 +23,14 @@
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\..\..\..\$(Platform)\$(Configuration)\modules\launcher\Plugins\Everything\</OutputPath>
+    <OutputPath>..\..\..\..\..\$(Platform)\$(Configuration)\RunPlugins\Everything\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <OutputPath>..\..\..\..\..\$(Platform)\$(Configuration)\modules\launcher\Plugins\Everything\</OutputPath>
+    <OutputPath>..\..\..\..\..\$(Platform)\$(Configuration)\RunPlugins\Everything\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>none</DebugType>

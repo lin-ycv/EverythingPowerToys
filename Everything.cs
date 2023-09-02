@@ -83,6 +83,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         try
                         {
                             process.Start();
+                            _ = Everything_IncRunCountFromFileName(fullPath);
                             return true;
                         }
                         catch (Win32Exception)
