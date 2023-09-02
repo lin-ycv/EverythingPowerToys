@@ -17,7 +17,7 @@
     <projectSourceUrl>https://github.com/lin-ycv/EverythingPowerToys</projectSourceUrl>
     <dependencies>
       <dependency id="everything" version="1.4.11023" />
-      <dependency id="powertoys" version="_VERSION_" />
+      <!--<dependency id="powertoys" version="_VERSION_" />-->
     </dependencies>
   </metadata>
 </package>
