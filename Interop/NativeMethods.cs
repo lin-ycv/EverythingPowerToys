@@ -112,6 +112,8 @@ namespace Community.PowerToys.Run.Plugin.Everything.Interop
         internal static extern uint Everything_GetNumResults();
         [DllImport(dllName, CharSet = CharSet.Unicode)]
         internal static extern void Everything_GetResultFullPathName(uint nIndex, StringBuilder lpString, uint nMaxCount);
+        [DllImport(dllName, CharSet = CharSet.Unicode)]
+        public static extern uint Everything_IncRunCountFromFileName(string lpFileName);
         [DllImport(dllName)]
         internal static extern bool Everything_IsFolderResult(uint index);
         [DllImport(dllName)]

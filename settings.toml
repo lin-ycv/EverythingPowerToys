@@ -1,5 +1,5 @@
 # This is the settings file to override the behaviour for "Everything for PowerToys"
-# to override a setting, uncomment that line by uncommenting and changing the value
+# to override a setting, uncomment that line and change the value
 # ie: "# max = 20" -> "max = 10"
 # Restart of powertoys is needed if values are changed
 
