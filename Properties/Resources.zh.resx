@@ -120,6 +120,10 @@
   <data name="clipboard_failed" xml:space="preserve">
     <value>複製到剪貼簿失敗</value>
   </data>
+  <data name="Context_Description" xml:space="preserve">
+    <value>配置選單選項與順序
+0_開啟資料夾、1_以管理員身分執行、2_以其他使用者身分執行、3_複製、4_複製路徑、5_在命令提示字元中開啟</value>
+  </data>
   <data name="copy_file" xml:space="preserve">
     <value>複製</value>
   </data>
@@ -137,6 +141,9 @@
   </data>
   <data name="Match_path_Description" xml:space="preserve">
     <value>也收尋路徑</value>
+  </data>
+  <data name="Max_Description" xml:space="preserve">
+    <value>結果中顯示的最大結果數</value>
   </data>
   <data name="open_containing_folder" xml:space="preserve">
     <value>開啟檔案位置 (Ctrl+Shift+E)</value>
@@ -163,7 +170,10 @@
     <value>以系統管理員身分執行 (Ctrl+Shift+Enter)</value>
   </data>
   <data name="run_as_user" xml:space="preserve">
-    <value>以不同的使用者身份執行 (Ctrl+Shift+U)</value>
+    <value>以其他使用者身份執行 (Ctrl+Shift+U)</value>
+  </data>
+  <data name="Sort_Description" xml:space="preserve">
+    <value>設定結果排序方法</value>
   </data>
   <data name="SwapCopy_Description" xml:space="preserve">
     <value>使用 Ctrl+C 複製檔案，Ctrl+Alt+C 複製路徑</value>

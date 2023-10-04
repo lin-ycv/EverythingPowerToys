@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using Community.PowerToys.Run.Plugin.Everything.Properties;
 using ManagedCommon;
@@ -10,17 +11,19 @@ using Microsoft.PowerToys.Settings.UI.Library;
 using Wox.Infrastructure;
 using Wox.Infrastructure.Storage;
 using Wox.Plugin;
+using Wox.Plugin.Common;
 using Wox.Plugin.Logger;
 using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
-    public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider, IPluginI18n
+    public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider, IPluginI18n, ISavable
     {
+        private readonly Settings _setting;
+        private readonly PluginJsonStorage<Settings> _storage;
         private IContextMenu _contextMenuLoader;
         private PluginInitContext _context;
         private bool _disposed;
-        private Settings _setting;
         private Everything _everything;
 
         public string Name => Resources.plugin_name;
@@ -29,6 +32,31 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         public IEnumerable<PluginAdditionalOption> AdditionalOptions => new List<PluginAdditionalOption>()
         {
+            new PluginAdditionalOption()
+            {
+                Key = nameof(Settings.Context),
+                DisplayLabel = Resources.Context,
+                DisplayDescription = Resources.Context_Description,
+                PluginOptionType = PluginAdditionalOption.AdditionalOptionType.Textbox,
+                TextValue = _setting.Context,
+            },
+            new PluginAdditionalOption()
+            {
+                Key = nameof(Settings.Sort),
+                DisplayLabel = Resources.Sort,
+                DisplayDescription = Resources.Sort_Description,
+                PluginOptionType = PluginAdditionalOption.AdditionalOptionType.Combobox,
+                ComboBoxOptions = Enum.GetNames(typeof(Sort)).ToList(),
+                ComboBoxValue = (int)_setting.Sort,
+            },
+            new PluginAdditionalOption()
+            {
+                Key = nameof(Settings.Max),
+                DisplayLabel = Resources.Max,
+                DisplayDescription = Resources.Max_Description,
+                PluginOptionType = PluginAdditionalOption.AdditionalOptionType.Numberbox,
+                NumberValue = _setting.Max,
+            },
             new PluginAdditionalOption()
             {
                 Key = nameof(Settings.Copy),
@@ -73,13 +101,20 @@ namespace Community.PowerToys.Run.Plugin.Everything
             },
         };
 
+        public Main()
+        {
+            _storage = new PluginJsonStorage<Settings>();
+            _setting = _storage.Load();
+        }
+
         public void Init(PluginInitContext context)
         {
+            _setting.Getfilters();
             if (_setting.Updates)
                 Task.Run(() => new Update(Assembly.GetExecutingAssembly().GetName().Version));
             _context = context;
-            _contextMenuLoader = new ContextMenuLoader(context, _setting.Options);
-            ((ContextMenuLoader)_contextMenuLoader).UpdateCopy(_setting.Copy);
+            _contextMenuLoader = new ContextMenuLoader(context, _setting.Context);
+            ((ContextMenuLoader)_contextMenuLoader).Update(_setting);
             _everything = new Everything(_setting);
         }
 
@@ -133,7 +168,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
         {
             if (settings != null && settings.AdditionalOptions != null)
             {
-                _setting ??= new Settings();
+                _setting.Sort = (Sort)(settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Sort))?.ComboBoxValue ?? 13);
+                _setting.Max = (uint)(settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Max))?.NumberValue ?? 20);
+                _setting.Context = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Context))?.TextValue ?? "012345";
                 _setting.RegEx = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.RegEx))?.Value ?? false;
                 _setting.Preview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Preview))?.Value ?? true;
                 _setting.MatchPath = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.MatchPath))?.Value ?? false;
@@ -141,11 +178,16 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 _setting.QueryText = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.QueryText))?.Value ?? false;
                 _setting.Updates = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Updates))?.Value ?? true;
 
-                if (_contextMenuLoader != null) ((ContextMenuLoader)_contextMenuLoader).UpdateCopy(_setting.Copy);
+                if (_contextMenuLoader != null) ((ContextMenuLoader)_contextMenuLoader).Update(_setting);
+                if (_contextMenuLoader != null) _everything.UpdateSettings(_setting);
 
-                Everything_SetRegex(_setting.RegEx);
-                Everything_SetMatchPath(_setting.MatchPath);
+                Save();
             }
+        }
+
+        public void Save()
+        {
+            _storage.Save();
         }
 
         protected virtual void Dispose(bool disposing)

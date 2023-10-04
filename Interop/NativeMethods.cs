@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Community.PowerToys.Run.Plugin.Everything.Interop
 {
-    internal sealed class NativeMethods
+    public sealed class NativeMethods
     {
         #region FlagsEnums
         [Flags]
@@ -28,9 +28,10 @@ namespace Community.PowerToys.Run.Plugin.Everything.Interop
             HIGHLIGHTED_FULL_PATH_AND_FILE_NAME = 0x00008000,
         }
 
-        internal enum Sort
+        public enum Sort
         {
-            NAME_ASCENDING = 1,
+            NULL = 0, // because combobox starts from 0, but everything starts from 1
+            NAME_ASCENDING,
             NAME_DESCENDING,
             PATH_ASCENDING,
             PATH_DESCENDING,
@@ -107,13 +108,13 @@ namespace Community.PowerToys.Run.Plugin.Everything.Interop
         }
         #endregion
 
-        internal const string dllName = "Everything64.dll";
+        public const string dllName = "Everything64.dll";
         [DllImport(dllName)]
         internal static extern uint Everything_GetNumResults();
         [DllImport(dllName, CharSet = CharSet.Unicode)]
         internal static extern void Everything_GetResultFullPathName(uint nIndex, StringBuilder lpString, uint nMaxCount);
         [DllImport(dllName, CharSet = CharSet.Unicode)]
-        public static extern uint Everything_IncRunCountFromFileName(string lpFileName);
+        internal static extern uint Everything_IncRunCountFromFileName(string lpFileName);
         [DllImport(dllName)]
         internal static extern bool Everything_IsFolderResult(uint index);
         [DllImport(dllName)]

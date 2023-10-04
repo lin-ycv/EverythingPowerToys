@@ -14,8 +14,15 @@ namespace Community.PowerToys.Run.Plugin.Everything
         internal Everything(Settings setting)
         {
             Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME);
-            Everything_SetSort((Sort)setting.Sort);
+            UpdateSettings(setting);
+        }
+
+        internal void UpdateSettings(Settings setting)
+        {
+            Everything_SetSort(setting.Sort);
             Everything_SetMax(setting.Max);
+            Everything_SetMatchPath(setting.MatchPath);
+            Everything_SetRegex(setting.RegEx);
         }
 
         internal IEnumerable<Result> Query(string query, Settings setting)

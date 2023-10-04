@@ -120,6 +120,13 @@
   <data name="clipboard_failed" xml:space="preserve">
     <value>Fail to set text in clipboard</value>
   </data>
+  <data name="Context" xml:space="preserve">
+    <value>Context Menu</value>
+  </data>
+  <data name="Context_Description" xml:space="preserve">
+    <value>Configure context menu options and order.
+0_Open folder, 1_Run as Admin, 2_Run as User, 3_Copy, 4_Copy Path, 5_Open in Console</value>
+  </data>
   <data name="copy_file" xml:space="preserve">
     <value>Copy </value>
   </data>
@@ -146,6 +153,12 @@
   </data>
   <data name="Match_path_Description" xml:space="preserve">
     <value>Search path in additional to file/folder name.</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Max</value>
+  </data>
+  <data name="Max_Description" xml:space="preserve">
+    <value>The maximum amount of results to display in the results.</value>
   </data>
   <data name="open_containing_folder" xml:space="preserve">
     <value>Open containing folder (Ctrl+Shift+E)</value>
@@ -182,6 +195,12 @@
   </data>
   <data name="run_as_user" xml:space="preserve">
     <value>Run as different user (Ctrl+Shift+U)</value>
+  </data>
+  <data name="Sort" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="Sort_Description" xml:space="preserve">
+    <value>Set result sorting method.</value>
   </data>
   <data name="SwapCopy" xml:space="preserve">
     <value>Copy</value>

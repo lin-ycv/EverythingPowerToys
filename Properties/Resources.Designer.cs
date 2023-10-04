@@ -70,6 +70,25 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Context Menu.
+        /// </summary>
+        public static string Context {
+            get {
+                return ResourceManager.GetString("Context", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure context menu options and order.
+        ///0_Open folder, 1_Run as Admin, 2_Run as User, 3_Copy, 4_Copy Path, 5_Open in Console.
+        /// </summary>
+        public static string Context_Description {
+            get {
+                return ResourceManager.GetString("Context_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy .
         /// </summary>
         public static string copy_file {
@@ -147,6 +166,24 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         public static string Match_path_Description {
             get {
                 return ResourceManager.GetString("Match_path_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max.
+        /// </summary>
+        public static string Max {
+            get {
+                return ResourceManager.GetString("Max", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The maximum amount of results to display in the results..
+        /// </summary>
+        public static string Max_Description {
+            get {
+                return ResourceManager.GetString("Max_Description", resourceCulture);
             }
         }
         
@@ -255,6 +292,24 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         public static string run_as_user {
             get {
                 return ResourceManager.GetString("run_as_user", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sort.
+        /// </summary>
+        public static string Sort {
+            get {
+                return ResourceManager.GetString("Sort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set result sorting method..
+        /// </summary>
+        public static string Sort_Description {
+            get {
+                return ResourceManager.GetString("Sort_Description", resourceCulture);
             }
         }
         

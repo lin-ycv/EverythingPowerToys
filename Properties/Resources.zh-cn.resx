@@ -120,6 +120,10 @@
   <data name="clipboard_failed" xml:space="preserve">
     <value>无法设置剪贴板中的文本</value>
   </data>
+  <data name="Context_Description" xml:space="preserve">
+    <value>配置选单选项与顺序
+0_打开所在文件夹、1_以管理员身分运行、2_以不同的使用者身分运行、3_复制、4_复制路径、5_在控制台中开启</value>
+  </data>
   <data name="copy_file" xml:space="preserve">
     <value>复制</value>
   </data>
@@ -137,6 +141,9 @@
   </data>
   <data name="Match_path_Description" xml:space="preserve">
     <value>匹配路径</value>
+  </data>
+  <data name="Max_Description" xml:space="preserve">
+    <value>结果中显示的最大结果数</value>
   </data>
   <data name="open_containing_folder" xml:space="preserve">
     <value>打开所在文件夹 (Ctrl+Shift+E)</value>
@@ -164,6 +171,9 @@
   </data>
   <data name="run_as_user" xml:space="preserve">
     <value>以不同的使用者身份运行(Ctrl+Shift+U)</value>
+  </data>
+  <data name="Sort_Description" xml:space="preserve">
+    <value>设定结果排序方法</value>
   </data>
   <data name="SwapCopy_Description" xml:space="preserve">
     <value>使用 Ctrl+C 复制档案，Ctrl+Alt+C 复制路径</value>
