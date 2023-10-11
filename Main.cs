@@ -19,16 +19,17 @@ namespace Community.PowerToys.Run.Plugin.Everything
 {
     public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider, IPluginI18n, ISavable
     {
-        private readonly Settings _setting;
-        private readonly PluginJsonStorage<Settings> _storage;
-        private IContextMenu _contextMenuLoader;
-        private PluginInitContext _context;
-        private bool _disposed;
-        private Everything _everything;
-
+        public static string PluginID => "A86867E2D932459CBD77D176373DD657";
         public string Name => Resources.plugin_name;
-
         public string Description => Resources.plugin_description;
+
+        private Settings _setting;
+        private PluginJsonStorage<Settings> _storage;
+
+        private IContextMenu _contextMenuLoader;
+        private bool _disposed;
+
+        private Everything _everything;
 
         public IEnumerable<PluginAdditionalOption> AdditionalOptions => new List<PluginAdditionalOption>()
         {
@@ -46,7 +47,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 DisplayLabel = Resources.Sort,
                 DisplayDescription = Resources.Sort_Description,
                 PluginOptionType = PluginAdditionalOption.AdditionalOptionType.Combobox,
-                ComboBoxOptions = Enum.GetNames(typeof(Sort)).ToList(),
+                ComboBoxItems = Enum.GetValues(typeof(Sort)).Cast<int>().Select(v => new KeyValuePair<string, string>(((Sort)v).ToString(), v + string.Empty)).ToList(),
                 ComboBoxValue = (int)_setting.Sort,
             },
             new PluginAdditionalOption()
@@ -62,42 +63,42 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 Key = nameof(Settings.Copy),
                 DisplayLabel = Resources.SwapCopy,
                 DisplayDescription = Resources.SwapCopy_Description,
-                Value = false,
+                Value = _setting.Copy,
             },
             new PluginAdditionalOption()
             {
                 Key = nameof(Settings.MatchPath),
                 DisplayLabel = Resources.Match_path,
                 DisplayDescription = Resources.Match_path_Description,
-                Value = false,
+                Value = _setting.MatchPath,
             },
             new PluginAdditionalOption()
             {
                 Key = nameof(Settings.Preview),
                 DisplayLabel = Resources.Preview,
                 DisplayDescription = Resources.Preview_Description,
-                Value = true,
+                Value = _setting.Preview,
             },
             new PluginAdditionalOption()
             {
                 Key = nameof(Settings.QueryText),
                 DisplayLabel = Resources.QueryText,
                 DisplayDescription = Resources.QueryText_Description,
-                Value = false,
+                Value = _setting.QueryText,
             },
             new PluginAdditionalOption()
             {
                 Key = nameof(Settings.RegEx),
                 DisplayLabel = Resources.RegEx,
                 DisplayDescription = Resources.RegEx_Description,
-                Value = false,
+                Value = _setting.RegEx,
             },
             new PluginAdditionalOption()
             {
                 Key = nameof(Settings.Updates),
                 DisplayLabel = Resources.Updates,
                 DisplayDescription = $"v{Assembly.GetExecutingAssembly().GetName().Version}",
-                Value = true,
+                Value = _setting.Updates,
             },
         };
 
@@ -112,7 +113,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
             _setting.Getfilters();
             if (_setting.Updates)
                 Task.Run(() => new Update(Assembly.GetExecutingAssembly().GetName().Version));
-            _context = context;
             _contextMenuLoader = new ContextMenuLoader(context, _setting.Context);
             ((ContextMenuLoader)_contextMenuLoader).Update(_setting);
             _everything = new Everything(_setting);
@@ -168,7 +168,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         {
             if (settings != null && settings.AdditionalOptions != null)
             {
-                _setting.Sort = (Sort)(settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Sort))?.ComboBoxValue ?? 13);
+                _setting.Sort = (Sort)(settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Sort))?.ComboBoxValue ?? 14);
                 _setting.Max = (uint)(settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Max))?.NumberValue ?? 20);
                 _setting.Context = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Context))?.TextValue ?? "012345";
                 _setting.RegEx = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.RegEx))?.Value ?? false;

@@ -30,8 +30,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Interop
 
         public enum Sort
         {
-            NULL = 0, // because combobox starts from 0, but everything starts from 1
-            NAME_ASCENDING,
+            NAME_ASCENDING = 1,
             NAME_DESCENDING,
             PATH_ASCENDING,
             PATH_DESCENDING,
@@ -108,7 +107,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Interop
         }
         #endregion
 
-        public const string dllName = "Everything64.dll";
+        internal const string dllName = "Everything64.dll";
         [DllImport(dllName)]
         internal static extern uint Everything_GetNumResults();
         [DllImport(dllName, CharSet = CharSet.Unicode)]
