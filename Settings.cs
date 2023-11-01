@@ -9,15 +9,16 @@ namespace Community.PowerToys.Run.Plugin.Everything
     public class Settings
     {
         // Settings from PTR settings
-        public Interop.NativeMethods.Sort Sort { get; set; }
-        public uint Max { get; set; }
-        public string Context { get; set; }
-        public bool Copy { get; set; }
-        public bool MatchPath { get; set; }
-        public bool Preview { get; set; }
-        public bool QueryText { get; set; }
-        public bool RegEx { get; set; }
-        public bool Updates { get; set; }
+        internal Interop.NativeMethods.Sort Sort { get; set; } = Interop.NativeMethods.Sort.DATE_MODIFIED_DESCENDING;
+        internal uint Max { get; set; } = 20;
+        internal string Context { get; set; } = "012345";
+        internal bool Copy { get; set; }
+        internal bool MatchPath { get; set; }
+        internal bool Preview { get; set; } = true;
+        internal bool QueryText { get; set; }
+        internal bool RegEx { get; set; }
+        internal bool Updates { get; set; } = true;
+        internal string Skip { get; set; }
 
         // Get Filters from settings.toml
         internal Dictionary<string, string> Filters { get; } = new Dictionary<string, string>();

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -106,16 +108,38 @@ namespace Community.PowerToys.Run.Plugin.Everything
         {
             _storage = new PluginJsonStorage<Settings>();
             _setting = _storage.Load();
+            _setting.Getfilters();
+            if (_setting.Updates)
+                Task.Run(() => new Update(Assembly.GetExecutingAssembly().GetName().Version, _setting));
+            _everything = new Everything(_setting);
+        }
+
+        public void UpdateSettings(PowerLauncherPluginSettings settings)
+        {
+            if (settings != null && settings.AdditionalOptions != null)
+            {
+                _setting.Sort = (Sort)settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Sort)).ComboBoxValue;
+                _setting.Max = (uint)settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Max)).NumberValue;
+                _setting.Context = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Context)).TextValue;
+                _setting.RegEx = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.RegEx)).Value;
+                _setting.Preview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Preview)).Value;
+                _setting.MatchPath = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.MatchPath)).Value;
+                _setting.Copy = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Copy)).Value;
+                _setting.QueryText = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.QueryText)).Value;
+                _setting.Updates = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Updates)).Value;
+
+                _everything.UpdateSettings(_setting);
+
+                if (_contextMenuLoader != null) ((ContextMenuLoader)_contextMenuLoader).Update(_setting);
+
+                Save();
+            }
         }
 
         public void Init(PluginInitContext context)
         {
-            _setting.Getfilters();
-            if (_setting.Updates)
-                Task.Run(() => new Update(Assembly.GetExecutingAssembly().GetName().Version));
             _contextMenuLoader = new ContextMenuLoader(context, _setting.Context);
             ((ContextMenuLoader)_contextMenuLoader).Update(_setting);
-            _everything = new Everything(_setting);
         }
 
         public List<Result> Query(Query query)
@@ -154,41 +178,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             return results;
         }
 
-        public List<ContextMenuResult> LoadContextMenus(Result selectedResult)
-        {
-            return _contextMenuLoader.LoadContextMenus(selectedResult);
-        }
-
-        public Control CreateSettingPanel()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateSettings(PowerLauncherPluginSettings settings)
-        {
-            if (settings != null && settings.AdditionalOptions != null)
-            {
-                _setting.Sort = (Sort)(settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Sort))?.ComboBoxValue ?? 14);
-                _setting.Max = (uint)(settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Max))?.NumberValue ?? 20);
-                _setting.Context = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Context))?.TextValue ?? "012345";
-                _setting.RegEx = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.RegEx))?.Value ?? false;
-                _setting.Preview = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Preview))?.Value ?? true;
-                _setting.MatchPath = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.MatchPath))?.Value ?? false;
-                _setting.Copy = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Copy))?.Value ?? false;
-                _setting.QueryText = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.QueryText))?.Value ?? false;
-                _setting.Updates = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Updates))?.Value ?? true;
-
-                if (_contextMenuLoader != null) ((ContextMenuLoader)_contextMenuLoader).Update(_setting);
-                if (_contextMenuLoader != null) _everything.UpdateSettings(_setting);
-
-                Save();
-            }
-        }
-
-        public void Save()
-        {
-            _storage.Save();
-        }
+        public void Save() => _storage.Save();
 
         protected virtual void Dispose(bool disposing)
         {
@@ -209,14 +199,11 @@ namespace Community.PowerToys.Run.Plugin.Everything
             GC.SuppressFinalize(this);
         }
 
-        public string GetTranslatedPluginTitle()
-        {
-            return Resources.plugin_name;
-        }
+        public List<ContextMenuResult> LoadContextMenus(Result selectedResult) => _contextMenuLoader.LoadContextMenus(selectedResult);
 
-        public string GetTranslatedPluginDescription()
-        {
-            return Resources.plugin_description;
-        }
+        public Control CreateSettingPanel() => throw new NotImplementedException();
+        public string GetTranslatedPluginTitle() => Resources.plugin_name;
+
+        public string GetTranslatedPluginDescription() => Resources.plugin_description;
     }
 }
