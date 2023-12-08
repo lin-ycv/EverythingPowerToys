@@ -55,7 +55,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             }
 
             uint resultCount = Everything_GetNumResults();
-
+            resultCount = resultCount > setting.Max ? setting.Max : resultCount;
             for (uint i = 0; i < resultCount; i++)
             {
                 StringBuilder buffer = new StringBuilder(260);
