@@ -18,8 +18,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 Version latest = Version.Parse(doc.GetElementsByTagName("title")[0].InnerXml.Split(':', StringSplitOptions.TrimEntries)[1].AsSpan(1));
                 if (latest > v && latest.ToString() != s.Skip)
                 {
-                    MessageBoxResult mbox = MessageBox.Show($"New version available for EverythingPowerToys.\n\nInstalled:\t {v}\nLatest:\t {latest}", "Download Update?", MessageBoxButton.OKCancel);
-                    if (mbox == MessageBoxResult.OK)
+                    MessageBoxResult mbox = MessageBox.Show($"New version available for EverythingPowerToys.\nClicking 'No' will disable future notice for this version.\n\nInstalled:\t {v}\nLatest:\t {latest}", "Download Update?", MessageBoxButton.YesNoCancel);
+                    if (mbox == MessageBoxResult.Yes)
                     {
                         ProcessStartInfo p = new ProcessStartInfo("https://github.com/lin-ycv/EverythingPowerToys/releases/latest")
                         {
@@ -28,7 +28,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         };
                         Process.Start(p);
                     }
-                    else
+                    else if (mbox == MessageBoxResult.No)
                     {
                         s.Skip = latest.ToString();
                     }
