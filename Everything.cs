@@ -37,10 +37,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             {
                 string[] nqry = query.Split(':');
                 if (setting.Filters.TryGetValue(nqry[0].ToLowerInvariant(), out string value))
-                {
-                    Everything_SetMax(0xffffffff);
                     query = nqry[1].Trim() + " ext:" + value;
-                }
             }
 
             _ = Everything_SetSearchW(query);
@@ -104,7 +101,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 yield return r;
             }
 
-            Everything_SetMax(setting.Max);
         }
     }
 }
