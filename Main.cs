@@ -25,8 +25,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
         public string Name => Resources.plugin_name;
         public string Description => Resources.plugin_description;
 
-        private Settings _setting;
-        private PluginJsonStorage<Settings> _storage;
+        private readonly Settings _setting;
+        private readonly PluginJsonStorage<Settings> _storage;
 
         private IContextMenu _contextMenuLoader;
         private bool _disposed;
