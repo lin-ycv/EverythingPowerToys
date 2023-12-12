@@ -1,6 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\..\..\Version.props" />
-
   <PropertyGroup>
     <TargetFramework>net8.0-windows7.0</TargetFramework>
     <ProjectGuid>{64467D32-4786-4ADD-9B77-FBF3C965D3D1}</ProjectGuid>
@@ -23,14 +21,14 @@
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\..\..\..\$(Platform)\$(Configuration)\RunPlugins\Everything\</OutputPath>
+    <OutputPath>$(Platform)\$(Configuration)\RunPlugins\Everything\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <OutputPath>..\..\..\..\..\$(Platform)\$(Configuration)\RunPlugins\Everything\</OutputPath>
+    <OutputPath>$(Platform)\$(Configuration)\RunPlugins\Everything\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>none</DebugType>
@@ -62,13 +60,12 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\settings-ui\Settings.UI.Library\Settings.UI.Library.csproj">
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Wox.Infrastructure\Wox.Infrastructure.csproj">
-      <Private>False</Private>
-    </ProjectReference>
+   <ItemGroup>
+    <Reference Include="Libs\PowerToys.Common.UI.dll" />
+    <Reference Include="Libs\PowerToys.ManagedCommon.dll" />
+    <Reference Include="Libs\PowerToys.Settings.UI.Lib.dll" />
+    <Reference Include="Libs\Wox.Infrastructure.dll" />
+    <Reference Include="Libs\Wox.Plugin.dll" />
   </ItemGroup>
 
   <ItemGroup>
