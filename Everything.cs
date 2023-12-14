@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using Community.PowerToys.Run.Plugin.Everything.Properties;
 using Wox.Plugin;
 using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
@@ -35,9 +36,21 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
             if (orgqry.Contains(':'))
             {
-                string[] nqry = query.Split(':');
-                if (setting.Filters.TryGetValue(nqry[0].ToLowerInvariant(), out string value))
-                    query = nqry[1].Trim() + " ext:" + value;
+                foreach (var item in setting.Filters.Keys)
+                {
+                    string pattern = @"\b"+ item + ":";
+                    if (Regex.IsMatch(orgqry, pattern, RegexOptions.IgnoreCase))
+                    {
+                        if (!query.Contains("ext:"))
+                        {
+                            query = Regex.Replace(query, pattern, " ext:" + setting.Filters[item] + "; ", RegexOptions.IgnoreCase);
+                        }
+                        else
+                        {
+                            query = Regex.Replace(query, pattern, " ", RegexOptions.IgnoreCase).Replace("ext:", "ext:" + setting.Filters[item] + ";");                            
+                        }
+                    }
+                }
             }
 
             _ = Everything_SetSearchW(query);
