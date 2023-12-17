@@ -12,7 +12,7 @@ Dev instructions are in the wiki.
 #### Install instructions
 1. Download the latest release from [here](https://github.com/lin-ycv/EverythingPowerToys/releases/latest).
 2. Unzip.
-3. Copy the `Everything` folder to `C:\Program Files\PowerToys\RunPlugins` or `%LOCALAPPDATA%\PowerToys\RunPlugins`.
+3. Copy the `Everything` folder to `C:\Program Files\PowerToys\RunPlugins` or `%LOCALAPPDATA%\Microsoft\PowerToys\PowerToys Run\Plugins\`.
 4. Restart PowerToys.
 
 #### Requirements
