@@ -125,6 +125,24 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enviroment Variables.
+        /// </summary>
+        public static string EnvVar {
+            get {
+                return ResourceManager.GetString("EnvVar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expanded enviroment variables, such as %appdata%, so that they work properly at the cost of query time..
+        /// </summary>
+        public static string EnvVar_Description {
+            get {
+                return ResourceManager.GetString("EnvVar_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Install Everything if not installed.
         /// </summary>
         public static string Everything_ini {

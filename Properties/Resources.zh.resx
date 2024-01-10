@@ -130,6 +130,9 @@
   <data name="copy_path" xml:space="preserve">
     <value>複製路徑</value>
   </data>
+  <data name="EnvVar_Description" xml:space="preserve">
+    <value>搜尋時可用環境變數，但會增加搜尋時間</value>
+  </data>
   <data name="Everything_ini" xml:space="preserve">
     <value>是否有安裝 Everything?</value>
   </data>

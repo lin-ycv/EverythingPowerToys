@@ -17,17 +17,17 @@ namespace Community.PowerToys.Run.Plugin.Everything
         public bool Preview { get; set; } = true;
         public bool QueryText { get; set; }
         public bool RegEx { get; set; }
+        public bool EnvVar { get; set; }
         public bool Updates { get; set; } = true;
         public string Skip { get; set; }
 
         // Get Filters from settings.toml
-        public Dictionary<string, string> Filters { get; } = new Dictionary<string, string>();
+        public Dictionary<string, string> Filters { get; } = [];
         internal void Getfilters()
         {
             string[] strArr;
             try { strArr = File.ReadAllLines(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "settings.toml")); }
             catch { return; }
-            var culture = new System.Globalization.CultureInfo("en-US");
             foreach (string str in strArr)
             {
                 if (str.Length == 0 || str[0] == '#') continue;

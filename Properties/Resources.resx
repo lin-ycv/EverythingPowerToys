@@ -139,6 +139,12 @@
   <data name="copy_shortcutAlt" xml:space="preserve">
     <value>(Ctrl+Alt+C)</value>
   </data>
+  <data name="EnvVar" xml:space="preserve">
+    <value>Enviroment Variables</value>
+  </data>
+  <data name="EnvVar_Description" xml:space="preserve">
+    <value>Expanded enviroment variables, such as %appdata%, so that they work properly at the cost of query time.</value>
+  </data>
   <data name="Everything_ini" xml:space="preserve">
     <value>Install Everything if not installed</value>
   </data>

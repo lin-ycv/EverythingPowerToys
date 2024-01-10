@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -33,9 +34,14 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 Everything_SetMatchPath(true);
             }
 
+            if (setting.EnvVar && orgqry.Contains('%'))
+            {
+                query = Environment.ExpandEnvironmentVariables(query).Replace(';', '|');
+            }
+
             if (orgqry.Contains(':'))
             {
-                string[] nqry = query.Split(':');
+                string[] nqry = query.Split(':', 2);
                 if (setting.Filters.TryGetValue(nqry[0].ToLowerInvariant(), out string value))
                     query = nqry[1].Trim() + " ext:" + value;
             }
@@ -55,7 +61,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
             for (uint i = 0; i < resultCount; i++)
             {
-                StringBuilder buffer = new StringBuilder(260);
+                StringBuilder buffer = new(260);
                 Everything_GetResultFullPathName(i, buffer, 260);
                 string fullPath = buffer.ToString();
                 string name = Path.GetFileName(fullPath);
@@ -100,7 +106,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 };
                 yield return r;
             }
-
         }
     }
 }

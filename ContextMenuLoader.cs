@@ -11,25 +11,19 @@ using Wox.Plugin.Logger;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
-    internal sealed class ContextMenuLoader : IContextMenu
+    internal sealed class ContextMenuLoader(PluginInitContext context, string options) : IContextMenu
     {
-        private readonly PluginInitContext _context;
+        private readonly PluginInitContext _context = context;
 
         // Extensions for adding run as admin context menu item for applications
-        private readonly string[] _appExtensions = { ".exe", ".bat", ".appref-ms", ".lnk" };
+        private readonly string[] _appExtensions = [".exe", ".bat", ".appref-ms", ".lnk"];
 
         private bool _swapCopy;
-        private string _options;
+        private string _options = options;
         internal void Update(Settings s)
         {
             _swapCopy = s.Copy;
             _options = s.Context;
-        }
-
-        public ContextMenuLoader(PluginInitContext context, string options)
-        {
-            _context = context;
-            _options = options;
         }
 
         public List<ContextMenuResult> LoadContextMenus(Result selectedResult)
