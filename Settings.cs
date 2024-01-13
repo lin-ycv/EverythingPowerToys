@@ -35,7 +35,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 if (kv.Length != 2) continue;
 
                 if (kv[0].Contains(':'))
-                    Filters.TryAdd(kv[0].Split(':')[0].ToLowerInvariant(), kv[1]);
+                    Filters.TryAdd(kv[0].ToLowerInvariant(), kv[1]);
             }
         }
     }
