@@ -5,7 +5,7 @@ $url        = '_URL_'
 
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
-  unzipLocation = "$env:ProgramFiles\\PowerToys\\RunPlugins\\"
+  unzipLocation = "$env:LOCALAPPDATA\\Microsoft\\PowerToys\\PowerToys Run\\Plugins\\"
   url           = $url
 
   softwareName  = 'EverythingPowerToys*'
