@@ -41,20 +41,19 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
             if (orgqry.Contains(':'))
             {
-                foreach (var item in setting.Filters.Keys)
+                fStringBuilder sb = new();
+                foreach (var kv in setting.Filters)
                 {
-                    string pattern = @"\b"+ item + ":";
-                    if (Regex.IsMatch(orgqry, pattern, RegexOptions.IgnoreCase))
+                    if (query.Contains(kv.Key, StringComparison.OrdinalIgnoreCase))
                     {
-                        if (!query.Contains("ext:"))
-                        {
-                            query = Regex.Replace(query, pattern, " ext:" + setting.Filters[item] + "; ", RegexOptions.IgnoreCase);
-                        }
-                        else
-                        {
-                            query = Regex.Replace(query, pattern, " ", RegexOptions.IgnoreCase).Replace("ext:", "ext:" + setting.Filters[item] + ";");                            
-                        }
+                        sb.Append(kv.Value + ';');
+                        query = query.Replace(kv.Key, string.Empty);
                     }
+                }
+
+                if (sb.Length > 0)
+                {
+                    query = query.Trim() + " ext:" + sb.ToString();
                 }
             }
 
