@@ -1,4 +1,5 @@
-﻿
+stop-process -Name "PowerToys"
+
 $ErrorActionPreference = 'Stop';
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $url        = '_URL_'
