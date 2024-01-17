@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWindowsForms>true</UseWindowsForms>
+		<Nullable>enable</Nullable>
+		<BaseOutputPath>..\bin\</BaseOutputPath>
+		<Company>lin-ycv</Company>
+		<ApplicationIcon>Everything.ico</ApplicationIcon>
+		<PackageId>linycv.EverythingPowerToys</PackageId>
+		<Title>EverythingPowerToys</Title>
+		<Authors>lin-ycv</Authors>
+		<Product>Everything-$(Version)-x64</Product>
+		<Description>Everything search plugin for PowerToys Run.</Description>
+		<PackageProjectUrl>https://github.com/lin-ycv/EverythingPowerToys/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/lin-ycv/EverythingPowerToys/</RepositoryUrl>
+		<AssemblyName>Everything-$(Version)-x64</AssemblyName>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DebugType>none</DebugType>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DebugType>none</DebugType>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Include="Everything.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Properties\Resources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Properties\Resources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
+
+</Project>
