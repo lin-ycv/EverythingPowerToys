@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Resources;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
-using System.Windows.Forms;
 
 namespace InstallerCreator
 {
@@ -16,10 +16,11 @@ namespace InstallerCreator
         {
             Console.WriteLine("Select a folder:");
 
-            using FolderBrowserDialog folderDialog = new() 
+            using FolderBrowserDialog folderDialog = new()
             {
                 Description = "Select Everything folder to add to ZIP",
                 UseDescriptionForTitle = true,
+                SelectedPath = Path.Combine(Directory.GetParent(Environment.CurrentDirectory).FullName, @"PowerToys\x64\Release\RunPlugins\Everything"),
             };
             DialogResult result = folderDialog.ShowDialog();
 
@@ -28,46 +29,72 @@ namespace InstallerCreator
                 string folderPath = folderDialog.SelectedPath;
                 Console.WriteLine($"You selected: {folderPath}");
 
-                string base64Zip = string.Empty;
-                using (MemoryStream memoryStream = new())
-                {
-                    ZipFile.CreateFromDirectory(folderPath, memoryStream, CompressionLevel.SmallestSize, true);
-                    base64Zip = Convert.ToBase64String(memoryStream.ToArray());
-                }
-
-                Console.WriteLine("Base64 representation of the ZIP file:" + base64Zip);
-
                 string pluginJsonPath = Path.Combine(folderPath, "plugin.json");
                 string jsonContent = File.ReadAllText(pluginJsonPath);
 
                 JsonDocument jsonDocument = JsonDocument.Parse(jsonContent);
                 JsonElement root = jsonDocument.RootElement;
 
-                string version = root.GetProperty("Version").GetString();
+                string? version = root.GetProperty("Version").GetString();
+                if (string.IsNullOrEmpty(version))
+                {
+                    Console.WriteLine("Version not found in plugin.json");
+                    return;
+                }
+
+                string base64Zip = string.Empty;
+                string fileName = $"Everything-{version}-x64";
+                StringBuilder sb = new("zip\r\n");
+                using (MemoryStream memoryStream = new())
+                {
+                    ZipFile.CreateFromDirectory(folderPath, memoryStream, CompressionLevel.SmallestSize, true);
+                    byte[] zipBytes = memoryStream.ToArray();
+                    sb.AppendLine(CalcSHA256(zipBytes));
+                    File.WriteAllBytes($"{fileName}.zip", zipBytes);
+                    base64Zip = Convert.ToBase64String(zipBytes);
+                }
+
+                Console.WriteLine("Base64 representation of the ZIP file:" + base64Zip);
+
                 Console.WriteLine($"Version from plugin.json: {version}");
 
-                ModResx(version, base64Zip, out string otherProjectPath);
-                if(string.IsNullOrEmpty(otherProjectPath))
+                ModResx(base64Zip, out string otherProjectPath);
+                if (string.IsNullOrEmpty(otherProjectPath))
+                {
+                    Console.WriteLine("No folder selected.");
                     return;
+                }
                 Console.WriteLine(otherProjectPath);
 
                 BuildInstaller(otherProjectPath, version);
-                Console.ReadKey();
+                try
+                {
+                    sb.AppendLine("exe\r\n"+ CalculateSHA256(fileName + ".exe"));
+                    File.WriteAllText("CheckSum.txt", sb.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex.StackTrace);
+                }
             }
             else
                 Console.WriteLine("No folder selected.");
+#if DEBUG
+            Console.ReadKey();
+#endif
         }
 
-        static void ModResx(string version, string base64Zip, out string path)
+        static void ModResx(string base64Zip, out string path)
         {
             OpenFileDialog openFileDialog = new()
             {
                 Title = "Choose RESX File",
                 FileName = "Resources.resx",
                 Filter = "RESX Files (*.resx)|*.resx|All Files (*.*)|*.*",
-                DefaultExt = "resx"
+                DefaultExt = "resx",
+                InitialDirectory = Path.Combine(Environment.CurrentDirectory, "Installer\\Properties"),
             };
-            openFileDialog.InitialDirectory = Path.Combine(Environment.CurrentDirectory, "Installer\\Properties");
 
             DialogResult result = openFileDialog.ShowDialog();
 
@@ -87,8 +114,6 @@ namespace InstallerCreator
 
                         if (key == "base64zipKey")
                             modifiedEntries[key] = base64Zip;
-                        else if (key == "versionKey")
-                            modifiedEntries[key] = version;
                         else
                             modifiedEntries[key] = entry.Value;
                     }
@@ -104,7 +129,7 @@ namespace InstallerCreator
             else
             {
                 Console.WriteLine("File selection canceled");
-                path= string.Empty;
+                path = string.Empty;
             }
         }
 
@@ -145,6 +170,18 @@ namespace InstallerCreator
             {
                 Console.WriteLine($"Build failed with exit code {process.ExitCode}.");
             }
+        }
+
+        static string CalculateSHA256(string filePath)
+        {
+            using var stream = File.OpenRead(filePath);
+            return CalcSHA256(stream);
+        }
+        static string CalcSHA256(dynamic bytestream)
+        {
+            using var sha256 = SHA256.Create();
+            byte[] hash = sha256.ComputeHash(bytestream);
+            return BitConverter.ToString(hash).Replace("-", "").ToLower();
         }
     }
 }

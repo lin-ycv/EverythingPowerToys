@@ -61,20 +61,11 @@ namespace Installer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UEsDBBQAAAAIAO2AMVjgH6MZ/RYAAHmYAAA+AAAARXZlcnl0aGluZy9Db21tdW5pdHkuUG93ZXJUb3lzLlJ1bi5QbHVnaW4uRXZlcnl0aGluZy5kZXBzLmpzb27tXFmTqsyWfe+I/g83ziv3k1GBjrgPqDggk+CEb0wCyiQz3vj+e6s1aFU5F3VOVfd9OeEpyJ251t65c2cC69///V//+MevKPUTxzNHamSZya//+ce/d3/d/t1XPXP73181nh61gsikwvCfEzOKncD/V0bUoF//fL4xdixfTdJof/ev3R//3l/6pQde6Lhqsm0hhLt/453554vJvr/4qMOzHb3esr2pFXhe6jtJWROD3IxGQRnXpNSviW5qOX6NzsyoTGzHt0Cohr9tu21tmKHpG6avO2b89tL2IufoURAHi6TWCgyT8lW3jJ24xpvJ/vdmO6Qdwu2IDuCfmx7GIptJsu09ro37NdbRdg22t9fgdw3kpHTNVhDW3piGa0gN+kszE7VW [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Base64zipValue.
         /// </summary>
         internal static string base64zipKey {
             get {
                 return ResourceManager.GetString("base64zipKey", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 0.7.0.
-        /// </summary>
-        internal static string versionKey {
-            get {
-                return ResourceManager.GetString("versionKey", resourceCulture);
             }
         }
     }

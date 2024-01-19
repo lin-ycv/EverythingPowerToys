@@ -9,17 +9,32 @@ namespace Installer
         [STAThread]
         static void Main(string[] args)
         {
-            Console.Title = "EverythingPowerToys Installer\\Updater";
-            EndPowerToys();
-            Console.WriteLine("Extracting EverythingPowerToys...");
-            Thread.Sleep(1000);
-            string extractionFolder = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\Microsoft\PowerToys\PowerToys Run\Plugins");
-            using MemoryStream memoryStream = new(Convert.FromBase64String(Res.base64zipKey));
-            using ZipArchive archive = new(memoryStream);
-            archive.ExtractToDirectory(extractionFolder, true);
-            Console.WriteLine("EverythingPowerToys Installed");
-            Thread.Sleep(1000);
-            StartPowerToys();
+            try
+            {
+                Console.Title = "EverythingPowerToys Installer\\Updater";
+                EndPowerToys();
+                Console.WriteLine("Extracting EverythingPowerToys...");
+                Thread.Sleep(1000);
+                string extractionFolder = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\Microsoft\PowerToys\PowerToys Run\Plugins");
+                using MemoryStream memoryStream = new(Convert.FromBase64String(Res.base64zipKey));
+                using ZipArchive archive = new(memoryStream);
+                archive.ExtractToDirectory(extractionFolder, true);
+                Console.WriteLine("EverythingPowerToys Installed");
+                Thread.Sleep(1000);
+                StartPowerToys();
+                Environment.ExitCode = 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                Environment.ExitCode = 1;
+            }
+            Console.WriteLine("Press any key to exit...");
+#if DEBUG
+            Console.ReadKey();
+#endif
+            Environment.Exit(Environment.ExitCode);
         }
         static void EndPowerToys()
         {
