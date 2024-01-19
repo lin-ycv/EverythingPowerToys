@@ -1,0 +1,32 @@
+PackageIdentifier: lin-ycv.EverythingPowerToys
+PackageVersion: _VERSION_
+PackageLocale: en-US
+Publisher: lin-ycv
+PackageName: EverythingPowerToys
+PackageUrl: "https://github.com/lin-ycv/EverythingPowerToys"
+License: Unlicensed
+ShortDescription: Everything search plugin for PowerToys Run.
+Tags:
+- "Everything"
+- "PowerToys"
+- "Run"
+- "Search"
+- "Launcher"
+- "PowerToysRun"
+- "EverythingPowerToys"
+Installers: 
+ - Architecture: x64
+   InstallerType: exe
+   InstallerSwitches:
+     Silent: /s
+     SilentWithProgress: /s
+   InstallerUrl: _URL_
+   InstallerSha256: _CRC_
+Dependencies:
+  PackageDependencies:
+  - PackageIdentifier: Microsoft.DotNet.DesktopRuntime.8
+    MinimumVersion: 8.0.0
+  - PackageIdentifier: Microsoft.PowerToys
+    MinimumVersion: _VERSION_
+ManifestType: singleton
+ManifestVersion: 1.0.0
