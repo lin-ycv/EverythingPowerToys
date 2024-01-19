@@ -41,7 +41,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
             if (orgqry.Contains(':'))
             {
-                fStringBuilder sb = new();
+                StringBuilder sb = new();
                 foreach (var kv in setting.Filters)
                 {
                     if (query.Contains(kv.Key, StringComparison.OrdinalIgnoreCase))

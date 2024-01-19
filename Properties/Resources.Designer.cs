@@ -350,6 +350,19 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New version available for EverythingPowerToys.
+        ///Clicking &apos;No&apos; will disable future notice for this version.
+        ///
+        ///Installed:		{0}
+        ///Latest:		{1}.
+        /// </summary>
+        public static string UpdateAvailable {
+            get {
+                return ResourceManager.GetString("UpdateAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check for updates.
         /// </summary>
         public static string Updates {

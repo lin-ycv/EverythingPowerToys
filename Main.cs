@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.Json;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using Community.PowerToys.Run.Plugin.Everything.Properties;
-using ManagedCommon;
 using Microsoft.PowerToys.Settings.UI.Library;
-using Wox.Infrastructure;
 using Wox.Infrastructure.Storage;
 using Wox.Plugin;
-using Wox.Plugin.Common;
 using Wox.Plugin.Logger;
 using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
 
@@ -116,7 +110,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             _setting = _storage.Load();
             _setting.Getfilters();
             if (_setting.Updates)
-                Task.Run(() => new Update(Assembly.GetExecutingAssembly().GetName().Version, _setting));
+                Task.Run(() => new Update().UpdateAsync(Assembly.GetExecutingAssembly().GetName().Version, _setting));
             _everything = new Everything(_setting);
         }
 
@@ -137,7 +131,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
                 _everything.UpdateSettings(_setting);
 
-                if (_contextMenuLoader != null) _contextMenuLoader.Update(_setting);
+                _contextMenuLoader?.Update(_setting);
 
                 Save();
             }

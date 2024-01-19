@@ -214,6 +214,13 @@
   <data name="SwapCopy_Description" xml:space="preserve">
     <value>Set Ctrl+C to copy file/folder, Ctrl+Alt+C to copy path.</value>
   </data>
+  <data name="UpdateAvailable" xml:space="preserve">
+    <value>New version available for EverythingPowerToys.
+Clicking 'No' will disable future notice for this version.
+
+Installed:		{0}
+Latest:		{1}</value>
+  </data>
   <data name="Updates" xml:space="preserve">
     <value>Check for updates</value>
   </data>

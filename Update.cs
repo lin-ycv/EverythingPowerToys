@@ -1,36 +1,67 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Xml;
-using Microsoft.Win32;
-using Wox.Infrastructure.Storage;
+using Community.PowerToys.Run.Plugin.Everything.Properties;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
     internal sealed class Update
     {
-        internal Update(Version v, Settings s)
+        internal async Task UpdateAsync(Version v, Settings s)
         {
+            string apiUrl = "https://api.github.com/repos/lin-ycv/EverythingPowerToys/releases/latest";
             try
             {
-                XmlDocument doc = new XmlDocument();
-                doc.Load("https://img.shields.io/github/v/release/lin-ycv/everythingpowertoys");
-                Version latest = Version.Parse(doc.GetElementsByTagName("title")[0].InnerXml.Split(':', StringSplitOptions.TrimEntries)[1].AsSpan(1));
-                if (latest > v && latest.ToString() != s.Skip)
+                using HttpClient httpClient = new();
+                httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
+
+                HttpResponseMessage response = await httpClient.GetAsync(apiUrl);
+                if (response.IsSuccessStatusCode)
                 {
-                    MessageBoxResult mbox = MessageBox.Show($"New version available for EverythingPowerToys.\nClicking 'No' will disable future notice for this version.\n\nInstalled:\t {v}\nLatest:\t {latest}", "Download Update?", MessageBoxButton.YesNoCancel);
-                    if (mbox == MessageBoxResult.Yes)
+                    using JsonDocument jsonDocument = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync());
+                    JsonElement root = jsonDocument.RootElement;
+                    Version latest = Version.TryParse(root.GetProperty("tag_name").GetString().AsSpan(1), out var vNumber)
+                        ? vNumber
+                        : Version.Parse(root.GetProperty("tag_name").GetString());
+                    if (latest > v && latest.ToString() != s.Skip)
                     {
-                        ProcessStartInfo p = new ProcessStartInfo("https://github.com/lin-ycv/EverythingPowerToys/releases/latest")
+                        MessageBoxResult mbox = MessageBox.Show(string.Format(CultureInfo.InvariantCulture, Resources.UpdateAvailable, v, latest), "Updater", MessageBoxButton.YesNoCancel);
+                        if (mbox == MessageBoxResult.Yes && root.TryGetProperty("assets", out JsonElement assets))
                         {
-                            UseShellExecute = true,
-                            Verb = "Open",
-                        };
-                        Process.Start(p);
-                    }
-                    else if (mbox == MessageBoxResult.No)
-                    {
-                        s.Skip = latest.ToString();
+                            string[] nameUrl = [string.Empty, string.Empty];
+                            foreach (JsonElement asset in assets.EnumerateArray())
+                            {
+                                if (asset.TryGetProperty("browser_download_url", out JsonElement downUrl) && downUrl.ToString().EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    nameUrl[0] = asset.GetProperty("name").ToString();
+                                    nameUrl[1] = downUrl.ToString();
+                                }
+                            }
+
+                            byte[] fileContent = await httpClient.GetByteArrayAsync(nameUrl[1]);
+                            string fileName = Path.Combine(Path.GetTempPath(), nameUrl[0]);
+                            File.WriteAllBytes(fileName, fileContent);
+                            using Process updater = Process.Start(fileName);
+                            updater.WaitForExit();
+                            if (updater.ExitCode == 1)
+                            {
+                                ProcessStartInfo p = new("https://github.com/lin-ycv/EverythingPowerToys/releases/latest")
+                                {
+                                    UseShellExecute = true,
+                                    Verb = "Open",
+                                };
+                                Process.Start(p);
+                            }
+                        }
+                        else if (mbox == MessageBoxResult.No)
+                        {
+                            s.Skip = latest.ToString();
+                        }
                     }
                 }
             }

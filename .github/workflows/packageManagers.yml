@@ -1,0 +1,50 @@
+name: sync to choco and winget
+
+on:
+  release:
+    types: [published]
+
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: chocolatey
+      
+      - name: Config and Push
+        run: |
+          rm .git -Recurse -Force -Confirm:$false
+          $response=curl.exe -s https://api.github.com/repos/lin-ycv/everythingpowertoys/releases/latest
+          
+          $ver = ($response | select-string '"tag_name":').Line.split("`"")[3].Trim('v')
+          
+          $zip = ($browser | Where-Object { $_ -like "*.zip`"" } | Select-Object -Last 1).Split("`"")[3]
+          $exe = ($browser | Where-Object { $_ -like "*.exe`"" } | Select-Object -Last 1).Split("`"")[3]
+          
+          $pattern = '(?s)(?<=<!--HASH-->).*?(?=<!--ENDHASH-->)'
+          $hash = (($response | select-string '"body"').Line | Select-String -Pattern $pattern | ForEach-Object { $_.Matches.Value.Trim() }).Split("\r\n")
+          $ziphash = ($hash | select-string "ZIP").Line.Split('|')[1]
+          $exehash = ($hash | select-string "EXE").Line.Split('|')[1]
+          
+          # chocolatey
+          echo $ver $zip $ziphash
+          Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $ver} | ForEach  {$_ -Replace '_URL_', $zip} | ForEach  {$_ -Replace '_CRC_', $ziphash} | Set-Content $_ }
+          if([System.IO.File]::Exists("$PWD\1")) { rm 1 }
+          choco pack
+          ls
+          choco apikey --key ${{ secrets.CHOCOLATEY }} --source https://push.chocolatey.org/
+          choco push everythingpowertoys.$ver.nupkg --source https://push.chocolatey.org/
+
+          # winget
+          $wingetPackage = "lin-ycv.EverythingPowerToys"
+          echo $wingetPackage $ver $exe $exehash
+          # rm -Path .\* -Recurse -Force
+          Invoke-WebRequest https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
+          git clone -b winget https://github.com/lin-ycv/EverythingPowerToys.git --depth 1
+          rm .git -Recurse -Force -Confirm:$false
+          Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $ver} | ForEach  {$_ -Replace '_URL_', $exe} | ForEach  {$_ -Replace '_CRC_', $exehash} | Set-Content $_ }
+          .\wingetcreate submit -p "New version: lin-ycv.EverythingPowerToys version $ver" -t ${{ secrets.GITTOKEN }} .\lin-ycv.EverythingPowerToys.yaml
