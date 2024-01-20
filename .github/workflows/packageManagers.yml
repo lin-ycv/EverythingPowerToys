@@ -42,7 +42,7 @@ jobs:
           # winget
           $wingetPackage = "lin-ycv.EverythingPowerToys"
           echo $wingetPackage $ver $exe $exehash
-          # rm -Path .\* -Recurse -Force
+          rm -Path .\* -Recurse -Force
           Invoke-WebRequest https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
           git clone -b winget https://github.com/lin-ycv/EverythingPowerToys.git --depth 1
           rm .git -Recurse -Force -Confirm:$false

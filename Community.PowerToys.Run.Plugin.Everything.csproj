@@ -11,7 +11,6 @@
     <useWPF>true</useWPF>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <NeutralLanguage>en-US</NeutralLanguage>
     <Authors>Yu Chieh (Victor) Lin</Authors>
     <PackageProjectUrl>https://github.com/lin-ycv/EverythingPowerToys</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -19,6 +18,10 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
 	<PlatformTarget>AnyCPU</PlatformTarget>
+	<Company>lin-ycv</Company>
+	<Copyright>Copyright (C) lin-ycv</Copyright>
+	<RepositoryUrl>https://github.com/lin-ycv/EverythingPowerToys</RepositoryUrl>
+	<PackageTags>PowerToys;Everything;EverythingPowerToys;</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
@@ -147,7 +150,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Wox*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Ijwhost.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.xml&quot;&#xD;&#xA;del/ Q &quot;$(TargetDir)backup_restore_settings.json&quot;" />
+    <Exec Command="del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Wox*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Ijwhost.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.xml&quot;&#xD;&#xA;del/ Q &quot;$(TargetDir)backup_restore_settings.json&quot;&#xD;&#xA;powershell Compress-Archive -Path $(TargetDir) -DestinationPath .\bin\EverythingPT-$(Version)-x64.zip -Force&#xD;&#xA;&quot;C:\Program Files (x86)\NSIS\makensis&quot; /Dver=$(Version) .\NSIS\exeCreator.nsi&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-x64.zip SHA256 &gt;&gt; .\bin\CHECKSUM.txt&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-x64.exe SHA256 &gt;&gt; .\bin\CHECKSUM.txt" />
   </Target>
 
 </Project>
