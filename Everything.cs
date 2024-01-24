@@ -46,14 +46,14 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 {
                     if (query.Contains(kv.Key, StringComparison.OrdinalIgnoreCase))
                     {
-                        sb.Append(kv.Value + ';');
+                        sb.Append(kv.Value + ' ');
                         query = query.Replace(kv.Key, string.Empty);
                     }
                 }
 
                 if (sb.Length > 0)
                 {
-                    query = query.Trim() + " ext:" + sb.ToString();
+                    query = query.Trim() + " " + sb.ToString();
                 }
             }
 

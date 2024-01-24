@@ -8,6 +8,7 @@ on:
   
 jobs:
   build:
+    if: "!github.event.release.prerelease"
     runs-on: windows-latest
 
     steps:

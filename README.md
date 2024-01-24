@@ -18,6 +18,8 @@ There are now 4 different methods of installation, chose the one you prefer:
 
 Detailed explanations and instructions are on the [release page](https://github.com/lin-ycv/EverythingPowerToys/releases/latest)
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/linycv)
+
 #### Requirements
 * [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/)
 * [Everything](https://www.voidtools.com/) (non-lite version) needs to be installed separately and **running**.

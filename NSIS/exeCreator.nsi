@@ -1,6 +1,7 @@
 ; Silent switch /S/
 ; Pass in /Dver=0.00.0 before calling the script to set the version
 ;  ie: makensis /Dver=0.77.0 .\exeCreator.nsi
+; Doc: https://nsis.sourceforge.io/Docs/Chapter4.html
 !define EPT "EverythingPT"
 !define PT "PowerToys.exe"
 
@@ -28,18 +29,15 @@ Unicode True
 
 ;--------------------------------
 
-; Pages
-
 Page directory
 Page instfiles
 
 ;--------------------------------
 
 Section ""
-  SetAutoClose True
 
-  ; Execute TaskKill to terminate the specified process
-  ExecWait '"$%SystemRoot%\system32\TaskKill.exe" /F /IM ${PT}'
+  ;ExecWait '"$%SystemRoot%\system32\TaskKill.exe" /F /IM ${PT}'
+  ExecWait 'wmic process where name="${PT}" call terminate'
   Sleep 1000
 
   SetOutPath $INSTDIR
@@ -47,14 +45,17 @@ Section ""
   GetFullPathName $0 $0
   File /r ".\..\..\..\..\..\..\x64\Release\RunPlugins\Everything\*"
 
-IfSilent +2
-  MessageBox MB_OK|MB_ICONINFORMATION|MB_TOPMOST "${EPT} installed, please restart ${PT}"
+  IfFileExists "$LOCALAPPDATA\PowerToys\${PT}" 0 +2
+  Exec '"$LOCALAPPDATA\PowerToys\${PT}"'
+
+  IfFileExists "$PROGRAMFILES64\PowerToys\${PT}" 0 +2
+  Exec '"$PROGRAMFILES64\PowerToys\${PT}"'
   
 SectionEnd
 
 ;--------------------------------
 
- Function .onInit
+Function .onInit
 
     System::Call 'kernel32::CreateMutex(p 0, i 0, t "ACFEF7F6-7856-4BB3-82E3-0877CBB4E9C7") p .r1 ?e'
  Pop $R0
