@@ -11,7 +11,7 @@ LoadLanguageFile "${NSISDIR}\Contrib\Language files\English.nlf"
   VIProductVersion "${ver}.0"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${EPT} Setup"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "lin-ycv"
-  VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "© lin-ycv"
+  VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "lin-ycv"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "Everything search plugin for PowerToys Run"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${ver}"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "${ver}"
@@ -38,7 +38,7 @@ Section ""
 
   ;ExecWait '"$%SystemRoot%\system32\TaskKill.exe" /F /IM ${PT}'
   ExecWait 'wmic process where name="${PT}" call terminate'
-  Sleep 1000
+  Sleep 3000
 
   SetOutPath $INSTDIR
   GetFullPathName $0 "$EXEDIR\"

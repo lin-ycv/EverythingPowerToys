@@ -185,7 +185,7 @@
     <value>啟用時檢查是否有更新</value>
   </data>
   <data name="UpdatesAvailable" xml:space="preserve">
-    <value>EverythingPowerToys有新版可以安裝
+    <value>更新EverythingPowerToys?
 按 '否' 不再通知這版的更新
 
 安裝版本：{0}

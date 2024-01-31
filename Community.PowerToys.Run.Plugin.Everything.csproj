@@ -150,7 +150,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Wox*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Ijwhost.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.xml&quot;&#xD;&#xA;del/ Q &quot;$(TargetDir)backup_restore_settings.json&quot;&#xD;&#xA;powershell Compress-Archive -Path $(TargetDir) -DestinationPath .\bin\EverythingPT-$(Version)-x64.zip -Force&#xD;&#xA;&quot;C:\Program Files (x86)\NSIS\makensis&quot; /Dver=$(Version) .\NSIS\exeCreator.nsi&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-x64.zip SHA256 &gt;&gt; .\bin\CHECKSUM.txt&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-x64.exe SHA256 &gt;&gt; .\bin\CHECKSUM.txt" />
+    <Exec Command="del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Wox*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Ijwhost.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.xml&quot;&#xD;&#xA;del/ Q &quot;$(TargetDir)backup_restore_settings.json&quot;&#xD;&#xA;powershell Compress-Archive -Path $(TargetDir) -DestinationPath .\bin\EverythingPT-$(Version)-x64.zip -Force&#xD;&#xA;&quot;C:\Program Files (x86)\NSIS\makensis&quot; /Dver=$(Version) .\NSIS\exeCreator.nsi&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-x64.zip SHA256 &gt;&gt; .\bin\CHECKSUM.txt&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-x64.exe SHA256 &gt;&gt; .\bin\CHECKSUM.txt&#xD;&#xA;rd /Q /S &quot;$(TargetDir)&quot;" />
   </Target>
 
 </Project>

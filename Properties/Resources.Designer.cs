@@ -350,7 +350,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New version available for EverythingPowerToys.
+        ///   Looks up a localized string similar to Install new version of EverythingPowerToys?
         ///Clicking &apos;No&apos; will disable future notice for this version.
         ///
         ///Installed:		{0}

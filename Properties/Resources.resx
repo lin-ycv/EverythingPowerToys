@@ -215,7 +215,7 @@
     <value>Set Ctrl+C to copy file/folder, Ctrl+Alt+C to copy path.</value>
   </data>
   <data name="UpdateAvailable" xml:space="preserve">
-    <value>New version available for EverythingPowerToys.
+    <value>Install new version of EverythingPowerToys?
 Clicking 'No' will disable future notice for this version.
 
 Installed:		{0}
