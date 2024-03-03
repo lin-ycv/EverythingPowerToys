@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -130,6 +130,9 @@
   <data name="copy_path" xml:space="preserve">
     <value>复制路径</value>
   </data>
+  <data name="EnvVar_Description" xml:space="preserve">
+    <value>搜索时可以使用环境变量，但会增加搜索时间</value>
+  </data>
   <data name="Everything_ini" xml:space="preserve">
     <value>是否安装了 Everything?</value>
   </data>
@@ -180,5 +183,12 @@
   </data>
   <data name="Updates" xml:space="preserve">
     <value>检查是否有更新</value>
+  </data>
+  <data name="UpdatesAvailable" xml:space="preserve">
+    <value>更新EverythingPowerToys吗？
+点击 '否' 将不再收到有关此版本更新的通知
+
+安装版本：{0}
+最新版本：{1}</value>
   </data>
 </root>
