@@ -3,9 +3,9 @@
     "description": "This plugin adds Everything search results to PowerToys Run.",
     "homepage": "https://github.com/lin-ycv/EverythingPowerToys",
     "license": "Unlicense",
-    "depends": "PowerToys",
     "suggest": {
-	    "Everything": ["Everything","Everything-Alpha"]	
+	    "Everything": ["Everything","Everything-Alpha"],
+	    "PowerToys": "PowerToys"
     },
     "architecture": {
         "64bit": {
@@ -20,6 +20,7 @@
     ],
     "post_install": [
 	    "Copy-Item -Path \"$dir\\Everything\" -Destination \"$env:LOCALAPPDATA\\Microsoft\\PowerToys\\PowerToys Run\\Plugins\\Everything\" -Recurse",
+	    "Write-Host 'PowerToys: scoop install powertoys'",
 	    "Write-Host '\'Everything\': scoop install everything' -ForegroundColor DarkYellow",
 	    "Write-Host 'OR'",
 	    "Write-Host '\'Everything-Alpha\': scoop install everything-alpha' -ForegroundColor DarkYellow"
