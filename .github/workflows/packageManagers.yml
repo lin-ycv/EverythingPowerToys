@@ -1,4 +1,4 @@
-name: sync to choco and winget
+name: sync to package repos
 
 on:
   release:
@@ -48,12 +48,18 @@ jobs:
           Invoke-WebRequest https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
           cd .\EverythingPowerToys
           rm .git -Recurse -Force -Confirm:$false
-          $verArray = $ver -split '\.'
-          $verArray[1] -= 1
-          if ($verArray[1] -lt 0) {
-            $verArray[1] = 0
-            $verArray[0] -=1
-            }
-          $prevVer = $verArray -join '.'
-          Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $ver} | ForEach  {$_ -Replace '_URL_', $exe} | ForEach  {$_ -Replace '_CRC_', $exehash} | ForEach  {$_ -Replace '_PV_', $prevVer} | Set-Content $_ }
+          Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $ver} | ForEach  {$_ -Replace '_URL_', $exe} | ForEach  {$_ -Replace '_CRC_', $exehash} |  Set-Content $_ }
           ..\wingetcreate submit -p "New version: lin-ycv.EverythingPowerToys version $ver" -t ${{ secrets.GITHUB_TOKEN }} .
+
+          # scoop # takes too long to get approvaed, impractical to implement
+          # cd ..
+          # rm -Path .\* -Recurse -Force
+          # git clone -b EverythingPowerToys https://github.com/lin-ycv/ScoopExtras.git --depth 1
+          # cd .\bucket
+          # rm EverythingPowerToys.json -Force
+          # Invoke-WebRequest https://github.com/lin-ycv/EverythingPowerToys/raw/scoop/EverythingPowerToys.json -OutFile EverythingPowerToys.json
+          # (Get-Content EverythingPowerToys.json) | ForEach-Object {$_ -Replace '_VERSION_', $ver} | ForEach-Object {$_ -Replace '_URL_', $zip} | ForEach-Object {$_ -Replace '_CRC_', $ziphash} | Set-Content EverythingPowerToys.json
+          # git add .
+          # git commit -m "EverythingPowerToys@$ver: Update"
+          # git push -f
+          # gh pr create --base main --head EverythingPowerToys --title "EverythingPowerToys@$ver: Update" --body "- [X] I have read the [Contributing Guide](https://github.com/ScoopInstaller/.github/blob/main/.github/CONTRIBUTING.md).`r`n`r`n/verify"

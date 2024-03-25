@@ -6,22 +6,20 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using Community.PowerToys.Run.Plugin.Everything.Properties;
 using Microsoft.PowerToys.Settings.UI.Library;
-using Wox.Infrastructure.Storage;
 using Wox.Plugin;
 using Wox.Plugin.Logger;
 using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
-    public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider, IPluginI18n, ISavable
+    public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider, IPluginI18n
     {
         public static string PluginID => "A86867E2D932459CBD77D176373DD657";
         public string Name => Resources.plugin_name;
         public string Description => Resources.plugin_description;
 
-        private readonly Settings _setting;
-        private readonly PluginJsonStorage<Settings> _storage;
-        private readonly Everything _everything;
+        private readonly Settings _setting = new();
+        private Everything _everything;
 
         private ContextMenuLoader _contextMenuLoader;
         private bool _disposed;
@@ -104,19 +102,18 @@ namespace Community.PowerToys.Run.Plugin.Everything
             },
         };
 
-        public Main()
+        public void Init(PluginInitContext context)
         {
-            _storage = new PluginJsonStorage<Settings>();
-            _setting = _storage.Load();
-            _setting.Getfilters();
             if (_setting.Updates)
                 Task.Run(() => new Update().UpdateAsync(Assembly.GetExecutingAssembly().GetName().Version, _setting));
             _everything = new Everything(_setting);
+            _contextMenuLoader = new ContextMenuLoader(context, _setting.Context);
+            _contextMenuLoader.Update(_setting);
         }
 
         public void UpdateSettings(PowerLauncherPluginSettings settings)
         {
-            if (settings != null && settings.AdditionalOptions != null)
+            if (settings.AdditionalOptions != null)
             {
                 _setting.Sort = (Sort)settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Sort)).ComboBoxValue;
                 _setting.Max = (uint)settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Max)).NumberValue;
@@ -129,18 +126,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 _setting.EnvVar = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.EnvVar)).Value;
                 _setting.Updates = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Updates)).Value;
 
-                _everything.UpdateSettings(_setting);
-
+                _everything?.UpdateSettings(_setting);
                 _contextMenuLoader?.Update(_setting);
-
-                Save();
             }
-        }
-
-        public void Init(PluginInitContext context)
-        {
-            _contextMenuLoader = new ContextMenuLoader(context, _setting.Context);
-            _contextMenuLoader.Update(_setting);
         }
 
         public List<Result> Query(Query query)
@@ -178,8 +166,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
             return results;
         }
-
-        public void Save() => _storage.Save();
 
         protected virtual void Dispose(bool disposing)
         {

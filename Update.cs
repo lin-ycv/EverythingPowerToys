@@ -47,7 +47,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                             string fileName = Path.Combine(Path.GetTempPath(), nameUrl[0]);
                             File.WriteAllBytes(fileName, fileContent);
                             using Process updater = Process.Start(fileName);
-                            updater.WaitForExit();
+                            updater.WaitForExit(5000);
                             if (updater.ExitCode == 1)
                             {
                                 ProcessStartInfo p = new("https://github.com/lin-ycv/EverythingPowerToys/releases/latest")
