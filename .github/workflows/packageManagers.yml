@@ -9,10 +9,11 @@ on:
 jobs:
   build:
     if: "!github.event.release.prerelease"
+    permissions: write-all
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.1.1
         with:
           ref: chocolatey
       
