@@ -125,13 +125,13 @@
   </data>
   <data name="Context_Description" xml:space="preserve">
     <value>Skonfiguruj opcje i kolejność menu kontekstowego.
-0_Otwórz folder, 1_Uruchom jako administrator, 2_Uruchom jako użytkownik, 3_Kopiuj, 4_Kopiuj jako ścieżkę, 5_Otwórz w konsoli</value>
+0_Otwórz folder, 1_Uruchom jako administrator, 2_Uruchom jako użytkownik, 3_Kopiuj plik, 4_Kopiuj ścieżkę, 5_Otwórz w konsoli</value>
   </data>
   <data name="copy_file" xml:space="preserve">
-    <value>Kopiuj </value>
+    <value>Kopiuj plik </value>
   </data>
   <data name="copy_path" xml:space="preserve">
-    <value>Kopiuj jako ścieżkę </value>
+    <value>Kopiuj ścieżkę </value>
   </data>
   <data name="copy_shortcut" xml:space="preserve">
     <value>(Ctrl+C)</value>
@@ -143,10 +143,10 @@
     <value>Zmienne środowiskowe</value>
   </data>
   <data name="EnvVar_Description" xml:space="preserve">
-    <value>Rozwijaj zmienne środowiskowe takie jak %appdata%, dzięki czemu będą działać poprawnie kosztem czasu wyszukiwanai.</value>
+    <value>Rozwijaj zmienne środowiskowe takie jak %appdata%, dzięki czemu będą działać poprawnie kosztem czasu wyszukiwania.</value>
   </data>
   <data name="Everything_ini" xml:space="preserve">
-    <value>Zainstaluj Everything jeśli nie zainstalowane</value>
+    <value>Zainstaluj Everything jeśli nie jest zainstalowane</value>
   </data>
   <data name="Everything_not_running" xml:space="preserve">
     <value>Everything nie jest uruchomione</value>
@@ -161,7 +161,7 @@
     <value>Szukaj ścieżki w dodatku do nazwy pliku/folderu.</value>
   </data>
   <data name="Max" xml:space="preserve">
-    <value>Maksimum</value>
+    <value>Maksymalna liczba rezultatów</value>
   </data>
   <data name="Max_Description" xml:space="preserve">
     <value>Maksymalna ilość wyników do wyświetlenia</value>
@@ -209,10 +209,10 @@
     <value>Ustaw metodę sortowania.</value>
   </data>
   <data name="SwapCopy" xml:space="preserve">
-    <value>Kopiowanie</value>
+    <value>Zamień skróty funkcji kopiowania</value>
   </data>
   <data name="SwapCopy_Description" xml:space="preserve">
-    <value>Użyj Ctrl+C aby skopiować plik/floder, Ctrl+Alt+C aby skopiować ścieżkę.</value>
+    <value>Użyj Ctrl+C aby skopiować plik/folder, Ctrl+Alt+C aby skopiować ścieżkę.</value>
   </data>
   <data name="UpdateAvailable" xml:space="preserve">
     <value>Zainstalować nową wersję EverythingPowerToys?
