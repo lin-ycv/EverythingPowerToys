@@ -4,7 +4,6 @@ InstallerType: nullsoft
 InstallerSwitches:
   Silent: /S
   SilentWithProgress: /S
-UpgradeBehavior: install
 Installers:
 - Architecture: x64
   InstallerUrl: _URL_
