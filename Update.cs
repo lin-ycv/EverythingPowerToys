@@ -1,17 +1,11 @@
-﻿using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Net.Http;
+﻿using System.Globalization;
 using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows;
-using Community.PowerToys.Run.Plugin.Everything.Properties;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
     internal sealed class Update
     {
+        private readonly CompositeFormat updateAvailable = CompositeFormat.Parse(Resources.UpdateAvailable);
         internal async Task UpdateAsync(Version v, Settings s)
         {
             string apiUrl = "https://api.github.com/repos/lin-ycv/EverythingPowerToys/releases/latest";
@@ -30,7 +24,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         : Version.Parse(root.GetProperty("tag_name").GetString());
                     if (latest > v && latest.ToString() != s.Skip)
                     {
-                        MessageBoxResult mbox = MessageBox.Show(string.Format(CultureInfo.InvariantCulture, Resources.UpdateAvailable, v, latest), "Updater", MessageBoxButton.YesNoCancel);
+                        MessageBoxResult mbox = MessageBox.Show(string.Format(CultureInfo.InvariantCulture, updateAvailable, v, latest), "Updater", MessageBoxButton.YesNoCancel);
                         if (mbox == MessageBoxResult.Yes && root.TryGetProperty("assets", out JsonElement assets))
                         {
                             string[] nameUrl = [string.Empty, string.Empty];

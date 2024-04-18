@@ -1,13 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using Wox.Infrastructure;
-using Wox.Plugin;
-using Wox.Plugin.Logger;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
@@ -43,7 +35,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                                 contextMenus.Add(new ContextMenuResult
                                 {
                                     PluginName = Assembly.GetExecutingAssembly().GetName().Name,
-                                    Title = Properties.Resources.open_containing_folder,
+                                    Title = Resources.open_containing_folder,
                                     Glyph = "\xE838",
                                     FontFamily = "Segoe MDL2 Assets",
                                     AcceleratorKey = Key.E,
@@ -52,7 +44,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                                     {
                                         if (!Helper.OpenInShell("explorer.exe", $"/select,\"{record.Path}\""))
                                         {
-                                            var message = $"{Properties.Resources.folder_open_failed} {Path.GetDirectoryName(record.Path)}";
+                                            var message = $"{Resources.folder_open_failed} {Path.GetDirectoryName(record.Path)}";
                                             _context.API.ShowMsg(message);
                                             return false;
                                         }
@@ -70,7 +62,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                                 contextMenus.Add(new ContextMenuResult
                                 {
                                     PluginName = Assembly.GetExecutingAssembly().GetName().Name,
-                                    Title = Properties.Resources.run_as_admin,
+                                    Title = Resources.run_as_admin,
                                     Glyph = "\xE7EF",
                                     FontFamily = "Segoe MDL2 Assets",
                                     AcceleratorKey = Key.Enter,
@@ -99,7 +91,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                                 contextMenus.Add(new ContextMenuResult
                                 {
                                     PluginName = Assembly.GetExecutingAssembly().GetName().Name,
-                                    Title = Properties.Resources.run_as_user,
+                                    Title = Resources.run_as_user,
                                     Glyph = "\xE7EE",
                                     FontFamily = "Segoe MDL2 Assets",
                                     AcceleratorKey = Key.U,
@@ -126,7 +118,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                             contextMenus.Add(new ContextMenuResult
                             {
                                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
-                                Title = Properties.Resources.copy_file + (_swapCopy ? Properties.Resources.copy_shortcut : Properties.Resources.copy_shortcutAlt),
+                                Title = Resources.copy_file + (_swapCopy ? Resources.copy_shortcut : Resources.copy_shortcutAlt),
                                 Glyph = "\xE8C8",
                                 FontFamily = "Segoe MDL2 Assets",
                                 AcceleratorKey = Key.C,
@@ -141,7 +133,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                                     }
                                     catch (Exception e)
                                     {
-                                        var message = Properties.Resources.clipboard_failed;
+                                        var message = Resources.clipboard_failed;
                                         Log.Exception(message, e, GetType());
 
                                         _context.API.ShowMsg(message);
@@ -155,7 +147,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                             contextMenus.Add(new ContextMenuResult
                             {
                                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
-                                Title = Properties.Resources.copy_path + (_swapCopy ? Properties.Resources.copy_shortcutAlt : Properties.Resources.copy_shortcut),
+                                Title = Resources.copy_path + (_swapCopy ? Resources.copy_shortcutAlt : Resources.copy_shortcut),
                                 Glyph = "\xE71B",
                                 FontFamily = "Segoe MDL2 Assets",
                                 AcceleratorKey = Key.C,
@@ -170,7 +162,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                                     }
                                     catch (Exception e)
                                     {
-                                        var message = Properties.Resources.clipboard_failed;
+                                        var message = Resources.clipboard_failed;
                                         Log.Exception(message, e, GetType());
 
                                         _context.API.ShowMsg(message);
@@ -184,7 +176,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                             contextMenus.Add(new ContextMenuResult
                             {
                                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
-                                Title = Properties.Resources.open_in_console,
+                                Title = Resources.open_in_console,
                                 Glyph = "\xE756",
                                 FontFamily = "Segoe MDL2 Assets",
                                 AcceleratorKey = Key.C,

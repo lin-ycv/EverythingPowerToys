@@ -16,8 +16,7 @@ Dev instructions are in the wiki.
 There are 4 different methods of installation, chose the one you prefer:
 1) WinGet : `winget install lin-ycv.EverythingPowerToys`
 2) Chocolatey : `choco install everythingpowertoys`
-3) ~Scoop : `scoop install everythingpowertoys`~
-4) Self-Extraction Installer (EXE) : [Download from release page](https://github.com/lin-ycv/EverythingPowerToys/releases/latest)
+3) Self-Extraction Installer (EXE) : [Download from release page](https://github.com/lin-ycv/EverythingPowerToys/releases/latest)
 5) Manual Installation (ZIP) : [Download from release page](https://github.com/lin-ycv/EverythingPowerToys/releases/latest)
 
 Detailed explanations and instructions are on the [release page](https://github.com/lin-ycv/EverythingPowerToys/releases/latest)

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Runtime.InteropServices;
 
 namespace Community.PowerToys.Run.Plugin.Everything.Interop
 {
-    public sealed class NativeMethods
+    public sealed partial class NativeMethods
     {
         #region FlagsEnums
         [Flags]
@@ -106,32 +104,33 @@ namespace Community.PowerToys.Run.Plugin.Everything.Interop
             MAX,
         }
         #endregion
-
         internal const string dllName = "Everything64.dll";
-        [DllImport(dllName)]
-        internal static extern uint Everything_GetNumResults();
-        [DllImport(dllName, CharSet = CharSet.Unicode)]
-        internal static extern void Everything_GetResultFullPathName(uint nIndex, StringBuilder lpString, uint nMaxCount);
-        [DllImport(dllName, CharSet = CharSet.Unicode)]
-        internal static extern uint Everything_IncRunCountFromFileName(string lpFileName);
-        [DllImport(dllName)]
-        internal static extern bool Everything_IsFolderResult(uint index);
-        [DllImport(dllName)]
-        internal static extern bool Everything_QueryW(bool bWait);
-        [DllImport(dllName)]
-        internal static extern void Everything_SetMax(uint dwMax);
-        [DllImport(dllName)]
-        internal static extern void Everything_SetRegex(bool bEnable);
-        [DllImport(dllName)]
-        internal static extern void Everything_SetRequestFlags(Request RequestFlags);
-        [DllImport(dllName, CharSet = CharSet.Unicode)]
-        internal static extern uint Everything_SetSearchW(string lpSearchString);
-        [DllImport(dllName)]
-        internal static extern bool Everything_SetMatchPath(bool bEnable);
-        [DllImport(dllName)]
-        internal static extern void Everything_SetSort(Sort SortType);
-
-        [DllImport("Shlwapi.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        internal static extern uint AssocQueryString(AssocF flags, AssocStr str, string pszAssoc, string pszExtra, [Out] char[] pszOut, [In][Out] ref uint pcchOut);
+        [LibraryImport(dllName)]
+        internal static partial uint Everything_GetLastError();
+        [LibraryImport(dllName)]
+        internal static partial uint Everything_GetNumResults();
+        [LibraryImport(dllName, EntryPoint = "Everything_GetResultFullPathNameW", StringMarshalling = StringMarshalling.Utf16)]
+        internal static partial uint Everything_GetResultFullPathName(uint nIndex, [Out] char[] lpString, uint nMaxCount);
+        [LibraryImport(dllName, StringMarshalling = StringMarshalling.Utf16)]
+        internal static partial uint Everything_IncRunCountFromFileName(string lpFileName);
+        [LibraryImport(dllName)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static partial bool Everything_IsFolderResult(uint index);
+        [LibraryImport(dllName)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static partial bool Everything_QueryW([MarshalAs(UnmanagedType.Bool)] bool bWait);
+        [LibraryImport(dllName)]
+        internal static partial void Everything_SetMax(uint dwMax);
+        [LibraryImport(dllName)]
+        internal static partial void Everything_SetRegex([MarshalAs(UnmanagedType.Bool)] bool bEnable);
+        [LibraryImport(dllName)]
+        internal static partial void Everything_SetRequestFlags(Request RequestFlags);
+        [LibraryImport(dllName, StringMarshalling = StringMarshalling.Utf16)]
+        internal static partial void Everything_SetSearchW(string lpSearchString);
+        [LibraryImport(dllName)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static partial bool Everything_SetMatchPath([MarshalAs(UnmanagedType.Bool)] bool bEnable);
+        [LibraryImport(dllName)]
+        internal static partial void Everything_SetSort(Sort SortType);
     }
 }

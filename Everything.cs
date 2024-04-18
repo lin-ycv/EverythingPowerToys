@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using Community.PowerToys.Run.Plugin.Everything.Properties;
-using Wox.Plugin;
-using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
+﻿using System.ComponentModel;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
@@ -14,8 +6,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
     {
         internal Everything(Settings setting)
         {
-            Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME);
-            UpdateSettings(setting);
+                Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME);
+                UpdateSettings(setting);
         }
 
         internal void UpdateSettings(Settings setting)
@@ -57,7 +49,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 }
             }
 
-            _ = Everything_SetSearchW(query);
+            Everything_SetSearchW(query);
             if (!Everything_QueryW(true))
             {
                 throw new Win32Exception("Unable to Query");
@@ -72,9 +64,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
             for (uint i = 0; i < resultCount; i++)
             {
-                StringBuilder buffer = new(260);
-                Everything_GetResultFullPathName(i, buffer, 260);
-                string fullPath = buffer.ToString();
+                char[] buffer = new char[260];
+                uint length = Everything_GetResultFullPathName(i, buffer, (uint)buffer.Length);
+                string fullPath = new(buffer, 0, (int)length);
                 string name = Path.GetFileName(fullPath);
                 bool isFolder = Everything_IsFolderResult(i);
                 string path = isFolder ? fullPath : Path.GetDirectoryName(fullPath);
@@ -87,7 +79,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     SubTitle = Resources.plugin_name + ": " + fullPath,
 
                     IcoPath = isFolder ? "Images/folder.png" : (setting.Preview ?
-                        fullPath : (SearchHelper.IconLoader.Icon(ext) ?? "Images/file.png")),
+                        fullPath : "Images/file.png"),
                     ContextData = new SearchResult()
                     {
                         Path = fullPath,

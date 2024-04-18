@@ -36,28 +36,27 @@ Page instfiles
 
 Section ""
 
-  ; Don't terminate processes, helps reduce AV FP
   ;ExecWait '"$%SystemRoot%\system32\TaskKill.exe" /F /IM ${PT}'
-  ;ExecWait 'wmic process where name="${PT}" call terminate'
-  ;Sleep 3000
 
   SetOutPath $INSTDIR
   GetFullPathName $0 "$EXEDIR\"
   GetFullPathName $0 $0
-  File /r ".\..\..\..\..\..\..\x64\Release\RunPlugins\Everything\*"
+  File /r "${direct}\*"
 
-  ; Also don't launch processes, helps reduce AV FP
-  ;IfFileExists "$LOCALAPPDATA\PowerToys\${PT}" 0 +2
-  ;Exec '"$LOCALAPPDATA\PowerToys\${PT}"'
+  IfFileExists "$LOCALAPPDATA\PowerToys\${PT}" 0 +2
+  Exec '"$LOCALAPPDATA\PowerToys\${PT}"'
 
-  ;IfFileExists "$PROGRAMFILES64\PowerToys\${PT}" 0 +2
-  ;Exec '"$PROGRAMFILES64\PowerToys\${PT}"'
+  IfFileExists "$PROGRAMFILES64\PowerToys\${PT}" 0 +2
+  Exec '"$PROGRAMFILES64\PowerToys\${PT}"'
   
 SectionEnd
 
 ;--------------------------------
-; Don't query proceses, helps reduce AV FP
-;Function .onInit
+Function .onInit
+
+ExecWait 'wmic process where name="${PT}" call terminate'
+  ExecWait 'wmic process where name="PowerToys.PowerLauncher.exe" call terminate'
+  Sleep 200
 
 ;    System::Call 'kernel32::CreateMutex(p 0, i 0, t "ACFEF7F6-7856-4BB3-82E3-0877CBB4E9C7") p .r1 ?e'
 ; Pop $R0
@@ -66,4 +65,4 @@ SectionEnd
 ;   MessageBox MB_OK|MB_ICONEXCLAMATION "The installer is already running."
 ;   Abort
 
-; FunctionEnd
+FunctionEnd
