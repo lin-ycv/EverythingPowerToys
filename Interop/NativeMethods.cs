@@ -106,8 +106,6 @@ namespace Community.PowerToys.Run.Plugin.Everything.Interop
         #endregion
         internal const string dllName = "Everything64.dll";
         [LibraryImport(dllName)]
-        internal static partial uint Everything_GetLastError();
-        [LibraryImport(dllName)]
         internal static partial uint Everything_GetNumResults();
         [LibraryImport(dllName, EntryPoint = "Everything_GetResultFullPathNameW", StringMarshalling = StringMarshalling.Utf16)]
         internal static partial uint Everything_GetResultFullPathName(uint nIndex, [Out] char[] lpString, uint nMaxCount);

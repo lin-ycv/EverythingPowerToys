@@ -3,6 +3,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
+	  <LangVersion>12</LangVersion>
     <ProjectGuid>{64467D32-4786-4ADD-9B77-FBF3C965D3D1}</ProjectGuid>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Community.PowerToys.Run.Plugin.Everything</RootNamespace>
@@ -10,22 +11,24 @@
     <Version>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)plugin.json').Split(',')[5].Split(':')[1].Trim().Trim('"'))</Version>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-	<GenerateSatelliteAssembliesForCore>true</GenerateSatelliteAssembliesForCore>
-	<Company>lin-ycv</Company>
-	<Copyright>Copyright (C) lin-ycv</Copyright>
-	<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-	<ImplicitUsings>enable</ImplicitUsings>
+    <GenerateSatelliteAssembliesForCore>true</GenerateSatelliteAssembliesForCore>
+    <Company>lin-ycv</Company>
+    <Copyright>Copyright (C) lin-ycv</Copyright>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\$(Platform)\$(Configuration)\Everything\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-	<DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>bin\$(Platform)\$(Configuration)\Everything\</OutputPath>
     <Optimize>true</Optimize>
     <DebugType>none</DebugType>
   </PropertyGroup>
@@ -81,6 +84,9 @@
 
   <ItemGroup>
     <None Update="Everything64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="EverythingARM64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Images\Everything.dark.png">
@@ -139,7 +145,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Wox*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Ijwhost.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.xml&quot;&#xD;&#xA;del/ Q &quot;$(TargetDir)backup_restore_settings.json&quot;&#xD;&#xA;del /Q &quot;.\bin\CHECKSUM.txt&quot;&#xD;&#xA;powershell Compress-Archive -Path $(TargetDir) -DestinationPath .\bin\EverythingPT-$(Version)-x64.zip -Force&#xD;&#xA;&quot;C:\Program Files (x86)\NSIS\makensis&quot; /Dver=$(Version) /Ddirect=$(TargetDir) .\NSIS\exeCreator.nsi&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-x64.zip SHA256 &gt;&gt; .\bin\CHECKSUM.txt&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-x64.exe SHA256 &gt;&gt; .\bin\CHECKSUM.txt" />
+    <Exec Command="del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Wox*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Ijwhost.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.xml&quot;&#xD;&#xA;del/ Q &quot;$(TargetDir)backup_restore_settings.json&quot;&#xD;&#xA;del /Q &quot;.\bin\CHECKSUM.txt&quot;&#xD;&#xA;powershell Compress-Archive -Path $(TargetDir) -DestinationPath .\bin\EverythingPT-$(Version)-x64+ARM64.zip -Force&#xD;&#xA;&quot;C:\Program Files (x86)\NSIS\makensis&quot; /Dver=$(Version) /Ddirect=$(TargetDir) .\NSIS\exeCreator.nsi&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-x64+ARM64.zip SHA256 &gt;&gt; .\bin\CHECKSUM.txt&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-x64+ARM64.exe SHA256 &gt;&gt; .\bin\CHECKSUM.txt&#xD;&#xA;rd /Q /S &quot;$(TargetDir)&quot;&#xD;&#xA;rd &quot;$(ProjectDir)obj&quot; /s /q" />
   </Target>
 
 </Project>

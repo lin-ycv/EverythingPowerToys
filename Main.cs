@@ -1,4 +1,5 @@
-﻿using Microsoft.PowerToys.Settings.UI.Library;
+﻿using System.Runtime.InteropServices;
+using Microsoft.PowerToys.Settings.UI.Library;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
@@ -92,8 +93,28 @@ namespace Community.PowerToys.Run.Plugin.Everything
             },
         };
 
+        private void CheckArm()
+        {
+            string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                arm = Path.Combine(dir, "EverythingARM64.dll");
+            if (File.Exists(arm))
+            {
+                Architecture arch = RuntimeInformation.ProcessArchitecture;
+                if (arch == Architecture.Arm64)
+                {
+                    File.Delete(Path.Combine(dir, "Everything64.dll"));
+                    File.Move(arm, Path.Combine(dir, "Everything64.dll"));
+                }
+                else
+                {
+                    File.Delete(arm);
+                }
+            }
+        }
+
         public void Init(PluginInitContext context)
         {
+            CheckArm();
             if (_setting.Updates)
                 Task.Run(() => new Update().UpdateAsync(Assembly.GetExecutingAssembly().GetName().Version, _setting));
             _everything = new Everything(_setting);

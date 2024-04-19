@@ -3,7 +3,7 @@
     public class Settings
     {
         // Settings from PTR settings
-        public Interop.NativeMethods.Sort Sort { get; set; } = Interop.NativeMethods.Sort.DATE_MODIFIED_DESCENDING;
+        public Sort Sort { get; set; } = Sort.DATE_MODIFIED_DESCENDING;
         public uint Max { get; set; } = 20;
         public string Context { get; set; } = "012345";
         public bool Copy { get; set; }
