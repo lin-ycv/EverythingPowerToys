@@ -6,6 +6,7 @@ Doc: = ext:c;cc;chm;cpp;cs;css;csv;cxx;doc;docm;docx;dot;dotm;dotx;epub;gh;h;hpp
 Exe: = ext:bat;cmd;exe;msi;msp;msu;ps1;scr
 Pic: = ext:ani;apng;bmp;bpg;cur;gif;ico;jfi;jfif;jif;jpe;jpeg;jpg;pcx;png;psb;psd;rle;svg;tga;tif;tiff;webp;wmf
 Video: = ext:3g2;3gp;3gp2;3gpp;amv;asf;asx;avi;bdmv;bik;d2v;divx;drc;dsa;dsm;dss;dsv;evo;f4v;flc;fli;flic;flv;hdmov;ifo;ivf;m1v;m2p;m2t;m2ts;m2v;m4v;mkv;mp2v;mp4;mp4v;mpe;mpeg;mpg;mpls;mpv2;mpv4;mov;mts;ogm;ogv;pss;pva;qt;ram;ratdvd;rm;rmm;rmvb;roq;rpm;smil;smk;swf;tp;tpr;ts;vob;vp6;webm;wm;wmp;wmv
+r: = regex:
 
 # Search filters, filters result with custom path(s), seperated by |
 # Demo: = C:\Windows\|C:\ProgramData

@@ -1,10 +1,15 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: "[BUG] xx"
+title: "🐛 xx"
 labels: bug
 
 ---
+
+**Flight Check**
+- [ ] I'm sure existing (open and closed) don't have duplicates
+- [ ] I've tried reinstalling PT, Everything, EverythingPT
+
 
 **Describe the bug**
 A clear and concise description of what the bug is.
@@ -27,10 +32,16 @@ If applicable, add screenshots to help explain your problem.
 or be found at
 %localappdata%\Microsoft\PowerToys\PowerToys Run\Logs
 
-**Version (please provide the version of software you are using):**
+**Version:**
  - PowerToy:
  - Everything:
+ - EverythingPT: 
  - Windows:
+
+ **Installation method (How did you install the following softwares):**
+ - PowerToys: Github/Windows Store/Winget..etc
+ - Everything:
+ - EverythingPT:
 
 **Additional context**
 Add any other context about the problem here.

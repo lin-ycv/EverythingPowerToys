@@ -167,7 +167,8 @@
     <value>選取結果時更新搜尋詞，獲得更多資訊，但可能會變更搜尋結果</value>
   </data>
   <data name="RegEx_Description" xml:space="preserve">
-    <value>RegEx 正規表示式搜尋</value>
+    <value>RegEx 正規表示式搜尋
+不建議啟用，建議在收尋詞裡使用 r:</value>
   </data>
   <data name="run_as_admin" xml:space="preserve">
     <value>以系統管理員身分執行 (Ctrl+Shift+Enter)</value>

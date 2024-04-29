@@ -117,6 +117,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             CheckArm();
             if (_setting.Updates)
                 Task.Run(() => new Update().UpdateAsync(Assembly.GetExecutingAssembly().GetName().Version, _setting));
+            _setting.Getfilters();
             _everything = new Everything(_setting);
             _contextMenuLoader = new ContextMenuLoader(context, _setting.Context);
             _contextMenuLoader.Update(_setting);

@@ -33,19 +33,12 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
             if (orgqry.Contains(':'))
             {
-                StringBuilder sb = new();
                 foreach (var kv in setting.Filters)
                 {
                     if (query.Contains(kv.Key, StringComparison.OrdinalIgnoreCase))
                     {
-                        sb.Append(kv.Value + ' ');
-                        query = query.Replace(kv.Key, string.Empty);
+                        query = query.Replace(kv.Key, kv.Value);
                     }
-                }
-
-                if (sb.Length > 0)
-                {
-                    query = query.Trim() + " " + sb.ToString();
                 }
             }
 
