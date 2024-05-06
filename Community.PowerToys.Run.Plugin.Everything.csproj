@@ -15,7 +15,7 @@
     <Company>lin-ycv</Company>
     <Copyright>Copyright (C) lin-ycv</Copyright>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <ImplicitUsings>enable</ImplicitUsings>
+	  <useWPF>true</useWPF>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
@@ -50,6 +50,7 @@
     <ProjectReference Include="..\..\Wox.Infrastructure\Wox.Infrastructure.csproj">
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Wox.Plugin\Wox.Plugin.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -121,6 +122,9 @@
     <None Update="Images\warning.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="MIT.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -130,22 +134,8 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Using Include="Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods">
-      <Static>True</Static>
-    </Using>
-    <Using Include="Community.PowerToys.Run.Plugin.Everything.Properties" />
-    <Using Include="System.Diagnostics" />
-    <Using Include="System.Reflection" />
-    <Using Include="System.Text" />
-    <Using Include="System.Windows" />
-    <Using Include="System.Windows.Controls" />
-    <Using Include="Wox.Plugin" />
-    <Using Include="Wox.Plugin.Logger" />
-  </ItemGroup>
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Wox*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Ijwhost.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.xml&quot;&#xD;&#xA;del/ Q &quot;$(TargetDir)backup_restore_settings.json&quot;&#xD;&#xA;del /Q &quot;.\bin\CHECKSUM.txt&quot;&#xD;&#xA;powershell Compress-Archive -Path $(TargetDir) -DestinationPath .\bin\EverythingPT-$(Version)-x64+ARM64.zip -Force&#xD;&#xA;&quot;C:\Program Files (x86)\NSIS\makensis&quot; /Dver=$(Version) /Ddirect=$(TargetDir) .\NSIS\exeCreator.nsi&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-x64+ARM64.zip SHA256 &gt;&gt; .\bin\CHECKSUM.txt&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-x64+ARM64.exe SHA256 &gt;&gt; .\bin\CHECKSUM.txt&#xD;&#xA;rd /Q /S &quot;$(TargetDir)&quot;&#xD;&#xA;rd &quot;$(ProjectDir)obj&quot; /s /q" />
+    <Exec Command="del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Wox*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Ijwhost.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.xml&quot;&#xD;&#xA;del/ Q &quot;$(TargetDir)backup_restore_settings.json&quot;&#xD;&#xA;del /Q &quot;.\bin\CHECKSUM.txt&quot;&#xD;&#xA;copy /y &quot;.\NSIS\MIT.txt&quot; &quot;$(TargetDir)LICENSE.txt&quot;&#xD;&#xA;powershell Compress-Archive -Path $(TargetDir) -DestinationPath .\bin\EverythingPT-$(Version)-x64+ARM64.zip -Force&#xD;&#xA;&quot;C:\Program Files (x86)\NSIS\makensis&quot; /Dver=$(Version) /Ddirect=$(TargetDir) .\NSIS\exeCreator.nsi&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-x64+ARM64.zip SHA256 &gt;&gt; .\bin\CHECKSUM.txt&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-x64+ARM64.exe SHA256 &gt;&gt; .\bin\CHECKSUM.txt&#xD;&#xA;rd /Q /S &quot;$(TargetDir)&quot;&#xD;&#xA;rd /Q /S &quot;$(ProjectDir)obj&quot;" />
   </Target>
 
 </Project>

@@ -1,5 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using Community.PowerToys.Run.Plugin.Everything.Properties;
 using Wox.Infrastructure;
+using Wox.Plugin;
+using Wox.Plugin.Logger;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {

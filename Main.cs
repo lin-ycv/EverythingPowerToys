@@ -1,5 +1,16 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using System.Windows.Controls;
+using Community.PowerToys.Run.Plugin.Everything.Properties;
 using Microsoft.PowerToys.Settings.UI.Library;
+using Wox.Plugin;
+using Wox.Plugin.Logger;
+using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {

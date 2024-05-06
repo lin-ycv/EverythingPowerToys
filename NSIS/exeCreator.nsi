@@ -1,6 +1,8 @@
 ; Silent switch /S
-; Pass in /Dver=0.00.0 before calling the script to set the version
-;  ie: makensis /Dver=0.77.0 .\exeCreator.nsi
+; to check silent mode `start /wait EverythingPT-0.81.0-x64+ARM64.exe /S`
+; and `echo %ERRORLEVEL%` to check if 0 or 2
+; Pass in /Dver=0.00.0 /Ddirect=(TargetDir) before calling the script to set the version
+;  ie: makensis /Dver=0.77.0 /Ddirect=bin\x64\Release\Everything\ .\exeCreator.nsi
 ; Doc: https://nsis.sourceforge.io/Docs/Chapter4.html
 !define EPT "EverythingPT"
 !define PT "PowerToys.exe"
@@ -26,10 +28,11 @@ Name "${EPT}"
 OutFile ".\..\bin\${EPT}-${ver}-x64+ARM64.exe"
 RequestExecutionLevel user
 SetCompressor /SOLID /FINAL lzma
+LicenseData "MIT.txt"
 
 ;--------------------------------
 
-;Page directory
+Page license
 Page instfiles
 
 ;--------------------------------
