@@ -13,8 +13,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
     {
         internal Everything(Settings setting)
         {
-                Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME);
-                UpdateSettings(setting);
+            Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME);
+            UpdateSettings(setting);
         }
 
         internal void UpdateSettings(Settings setting)
@@ -27,15 +27,29 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         internal IEnumerable<Result> Query(string query, Settings setting)
         {
+            if (setting.Log > LogLevel.None)
+            {
+                Debugger.Write($"\r\n\r\nNew Query: {query}\r\n" +
+                    $"Sort {(int)setting.Sort}_{Everything_GetSort()} | " +
+                    $"Max {setting.Max}_{Everything_GetMax()} | " +
+                    $"Match Path {setting.MatchPath}_{Everything_GetMatchPath()} | " +
+                    $"Regex {setting.RegEx}_{Everything_GetRegex()}");
+            }
+
             string orgqry = query;
             if (orgqry.Contains('\"') && !setting.MatchPath)
             {
+                if (setting.Log > LogLevel.None)
+                    Debugger.Write("MatchPath");
+
                 Everything_SetMatchPath(true);
             }
 
             if (setting.EnvVar && orgqry.Contains('%'))
             {
                 query = Environment.ExpandEnvironmentVariables(query).Replace(';', '|');
+                if (setting.Log > LogLevel.None)
+                    Debugger.Write($"EnvVariable\r\n{query}");
             }
 
             if (orgqry.Contains(':'))
@@ -45,6 +59,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     if (query.Contains(kv.Key, StringComparison.OrdinalIgnoreCase))
                     {
                         query = query.Replace(kv.Key, kv.Value);
+                        if (setting.Log > LogLevel.None)
+                            Debugger.Write($"Contains Filter: {kv.Key}\r\n{query}");
                     }
                 }
             }
@@ -52,6 +68,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
             Everything_SetSearchW(query);
             if (!Everything_QueryW(true))
             {
+                if (setting.Log > LogLevel.None)
+                    Debugger.Write("\r\nUnable to Query\r\n");
+
                 throw new Win32Exception("Unable to Query");
             }
 
@@ -61,16 +80,27 @@ namespace Community.PowerToys.Run.Plugin.Everything
             }
 
             uint resultCount = Everything_GetNumResults();
+            if (setting.Log > LogLevel.None)
+                Debugger.Write($"Results: {resultCount}");
 
             for (uint i = 0; i < resultCount; i++)
             {
-                char[] buffer = new char[260];
-                uint length = Everything_GetResultFullPathName(i, buffer, (uint)buffer.Length);
+                if (setting.Log > LogLevel.None)
+                    Debugger.Write($"\r\n===== RESULT #{i} =====");
+
+                char[] buffer = new char[32767];
+                uint length = Everything_GetResultFullPathNameW(i, buffer, (uint)buffer.Length);
+
                 string fullPath = new(buffer, 0, (int)length);
+                if (setting.Log > LogLevel.None)
+                    Debugger.Write($"{length} {(setting.Log == LogLevel.Verbose ? fullPath : string.Empty)}");
                 string name = Path.GetFileName(fullPath);
                 bool isFolder = Everything_IsFolderResult(i);
+
                 string path = isFolder ? fullPath : Path.GetDirectoryName(fullPath);
                 string ext = Path.GetExtension(fullPath.Replace(".lnk", string.Empty));
+                if (setting.Log > LogLevel.None)
+                    Debugger.Write($"Folder: {isFolder}\r\nFile Path {(setting.Log == LogLevel.Verbose ? path : path.Length)}\r\nFile Name {(setting.Log == LogLevel.Verbose ? name : name.Length)}\r\nExt: {ext}");
 
                 var r = new Result()
                 {
@@ -96,7 +126,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         try
                         {
                             process.Start();
-                            _ = Everything_IncRunCountFromFileName(fullPath);
+                            _ = Everything_IncRunCountFromFileNameW(fullPath);
                             return true;
                         }
                         catch (Win32Exception)

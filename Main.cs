@@ -26,8 +26,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
         private ContextMenuLoader _contextMenuLoader;
         private bool _disposed;
 
-        public IEnumerable<PluginAdditionalOption> AdditionalOptions => new List<PluginAdditionalOption>()
-        {
+        public IEnumerable<PluginAdditionalOption> AdditionalOptions =>
+        [
             new()
             {
                 Key = nameof(Settings.Context),
@@ -102,7 +102,15 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 DisplayDescription = $"v{Assembly.GetExecutingAssembly().GetName().Version}",
                 Value = _setting.Updates,
             },
-        };
+            new()
+            {
+                Key = nameof(Settings.Log),
+                DisplayLabel = "Debug Mode",
+                PluginOptionType = PluginAdditionalOption.AdditionalOptionType.Combobox,
+                ComboBoxItems = Enum.GetValues(typeof(LogLevel)).Cast<int>().Select(d => new KeyValuePair<string, string>(((LogLevel)d).ToString(), d + string.Empty)).ToList(),
+                ComboBoxValue = (int)_setting.Log,
+            },
+        ];
 
         private void CheckArm()
         {
@@ -111,6 +119,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
             if (File.Exists(arm))
             {
                 Architecture arch = RuntimeInformation.ProcessArchitecture;
+                if (_setting.Log > LogLevel.None)
+                    Debugger.Write("0.Checking ARM..." + (_setting.Log == LogLevel.Verbose ? $"\r\n\tArchitecture: {arch}" : string.Empty));
                 if (arch == Architecture.Arm64)
                 {
                     File.Delete(Path.Combine(dir, "Everything64.dll"));
@@ -121,6 +131,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     File.Delete(arm);
                 }
             }
+
+            if (_setting.Log > LogLevel.None)
+                Debugger.Write("  Checking ARM...Done");
         }
 
         public void Init(PluginInitContext context)
@@ -132,6 +145,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
             _everything = new Everything(_setting);
             _contextMenuLoader = new ContextMenuLoader(context, _setting.Context);
             _contextMenuLoader.Update(_setting);
+            if (_setting.Log > LogLevel.None)
+                Debugger.Write("Init Complete\r\n");
         }
 
         public void UpdateSettings(PowerLauncherPluginSettings settings)
@@ -148,6 +163,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 _setting.QueryText = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.QueryText)).Value;
                 _setting.EnvVar = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.EnvVar)).Value;
                 _setting.Updates = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Updates)).Value;
+                _setting.Log = (LogLevel)settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Log)).ComboBoxValue;
 
                 _everything?.UpdateSettings(_setting);
                 _contextMenuLoader?.Update(_setting);
@@ -165,7 +181,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             List<Result> results = [];
             if (!string.IsNullOrEmpty(query.Search))
             {
-                var searchQuery = query.Search;
+                string searchQuery = query.Search;
 
                 try
                 {
@@ -183,6 +199,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 }
                 catch (Exception e)
                 {
+                    if (_setting.Log > LogLevel.None)
+                        Debugger.Write($"Everything Exception: {e.Message}\r\n{e.StackTrace}\r\n");
+
                     Log.Exception("Everything Exception", e, GetType());
                 }
             }

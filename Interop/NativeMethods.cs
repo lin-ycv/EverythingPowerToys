@@ -108,10 +108,20 @@ namespace Community.PowerToys.Run.Plugin.Everything.Interop
         internal const string dllName = "Everything64.dll";
         [LibraryImport(dllName)]
         internal static partial uint Everything_GetNumResults();
-        [LibraryImport(dllName, EntryPoint = "Everything_GetResultFullPathNameW", StringMarshalling = StringMarshalling.Utf16)]
-        internal static partial uint Everything_GetResultFullPathName(uint nIndex, [Out] char[] lpString, uint nMaxCount);
+        [LibraryImport(dllName)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static partial bool Everything_GetMatchPath();
+        [LibraryImport(dllName)]
+        internal static partial uint Everything_GetMax();
+        [LibraryImport(dllName)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static partial bool Everything_GetRegex();
         [LibraryImport(dllName, StringMarshalling = StringMarshalling.Utf16)]
-        internal static partial uint Everything_IncRunCountFromFileName(string lpFileName);
+        internal static partial uint Everything_GetResultFullPathNameW(uint nIndex, [Out] char[] lpString, uint nMaxCount);
+        [LibraryImport(dllName)]
+        internal static partial uint Everything_GetSort();
+        [LibraryImport(dllName, StringMarshalling = StringMarshalling.Utf16)]
+        internal static partial uint Everything_IncRunCountFromFileNameW(string lpFileName);
         [LibraryImport(dllName)]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static partial bool Everything_IsFolderResult(uint index);

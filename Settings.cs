@@ -20,14 +20,23 @@ namespace Community.PowerToys.Run.Plugin.Everything
         public bool EnvVar { get; set; }
         public bool Updates { get; set; } = true;
         public string Skip { get; set; }
+        public LogLevel Log { get; set; } = LogLevel.None;
 
         // Get Filters from settings.toml
         public Dictionary<string, string> Filters { get; } = [];
         internal void Getfilters()
         {
+            if (Log > LogLevel.None)
+                Debugger.Write("2.Getting Filters...");
             string[] strArr;
             try { strArr = File.ReadAllLines(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "settings.toml")); }
-            catch { return; }
+            catch (Exception e)
+            {
+                if (Log > LogLevel.None)
+                    Debugger.Write($"\r\nERROR: {e.Message}\r\n");
+                return;
+            }
+
             foreach (string str in strArr)
             {
                 if (str.Length == 0 || str[0] == '#') continue;
@@ -35,8 +44,18 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 if (kv.Length != 2) continue;
 
                 if (kv[0].Contains(':'))
-                    Filters.TryAdd(kv[0].ToLowerInvariant(), kv[1]);
+                    Filters.TryAdd(kv[0].ToLowerInvariant(), kv[1] + (kv[1].EndsWith(';') ? ' ' : string.Empty));
             }
+
+            if (Log > LogLevel.None)
+                Debugger.Write(Log > LogLevel.Debug ? string.Join(Environment.NewLine, Filters) + "\r\n" : string.Empty + "  GettingFilters...Done");
         }
+    }
+
+    public enum LogLevel
+    {
+        None,
+        Debug,
+        Verbose,
     }
 }

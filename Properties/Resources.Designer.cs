@@ -288,7 +288,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Enable regular expression in search.
-        ///Recommend using r: in query instead of enabling this option.
+        ///Recommend using regex: in query instead of enabling this option.
         /// </summary>
         public static string RegEx_Description {
             get {

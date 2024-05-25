@@ -168,7 +168,7 @@
   </data>
   <data name="RegEx_Description" xml:space="preserve">
     <value>RegEx 正規表示式搜尋
-不建議啟用，建議在收尋詞裡使用 r:</value>
+不建議啟用，建議在收尋詞裡使用 regex:</value>
   </data>
   <data name="run_as_admin" xml:space="preserve">
     <value>以系統管理員身分執行 (Ctrl+Shift+Enter)</value>

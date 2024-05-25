@@ -195,7 +195,7 @@
   </data>
   <data name="RegEx_Description" xml:space="preserve">
     <value>Enable regular expression in search.
-Recommend using r: in query instead of enabling this option</value>
+Recommend using regex: in query instead of enabling this option</value>
   </data>
   <data name="run_as_admin" xml:space="preserve">
     <value>Run as administrator (Ctrl+Shift+Enter)</value>

@@ -17,12 +17,18 @@ namespace Community.PowerToys.Run.Plugin.Everything
         internal async Task UpdateAsync(Version v, Settings s)
         {
             string apiUrl = "https://api.github.com/repos/lin-ycv/EverythingPowerToys/releases/latest";
+            if (s.Log > LogLevel.None)
+                Debugger.Write("1.Checking Update...");
+
             try
             {
                 using HttpClient httpClient = new();
                 httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
 
                 HttpResponseMessage response = await httpClient.GetAsync(apiUrl);
+
+                if (s.Log == LogLevel.Verbose) Debugger.Write($"\tResponse: {response.StatusCode}");
+
                 if (response.IsSuccessStatusCode)
                 {
                     using JsonDocument jsonDocument = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync());
@@ -69,7 +75,13 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     }
                 }
             }
-            catch { }
+            catch (Exception e)
+            {
+                if (s.Log > LogLevel.None)
+                    Debugger.Write($"\r\nERROR: {e.Message}\r\n{e.StackTrace}\r\n");
+            }
+
+            Debugger.Write("  Checking Update...Done");
         }
     }
 }

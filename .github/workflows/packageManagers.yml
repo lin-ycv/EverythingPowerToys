@@ -9,7 +9,6 @@ on:
 jobs:
   build:
     if: "!github.event.release.prerelease"
-    permissions: write-all
     runs-on: windows-latest
 
     steps:
@@ -50,7 +49,7 @@ jobs:
           cd .\EverythingPowerToys
           rm .git -Recurse -Force -Confirm:$false
           Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $ver} | ForEach  {$_ -Replace '_URL_', $exe} | ForEach  {$_ -Replace '_CRC_', $exehash} |  Set-Content $_ }
-          ..\wingetcreate submit -p "New version: lin-ycv.EverythingPowerToys version $ver" -t ${{ secrets.GITHUB_TOKEN }} .
+          ..\wingetcreate submit -p "New version: lin-ycv.EverythingPowerToys version $ver" -t ${{ secrets.EVERYTHINGPT }} .
 
           # scoop # takes too long to get approvaed, impractical to implement
           # cd ..
