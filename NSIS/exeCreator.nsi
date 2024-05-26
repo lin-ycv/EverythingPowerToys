@@ -21,7 +21,7 @@ LoadLanguageFile "${NSISDIR}\Contrib\Language files\English.nlf"
 
 BrandingText "${EPT} v${ver}"
 CRCCheck force
-FileErrorText "Can't write: $\r$\n$\r$\n$0$\r$\n$\r$\nPowerToys is probaly still running, please close it and retry."
+FileErrorText "Can't write: $\r$\n$\r$\n$0$\r$\n$\r$\nPowerToys is probably still running, please close it and retry."
 Icon Everything.ico
 InstallDir "$LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins\Everything"
 Name "${EPT}"
@@ -48,7 +48,7 @@ Section ""
   IfErrors 0 +5
   SetErrorlevel 2
   IfSilent +2
-  MessageBox MB_ICONEXCLAMATION "Unable to install, PowerToys is probaly still running, please close it manually before install."
+  MessageBox MB_ICONEXCLAMATION "Unable to install, PowerToys is probably still running, please close it manually before install."
   Abort
   
 SectionEnd
