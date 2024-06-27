@@ -45,6 +45,11 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 Everything_SetMatchPath(true);
             }
 
+            if (orgqry.Contains("exact:"))
+            {
+                Everything_SetMatchPath(false);
+            }
+
             if (setting.EnvVar && orgqry.Contains('%'))
             {
                 query = Environment.ExpandEnvironmentVariables(query).Replace(';', '|');
