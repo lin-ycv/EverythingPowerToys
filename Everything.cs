@@ -37,17 +37,16 @@ namespace Community.PowerToys.Run.Plugin.Everything
             }
 
             string orgqry = query;
-            if (orgqry.Contains('\"') && !setting.MatchPath)
+            if (orgqry.Contains("exact:"))
+            {
+                Everything_SetMatchPath(false);
+            }
+            else if (orgqry.Contains('\"') && !setting.MatchPath)
             {
                 if (setting.Log > LogLevel.None)
                     Debugger.Write("MatchPath");
 
                 Everything_SetMatchPath(true);
-            }
-
-            if (orgqry.Contains("exact:"))
-            {
-                Everything_SetMatchPath(false);
             }
 
             if (setting.EnvVar && orgqry.Contains('%'))
