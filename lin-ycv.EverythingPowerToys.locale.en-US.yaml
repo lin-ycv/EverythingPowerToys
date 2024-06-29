@@ -7,7 +7,7 @@ PublisherSupportUrl: https://github.com/lin-ycv/EverythingPowerToys/issues
 Author: Yu Chieh (Victor) Lin
 PackageName: EverythingPowerToys
 PackageUrl: https://github.com/lin-ycv/EverythingPowerToys
-License: Unlicensed
+License: MIT
 Copyright: Copyright (c) lin-ycv. All rights reserved.
 ShortDescription: Everything search plugin for PowerToys Run.
 Description: |-
