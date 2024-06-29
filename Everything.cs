@@ -37,14 +37,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             }
 
             string orgqry = query;
-            if (orgqry.Contains('\"') && !setting.MatchPath)
-            {
-                if (setting.Log > LogLevel.None)
-                    Debugger.Write("MatchPath");
-
-                Everything_SetMatchPath(true);
-            }
-
+            
             if (setting.EnvVar && orgqry.Contains('%'))
             {
                 query = Environment.ExpandEnvironmentVariables(query).Replace(';', '|');
@@ -72,11 +65,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     Debugger.Write("\r\nUnable to Query\r\n");
 
                 throw new Win32Exception("Unable to Query");
-            }
-
-            if (orgqry.Contains('\"') && !setting.MatchPath)
-            {
-                Everything_SetMatchPath(false);
             }
 
             uint resultCount = Everything_GetNumResults();
