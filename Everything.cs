@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using Community.PowerToys.Run.Plugin.Everything.Properties;
 using Wox.Plugin;
 using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
@@ -38,20 +37,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             }
 
             string orgqry = query;
-            string[] matchPathIgnoreList = ["wfn:", "wholefilename:", "nowfn:", "nowholefilename:", "exact:"];
-            bool matchPathIgnore = matchPathIgnoreList.Any(orgqry.Contains);
-            if (matchPathIgnore)
-            {
-                Everything_SetMatchPath(false);
-            }
-            else if (orgqry.Contains('\"') && !setting.MatchPath)
-            {
-                if (setting.Log > LogLevel.None)
-                    Debugger.Write("MatchPath");
-
-                Everything_SetMatchPath(true);
-            }
-
+            
             if (setting.EnvVar && orgqry.Contains('%'))
             {
                 query = Environment.ExpandEnvironmentVariables(query).Replace(';', '|');
@@ -79,11 +65,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     Debugger.Write("\r\nUnable to Query\r\n");
 
                 throw new Win32Exception("Unable to Query");
-            }
-
-            if (orgqry.Contains('\"') && !setting.MatchPath)
-            {
-                Everything_SetMatchPath(false);
             }
 
             uint resultCount = Everything_GetNumResults();
