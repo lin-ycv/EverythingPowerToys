@@ -62,6 +62,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.es-es.resx">
+    </EmbeddedResource>
     <EmbeddedResource Update="Properties\Resources.de-de.resx">
       <CustomToolNamespace>Community.PowerToys.Run.Plugin.Everything.Language</CustomToolNamespace>
       <LastGenOutput>Resources.de.Designer.cs</LastGenOutput>
