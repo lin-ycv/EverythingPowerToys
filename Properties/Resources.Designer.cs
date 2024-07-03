@@ -134,7 +134,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expanded enviroment variables, such as %appdata%, so that they work properly at the cost of query time..
+        ///   Looks up a localized string similar to Expand enviroment variables, such as %appdata%, so that they work properly at the cost of query time..
         /// </summary>
         public static string EnvVar_Description {
             get {
@@ -238,6 +238,25 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         public static string plugin_name {
             get {
                 return ResourceManager.GetString("plugin_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Query Prefix.
+        /// </summary>
+        public static string Prefix {
+            get {
+                return ResourceManager.GetString("Prefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adds prefix to all queries, so that you can always include certain filters/modifiers without typing it every time.
+        ///Space is not added automatically between prfix and query..
+        /// </summary>
+        public static string Prefix_Description {
+            get {
+                return ResourceManager.GetString("Prefix_Description", resourceCulture);
             }
         }
         

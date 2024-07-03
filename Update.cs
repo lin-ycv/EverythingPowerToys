@@ -44,7 +44,11 @@ namespace Community.PowerToys.Run.Plugin.Everything
                             string[] nameUrl = [string.Empty, string.Empty];
                             foreach (JsonElement asset in assets.EnumerateArray())
                             {
-                                if (asset.TryGetProperty("browser_download_url", out JsonElement downUrl) && downUrl.ToString().EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+#if X64
+                                if (asset.TryGetProperty("browser_download_url", out JsonElement downUrl) && downUrl.ToString().EndsWith("x64.exe", StringComparison.OrdinalIgnoreCase))
+#elif ARM64
+                                if (asset.TryGetProperty("browser_download_url", out JsonElement downUrl) && downUrl.ToString().EndsWith("ARM64.exe", StringComparison.OrdinalIgnoreCase))
+#endif
                                 {
                                     nameUrl[0] = asset.GetProperty("name").ToString();
                                     nameUrl[1] = downUrl.ToString();
@@ -81,7 +85,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     Debugger.Write($"\r\nERROR: {e.Message}\r\n{e.StackTrace}\r\n");
             }
 
-            Debugger.Write("  Checking Update...Done");
+            if (s.Log > LogLevel.None)
+                Debugger.Write("  Checking Update...Done");
         }
     }
 }

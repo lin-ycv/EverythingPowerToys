@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using Community.PowerToys.Run.Plugin.Everything.Properties;
@@ -19,10 +17,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
         public static string PluginID => "A86867E2D932459CBD77D176373DD657";
         public string Name => Resources.plugin_name;
         public string Description => Resources.plugin_description;
-
         private readonly Settings _setting = new();
         private Everything _everything;
-
         private ContextMenuLoader _contextMenuLoader;
         private bool _disposed;
 
@@ -52,6 +48,14 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 DisplayDescription = Resources.Max_Description,
                 PluginOptionType = PluginAdditionalOption.AdditionalOptionType.Numberbox,
                 NumberValue = _setting.Max,
+            },
+            new()
+            {
+                Key = nameof(Settings.Prefix),
+                DisplayLabel = Resources.Prefix,
+                DisplayDescription = Resources.Prefix_Description,
+                PluginOptionType = PluginAdditionalOption.AdditionalOptionType.Textbox,
+                TextValue = _setting.Prefix,
             },
             new()
             {
@@ -112,33 +116,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
             },
         ];
 
-        private void CheckArm()
-        {
-            string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                arm = Path.Combine(dir, "EverythingARM64.dll");
-            if (File.Exists(arm))
-            {
-                Architecture arch = RuntimeInformation.ProcessArchitecture;
-                if (_setting.Log > LogLevel.None)
-                    Debugger.Write("0.Checking ARM..." + (_setting.Log == LogLevel.Verbose ? $"\r\n\tArchitecture: {arch}" : string.Empty));
-                if (arch == Architecture.Arm64)
-                {
-                    File.Delete(Path.Combine(dir, "Everything64.dll"));
-                    File.Move(arm, Path.Combine(dir, "Everything64.dll"));
-                }
-                else
-                {
-                    File.Delete(arm);
-                }
-            }
-
-            if (_setting.Log > LogLevel.None)
-                Debugger.Write("  Checking ARM...Done");
-        }
-
         public void Init(PluginInitContext context)
         {
-            CheckArm();
             if (_setting.Updates)
                 Task.Run(() => new Update().UpdateAsync(Assembly.GetExecutingAssembly().GetName().Version, _setting));
             _setting.Getfilters();
@@ -164,6 +143,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 _setting.EnvVar = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.EnvVar)).Value;
                 _setting.Updates = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Updates)).Value;
                 _setting.Log = (LogLevel)settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Log)).ComboBoxValue;
+                _setting.Prefix = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Prefix)).TextValue;
 
                 _everything?.UpdateSettings(_setting);
                 _contextMenuLoader?.Update(_setting);
@@ -229,10 +209,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
         }
 
         public List<ContextMenuResult> LoadContextMenus(Result selectedResult) => _contextMenuLoader.LoadContextMenus(selectedResult);
-
         public Control CreateSettingPanel() => throw new NotImplementedException();
         public string GetTranslatedPluginTitle() => Resources.plugin_name;
-
         public string GetTranslatedPluginDescription() => Resources.plugin_description;
     }
 }

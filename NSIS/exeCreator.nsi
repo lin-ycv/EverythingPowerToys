@@ -1,11 +1,10 @@
 ; Silent switch /S
-; to check silent mode `start /wait EverythingPT-0.81.0-x64+ARM64.exe /S`
+; to check silent mode `start /wait EverythingPT-0.81.0-x64.exe /S`
 ; and `echo %ERRORLEVEL%` to check if 0 or 2
-; Pass in /Dver=0.00.0 /Ddirect=(TargetDir) before calling the script to set the version
+; Pass in /Dver=0.00.0 /Ddirect=$(TargetDir) before calling the script to set the version
 ;  ie: makensis /Dver=0.77.0 /Ddirect=bin\x64\Release\Everything\ .\exeCreator.nsi
 ; Doc: https://nsis.sourceforge.io/Docs/Chapter4.html
 !define EPT "EverythingPT"
-!define PT "PowerToys.exe"
 
 LoadLanguageFile "${NSISDIR}\Contrib\Language files\English.nlf"
 ;--------------------------------
@@ -25,7 +24,7 @@ FileErrorText "Can't write: $\r$\n$\r$\n$0$\r$\n$\r$\nPowerToys is probably stil
 Icon Everything.ico
 InstallDir "$LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins\Everything"
 Name "${EPT}"
-OutFile ".\..\bin\${EPT}-${ver}-x64+ARM64.exe"
+OutFile ".\..\bin\${EPT}-${ver}-${platform}.exe"
 RequestExecutionLevel user
 SetCompressor /SOLID /FINAL lzma
 LicenseData "MIT.txt"

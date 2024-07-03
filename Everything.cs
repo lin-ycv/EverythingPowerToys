@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using Community.PowerToys.Run.Plugin.Everything.Properties;
 using Wox.Plugin;
 using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
@@ -13,7 +14,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
     {
         internal Everything(Settings setting)
         {
-            Everything_SetRequestFlags(Request.FULL_PATH_AND_FILE_NAME);
+            Everything_SetRequestFlags(Request.FILE_NAME | Request.PATH);
             UpdateSettings(setting);
         }
 
@@ -30,14 +31,18 @@ namespace Community.PowerToys.Run.Plugin.Everything
             if (setting.Log > LogLevel.None)
             {
                 Debugger.Write($"\r\n\r\nNew Query: {query}\r\n" +
+                    $"Prefix {setting.Prefix} | " +
                     $"Sort {(int)setting.Sort}_{Everything_GetSort()} | " +
                     $"Max {setting.Max}_{Everything_GetMax()} | " +
                     $"Match Path {setting.MatchPath}_{Everything_GetMatchPath()} | " +
                     $"Regex {setting.RegEx}_{Everything_GetRegex()}");
             }
 
+            if (!string.IsNullOrEmpty(setting.Prefix))
+                query = setting.Prefix + query;
+
             string orgqry = query;
-            
+
             if (setting.EnvVar && orgqry.Contains('%'))
             {
                 query = Environment.ExpandEnvironmentVariables(query).Replace(';', '|');
@@ -76,16 +81,16 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 if (setting.Log > LogLevel.None)
                     Debugger.Write($"\r\n===== RESULT #{i} =====");
 
-                char[] buffer = new char[32767];
-                uint length = Everything_GetResultFullPathNameW(i, buffer, (uint)buffer.Length);
+                string name = Marshal.PtrToStringUni(Everything_GetResultFileNameW(i));
+                string path = Marshal.PtrToStringUni(Everything_GetResultPathW(i));
+                string fullPath = Path.Combine(path, name);
 
-                string fullPath = new(buffer, 0, (int)length);
                 if (setting.Log > LogLevel.None)
-                    Debugger.Write($"{length} {(setting.Log == LogLevel.Verbose ? fullPath : string.Empty)}");
-                string name = Path.GetFileName(fullPath);
-                bool isFolder = Everything_IsFolderResult(i);
+                    Debugger.Write($"{fullPath.Length} {(setting.Log == LogLevel.Verbose ? fullPath : string.Empty)}");
 
-                string path = isFolder ? fullPath : Path.GetDirectoryName(fullPath);
+                bool isFolder = Everything_IsFolderResult(i);
+                if (isFolder)
+                    path = fullPath;
                 string ext = Path.GetExtension(fullPath.Replace(".lnk", string.Empty));
                 if (setting.Log > LogLevel.None)
                     Debugger.Write($"Folder: {isFolder}\r\nFile Path {(setting.Log == LogLevel.Verbose ? path : path.Length)}\r\nFile Name {(setting.Log == LogLevel.Verbose ? name : name.Length)}\r\nExt: {ext}");
@@ -114,7 +119,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         try
                         {
                             process.Start();
-                            _ = Everything_IncRunCountFromFileNameW(fullPath);
+                            _ = Everything_IncRunCountFromFileName(fullPath);
                             return true;
                         }
                         catch (Win32Exception)

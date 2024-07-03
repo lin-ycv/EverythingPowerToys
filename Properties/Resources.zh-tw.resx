@@ -146,7 +146,7 @@
     <value>也收尋路徑</value>
   </data>
   <data name="Max_Description" xml:space="preserve">
-    <value>結果中顯示的最大結果數</value>
+    <value>結果中顯示的結果數上限</value>
   </data>
   <data name="open_containing_folder" xml:space="preserve">
     <value>開啟檔案位置 (Ctrl+Shift+E)</value>
@@ -159,6 +159,10 @@
   </data>
   <data name="plugin_name" xml:space="preserve">
     <value>Everything 搜尋</value>
+  </data>
+  <data name="Prefix_Description" xml:space="preserve">
+    <value>為收尋詞增加固定的前綴，在收詢時不用再自行打修飾詞/篩選詞
+前綴與收尋詞之間不會自動加入空格</value>
   </data>
   <data name="Preview_Description" xml:space="preserve">
     <value>將檔案內容顯示為預覽圖示，預覽雲端的檔案可能會造成停頓</value>
@@ -174,7 +178,7 @@
     <value>以系統管理員身分執行 (Ctrl+Shift+Enter)</value>
   </data>
   <data name="run_as_user" xml:space="preserve">
-    <value>以其他使用者身份執行 (Ctrl+Shift+U)</value>
+    <value>以其他使用者身分執行 (Ctrl+Shift+U)</value>
   </data>
   <data name="Sort_Description" xml:space="preserve">
     <value>設定結果排序方法</value>

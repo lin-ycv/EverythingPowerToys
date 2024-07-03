@@ -21,6 +21,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         public bool Updates { get; set; } = true;
         public string Skip { get; set; }
         public LogLevel Log { get; set; } = LogLevel.None;
+        public string Prefix { get; set; }
 
         // Get Filters from settings.toml
         public Dictionary<string, string> Filters { get; } = [];

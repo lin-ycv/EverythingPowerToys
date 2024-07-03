@@ -33,6 +33,14 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Platform)'=='x64'">
+    <DefineConstants>$(DefineConstants);X64</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)'=='ARM64'">
+    <DefineConstants>$(DefineConstants);ARM64</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="NativeMethods.cs" />
   </ItemGroup>
@@ -65,23 +73,14 @@
     <EmbeddedResource Update="Properties\Resources.es-es.resx">
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\Resources.de-de.resx">
-      <CustomToolNamespace>Community.PowerToys.Run.Plugin.Everything.Language</CustomToolNamespace>
-      <LastGenOutput>Resources.de.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\Resources.zh-cn.resx">
-      <CustomToolNamespace>Community.PowerToys.Run.Plugin.Everything.Language</CustomToolNamespace>
-      <LastGenOutput>Resources - Copy.zh.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\Resources.zh.resx">
-      <CustomToolNamespace>Community.PowerToys.Run.Plugin.Everything.Language</CustomToolNamespace>
-      <LastGenOutput>Resources.zh.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
+    <EmbeddedResource Update="Properties\Resources.zh-tw.resx">
     </EmbeddedResource>
   </ItemGroup>
 
@@ -137,7 +136,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Wox*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Ijwhost.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.xml&quot;&#xD;&#xA;del/ Q &quot;$(TargetDir)backup_restore_settings.json&quot;&#xD;&#xA;del /Q &quot;.\bin\CHECKSUM.txt&quot;&#xD;&#xA;copy /y &quot;.\NSIS\MIT.txt&quot; &quot;$(TargetDir)LICENSE.txt&quot;&#xD;&#xA;powershell Compress-Archive -Path $(TargetDir) -DestinationPath .\bin\EverythingPT-$(Version)-x64+ARM64.zip -Force&#xD;&#xA;&quot;C:\Program Files (x86)\NSIS\makensis&quot; /Dver=$(Version) /Ddirect=$(TargetDir) .\NSIS\exeCreator.nsi&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-x64+ARM64.zip SHA256 &gt;&gt; .\bin\CHECKSUM.txt&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-x64+ARM64.exe SHA256 &gt;&gt; .\bin\CHECKSUM.txt&#xD;&#xA;rd /Q /S &quot;$(TargetDir)&quot;&#xD;&#xA;rd /Q /S &quot;$(ProjectDir)obj&quot;" />
+    <Exec Command="if $(Platform) == ARM64 (&#xD;&#xA;del /Q &quot;$(TargetDir)Everything64.dll&quot;&#xD;&#xA;copy /y &quot;$(TargetDir)EverythingARM64.dll&quot; &quot;$(TargetDir)Everything64.dll&quot;&#xD;&#xA;)&#xD;&#xA;del /Q &quot;$(TargetDir)EverythingARM64.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Wox*.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Ijwhost.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.xml&quot;&#xD;&#xA;del/ Q &quot;$(TargetDir)backup_restore_settings.json&quot;&#xD;&#xA;del /Q &quot;.\bin\CHECKSUM.txt&quot;&#xD;&#xA;copy /y &quot;.\NSIS\MIT.txt&quot; &quot;$(TargetDir)LICENSE.txt&quot;&#xD;&#xA;powershell Compress-Archive -Path $(TargetDir) -DestinationPath .\bin\EverythingPT-$(Version)-$(Platform).zip -Force&#xD;&#xA;&quot;C:\Program Files (x86)\NSIS\makensis&quot; /Dver=$(Version) /Ddirect=$(TargetDir) /Dplatform=$(Platform) .\NSIS\exeCreator.nsi&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-$(Platform).zip SHA256 &gt;&gt; .\bin\CHECKSUM.txt&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-$(Platform).exe SHA256 &gt;&gt; .\bin\CHECKSUM.txt&#xD;&#xA;rd /Q /S &quot;$(TargetDir)&quot;&#xD;&#xA;rd /Q /S &quot;$(ProjectDir)obj&quot;" />
   </Target>
 
 </Project>
