@@ -23,13 +23,13 @@ jobs:
           
           $ver = ($response | select-string '"tag_name":').Line.split("`"")[3].Trim('v')
           
-          $zip = ($response | Where-Object { $_ -like "*.zip`"" } | Select-Object -Last 1).Split("`"")[3]
-          $exe = ($response | Where-Object { $_ -like "*.exe`"" } | Select-Object -Last 1).Split("`"")[3]
+          $zip = ($response | Where-Object { $_ -like "*x64.zip`"" } | Select-Object -Last 1).Split("`"")[3]
+          $exe = ($response | Where-Object { $_ -like "*x64.exe`"" } | Select-Object -Last 1).Split("`"")[3]
           
           $pattern = '(?s)(?<=<!--HASH-->).*?(?=<!--ENDHASH-->)'
           $hash = (($response | select-string '"body"').Line | Select-String -Pattern $pattern | ForEach-Object { $_.Matches.Value.Trim() }).Split("\r\n")
-          $ziphash = ($hash | select-string "ZIP").Line.Split('|')[1]
-          $exehash = ($hash | select-string "EXE").Line.Split('|')[1]
+          $ziphash = ($hash | select-string "x64-ZIP").Line.Split('|')[1]
+          $exehash = ($hash | select-string "x64-EXE").Line.Split('|')[1]
           
           # chocolatey
           echo $ver $zip $ziphash
