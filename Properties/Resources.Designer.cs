@@ -161,6 +161,24 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Everything64.exe.
+        /// </summary>
+        public static string EverythingPath {
+            get {
+                return ResourceManager.GetString("EverythingPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location of Everything64.exe if it&apos;s not installed in &quot;Program Files&quot;.
+        /// </summary>
+        public static string EverythingPath_Description {
+            get {
+                return ResourceManager.GetString("EverythingPath_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fail to open folder at.
         /// </summary>
         public static string folder_open_failed {
@@ -202,6 +220,24 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         public static string Max_Description {
             get {
                 return ResourceManager.GetString("Max_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to See more....
+        /// </summary>
+        public static string more_results {
+            get {
+                return ResourceManager.GetString("more_results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Everything and see the remaining results.
+        /// </summary>
+        public static string more_results_Subtitle {
+            get {
+                return ResourceManager.GetString("more_results_Subtitle", resourceCulture);
             }
         }
         

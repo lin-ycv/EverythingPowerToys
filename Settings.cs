@@ -9,8 +9,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
     public class Settings
     {
         // Settings from PTR settings
-        public Sort Sort { get; set; } = Sort.DATE_MODIFIED_DESCENDING;
-        public uint Max { get; set; } = 20;
+        public Sort Sort { get; set; } = Sort.NAME_ASCENDING;
+        public uint Max { get; set; } = 10;
         public string Context { get; set; } = "012345";
         public bool Copy { get; set; }
         public bool MatchPath { get; set; }
@@ -22,6 +22,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         public string Skip { get; set; }
         public LogLevel Log { get; set; } = LogLevel.None;
         public string Prefix { get; set; }
+        public string EverythingPath { get; set; }
 
         // Get Filters from settings.toml
         public Dictionary<string, string> Filters { get; } = [];

@@ -133,6 +133,9 @@
   <data name="EnvVar_Description" xml:space="preserve">
     <value>搜尋時可用環境變數，但會增加搜尋時間</value>
   </data>
+  <data name="EverythingPath_Description" xml:space="preserve">
+    <value>若Everything安裝位置非預設的Program Files，請提供Everything64.exe的位置</value>
+  </data>
   <data name="Everything_ini" xml:space="preserve">
     <value>是否有安裝 Everything?</value>
   </data>
@@ -147,6 +150,12 @@
   </data>
   <data name="Max_Description" xml:space="preserve">
     <value>結果中顯示的結果數上限</value>
+  </data>
+  <data name="more_results" xml:space="preserve">
+    <value>顯示更多結果...</value>
+  </data>
+  <data name="more_results_Subtitle" xml:space="preserve">
+    <value>在Everything主視窗裡查看更多結果</value>
   </data>
   <data name="open_containing_folder" xml:space="preserve">
     <value>開啟檔案位置 (Ctrl+Shift+E)</value>

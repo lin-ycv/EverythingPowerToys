@@ -12,6 +12,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
 {
     internal sealed class Everything
     {
+        private string exe = string.Empty;
         internal Everything(Settings setting)
         {
             Everything_SetRequestFlags(Request.FILE_NAME | Request.PATH);
@@ -24,6 +25,16 @@ namespace Community.PowerToys.Run.Plugin.Everything
             Everything_SetMax(setting.Max);
             Everything_SetMatchPath(setting.MatchPath);
             Everything_SetRegex(setting.RegEx);
+            if (!string.IsNullOrEmpty(setting.EverythingPath))
+            {
+                if (setting.EverythingPath != exe && Path.Exists(setting.EverythingPath))
+                    exe = setting.EverythingPath;
+            }
+            else if (string.IsNullOrEmpty(exe))
+            {
+                exe = Path.Exists("C:\\Program Files\\Everything 1.5a\\Everything64.exe") ? "C:\\Program Files\\Everything 1.5a\\Everything64.exe" :
+                    (Path.Exists("C:\\Program Files\\Everything\\Everything64.exe") ? "C:\\Program Files\\Everything\\Everything64.exe" : string.Empty);
+            }
         }
 
         internal IEnumerable<Result> Query(string query, Settings setting)
@@ -75,6 +86,36 @@ namespace Community.PowerToys.Run.Plugin.Everything
             uint resultCount = Everything_GetNumResults();
             if (setting.Log > LogLevel.None)
                 Debugger.Write($"Results: {resultCount}");
+
+            bool showMore = !string.IsNullOrEmpty(exe) && resultCount == setting.Max;
+            if (showMore)
+            {
+                var more = new Result()
+                {
+                    Title = Resources.more_results,
+                    SubTitle = Resources.more_results_Subtitle,
+                    IcoPath = "Images/Everything.light.png",
+                    Action = e =>
+                    {
+                        using var process = new Process();
+                        process.StartInfo.FileName = exe;
+                        process.StartInfo.UseShellExecute = true;
+                        process.StartInfo.Arguments = $@"-s {query}";
+                        try
+                        {
+                            process.Start();
+                            return true;
+                        }
+                        catch (Win32Exception)
+                        {
+                            return false;
+                        }
+                    },
+                    Score = int.MinValue,
+                    QueryTextDisplay = orgqry,
+                };
+                yield return more;
+            }
 
             for (uint i = 0; i < resultCount; i++)
             {

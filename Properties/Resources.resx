@@ -145,6 +145,12 @@
   <data name="EnvVar_Description" xml:space="preserve">
     <value>Expand enviroment variables, such as %appdata%, so that they work properly at the cost of query time.</value>
   </data>
+  <data name="EverythingPath" xml:space="preserve">
+    <value>Everything64.exe</value>
+  </data>
+  <data name="EverythingPath_Description" xml:space="preserve">
+    <value>Location of Everything64.exe if it's not installed in "Program Files"</value>
+  </data>
   <data name="Everything_ini" xml:space="preserve">
     <value>Install Everything if not installed</value>
   </data>
@@ -165,6 +171,12 @@
   </data>
   <data name="Max_Description" xml:space="preserve">
     <value>The maximum amount of results to display in the results.</value>
+  </data>
+  <data name="more_results" xml:space="preserve">
+    <value>See more...</value>
+  </data>
+  <data name="more_results_Subtitle" xml:space="preserve">
+    <value>Open Everything and see the remaining results</value>
   </data>
   <data name="open_containing_folder" xml:space="preserve">
     <value>Open containing folder (Ctrl+Shift+E)</value>

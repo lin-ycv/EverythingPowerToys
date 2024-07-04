@@ -133,6 +133,9 @@
   <data name="EnvVar_Description" xml:space="preserve">
     <value>搜索时可以使用环境变量，但会增加搜索时间</value>
   </data>
+  <data name="EverythingPath_Description" xml:space="preserve">
+    <value>若Everything安装位置非预设的Program Files，请提供Everything64exe的位置</value>
+  </data>
   <data name="Everything_ini" xml:space="preserve">
     <value>是否安装了 Everything?</value>
   </data>
@@ -148,6 +151,12 @@
   <data name="Max_Description" xml:space="preserve">
     <value>结果中显示的最大结果数</value>
   </data>
+  <data name="more_results" xml:space="preserve">
+    <value>显示更多结果...</value>
+  </data>
+  <data name="more_results_Subtitle" xml:space="preserve">
+    <value>在Everything主视窗里查看更多结果</value>
+  </data>
   <data name="open_containing_folder" xml:space="preserve">
     <value>打开所在文件夹 (Ctrl+Shift+E)</value>
   </data>
@@ -159,6 +168,10 @@
   </data>
   <data name="plugin_name" xml:space="preserve">
     <value>Everything</value>
+  </data>
+  <data name="Prefix_Description" xml:space="preserve">
+    <value>为搜索词添加固定的前缀，搜索时无需再手动输入修饰词/筛选词
+前缀与搜索词之间不会自动加入空格</value>
   </data>
   <data name="Preview_Description" xml:space="preserve">
     <value>以图标形式预览文件内容，如果文件不是本地文件，可能会导致冻结</value>
