@@ -1,0 +1,46 @@
+{
+    "version": "_VERSION_",
+    "description": "This plugin adds Everything search results to PowerToys Run.",
+    "homepage": "https://github.com/lin-ycv/EverythingPowerToys",
+    "license": "EPL-2.0",
+    "suggest": {
+        "Everything": [
+            "everything",
+            "versions/everything-alpha"
+        ],
+        "PowerToys": "powertoys"
+    },
+    "architecture": {
+        "64bit": {
+            "url": "_URL_",
+            "hash": "_CRC_"
+        }
+    },
+    "pre_uninstall": [
+        "if (!(Get-Process powertoys -ErrorAction Ignore)) {",
+        "  Remove-Item \"$env:LOCALAPPDATA\\Microsoft\\PowerToys\\PowerToys Run\\Plugins\\Everything\" -ErrorAction Stop",
+        "} else {",
+        "  abort 'PowerToys is still running, please close it before uninstalling everything-powertoys'",
+        "}"
+    ],
+    "post_install": "New-Item -ItemType Junction -Path \"$env:LOCALAPPDATA\\Microsoft\\PowerToys\\PowerToys Run\\Plugins\\Everything\" -Target \"$dir\\Everything\" | Out-Null",
+    "pre_uninstall": [
+        "if (!(Get-Process powertoys -ErrorAction Ignore)) {",
+        "  Remove-Item \"$env:LOCALAPPDATA\\Microsoft\\PowerToys\\PowerToys Run\\Plugins\\Everything\" -ErrorAction Stop",
+        "} else {",
+        "  abort 'PowerToys is still running, please close it before uninstalling everything-powertoys'",
+        "}"
+    ],
+    "checkver": "github",
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/lin-ycv/EverythingPowerToys/releases/download/v$version/EverythingPT-$version-x64.zip",
+                "hash": {
+                    "url": "https://github.com/lin-ycv/EverythingPowerToys/releases/tag/v$version",
+                    "regex": "(?s)x64-ZIP.*?$sha256"
+                }
+            }
+        }
+    }
+}
