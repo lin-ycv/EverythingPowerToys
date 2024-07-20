@@ -64,6 +64,6 @@ jobs:
           Invoke-WebRequest https://github.com/lin-ycv/EverythingPowerToys/raw/scoop/everything-powertoys.json -OutFile everything-powertoys.json
           (Get-Content everything-powertoys.json) | ForEach-Object {$_ -Replace '_VERSION_', $ver} | ForEach-Object {$_ -Replace '_URL_', $zip} | ForEach-Object {$_ -Replace '_CRC_', $ziphash} | ForEach-Object {$_ -Replace '_armURL_', $zipARM} | ForEach-Object {$_ -Replace '_armCRC_', $zipARMhash} | Set-Content everything-powertoys.json
           git add .
-          git commit -m "everything-powertoys@$ver: Update"
+          git commit -m "everything-powertoys update to $ver"
           git push -f
-          gh pr create --base main --head EverythingPowerToys --title "everything-powertoys@$ver: Update" --body "- [X] I have read the [Contributing Guide](https://github.com/ScoopInstaller/.github/blob/main/.github/CONTRIBUTING.md).`r`n`r`n/verify"
+          gh pr create --base main --head EverythingPowerToys --title "everything-powertoys update to $ver" --body "- [X] I have read the [Contributing Guide](https://github.com/ScoopInstaller/.github/blob/main/.github/CONTRIBUTING.md).`r`n`r`n/verify"
