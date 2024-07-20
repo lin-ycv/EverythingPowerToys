@@ -7,10 +7,11 @@ PublisherSupportUrl: https://github.com/lin-ycv/EverythingPowerToys/issues
 Author: Yu Chieh (Victor) Lin
 PackageName: EverythingPowerToys
 PackageUrl: https://github.com/lin-ycv/EverythingPowerToys
-License: MIT
+License: EPL-2.0
+LicenseUrl: https://github.com/lin-ycv/EverythingPowerToys/blob/main/LICENSE
 Copyright: Copyright (c) lin-ycv. Todos los derechos reservados.
 ShortDescription: Plugin de búsqueda con Everything para PowerToys Run.
-Description: |-
+Description: |
   Inclye los resultados de búsqueda de Everything en PowerToys Run.
   PowerToys se lista como una dependencia pero Everything necesita ser instalado de manera separada.
 Moniker: everythingpt
@@ -25,4 +26,4 @@ Tags:
 - "EverythingPowerToys"
 ReleaseNotesUrl: https://github.com/lin-ycv/EverythingPowerToys/releases/tag/v_VERSION_
 ManifestType: locale
-ManifestVersion: 1.5.0
+ManifestVersion: 1.6.0
