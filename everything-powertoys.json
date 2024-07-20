@@ -14,15 +14,12 @@
         "64bit": {
             "url": "_URL_",
             "hash": "_CRC_"
+        },
+        "arm64": {
+            "url": "_armURL_",
+            "hash": "_armCRC_"
         }
     },
-    "pre_uninstall": [
-        "if (!(Get-Process powertoys -ErrorAction Ignore)) {",
-        "  Remove-Item \"$env:LOCALAPPDATA\\Microsoft\\PowerToys\\PowerToys Run\\Plugins\\Everything\" -ErrorAction Stop",
-        "} else {",
-        "  abort 'PowerToys is still running, please close it before uninstalling everything-powertoys'",
-        "}"
-    ],
     "post_install": "New-Item -ItemType Junction -Path \"$env:LOCALAPPDATA\\Microsoft\\PowerToys\\PowerToys Run\\Plugins\\Everything\" -Target \"$dir\\Everything\" | Out-Null",
     "pre_uninstall": [
         "if (!(Get-Process powertoys -ErrorAction Ignore)) {",
@@ -39,6 +36,13 @@
                 "hash": {
                     "url": "https://github.com/lin-ycv/EverythingPowerToys/releases/tag/v$version",
                     "regex": "(?s)x64-ZIP.*?$sha256"
+                }
+            },
+            "arm64": {
+                "url": "https://github.com/lin-ycv/EverythingPowerToys/releases/download/v$version/EverythingPT-$version-ARM64.zip",
+                "hash": {
+                    "url": "https://github.com/lin-ycv/EverythingPowerToys/releases/tag/v$version",
+                    "regex": "(?s)ARM64-ZIP.*?$sha256"
                 }
             }
         }
