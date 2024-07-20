@@ -24,12 +24,16 @@ jobs:
           $ver = ($response | select-string '"tag_name":').Line.split("`"")[3].Trim('v')
           
           $zip = ($response | Where-Object { $_ -like "*x64.zip`"" } | Select-Object -Last 1).Split("`"")[3]
+          $zipARM = ($response | Where-Object { $_ -like "*ARM64.zip`"" } | Select-Object -Last 1).Split("`"")[3]
           $exe = ($response | Where-Object { $_ -like "*x64.exe`"" } | Select-Object -Last 1).Split("`"")[3]
+          $exeARM = ($response | Where-Object { $_ -like "*ARM64.exe`"" } | Select-Object -Last 1).Split("`"")[3]
           
           $pattern = '(?s)(?<=<!--HASH-->).*?(?=<!--ENDHASH-->)'
           $hash = (($response | select-string '"body"').Line | Select-String -Pattern $pattern | ForEach-Object { $_.Matches.Value.Trim() }).Split("\r\n")
           $ziphash = ($hash | select-string "x64-ZIP").Line.Split('|')[1]
+          $zipARMhash = ($hash | select-string "ARM64-ZIP").Line.Split('|')[1]
           $exehash = ($hash | select-string "x64-EXE").Line.Split('|')[1]
+          $exeARMhash = ($hash | select-string "ARM64-EXE").Line.Split('|')[1]
           
           # chocolatey
           echo $ver $zip $ziphash
@@ -42,24 +46,24 @@ jobs:
 
           # winget
           $wingetPackage = "lin-ycv.EverythingPowerToys"
-          echo $wingetPackage $ver $exe $exehash
+          echo $wingetPackage $ver $exe $exehash $exeARM $exeARMhash
           rm -Path .\* -Recurse -Force
           git clone -b winget https://github.com/lin-ycv/EverythingPowerToys.git --depth 1
           Invoke-WebRequest https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
           cd .\EverythingPowerToys
           rm .git -Recurse -Force -Confirm:$false
-          Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $ver} | ForEach  {$_ -Replace '_URL_', $exe} | ForEach  {$_ -Replace '_CRC_', $exehash} |  Set-Content $_ }
+          Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $ver} | ForEach  {$_ -Replace '_URL_', $exe} | ForEach  {$_ -Replace '_CRC_', $exehash} | ForEach  {$_ -Replace '_armURL_', $exeARM} | ForEach  {$_ -Replace '_armCRC_', $exeARMhash} |  Set-Content $_ }
           ..\wingetcreate submit -p "New version: lin-ycv.EverythingPowerToys version $ver" -t ${{ secrets.EVERYTHINGPT }} .
 
-          # scoop # takes too long to get approvaed, impractical to implement
-          # cd ..
-          # rm -Path .\* -Recurse -Force
-          # git clone -b EverythingPowerToys https://github.com/lin-ycv/ScoopExtras.git --depth 1
-          # cd .\bucket
-          # rm EverythingPowerToys.json -Force
-          # Invoke-WebRequest https://github.com/lin-ycv/EverythingPowerToys/raw/scoop/EverythingPowerToys.json -OutFile EverythingPowerToys.json
-          # (Get-Content EverythingPowerToys.json) | ForEach-Object {$_ -Replace '_VERSION_', $ver} | ForEach-Object {$_ -Replace '_URL_', $zip} | ForEach-Object {$_ -Replace '_CRC_', $ziphash} | Set-Content EverythingPowerToys.json
-          # git add .
-          # git commit -m "EverythingPowerToys@$ver: Update"
-          # git push -f
-          # gh pr create --base main --head EverythingPowerToys --title "EverythingPowerToys@$ver: Update" --body "- [X] I have read the [Contributing Guide](https://github.com/ScoopInstaller/.github/blob/main/.github/CONTRIBUTING.md).`r`n`r`n/verify"
+          # scoop
+          cd ..
+          rm -Path .\* -Recurse -Force
+          git clone -b EverythingPowerToys https://github.com/lin-ycv/ScoopExtras.git --depth 1
+          cd .\ScoopExtras\bucket
+          rm everything-powertoys.json -Force
+          Invoke-WebRequest https://github.com/lin-ycv/EverythingPowerToys/raw/scoop/everything-powertoys.json -OutFile everything-powertoys.json
+          (Get-Content everything-powertoys.json) | ForEach-Object {$_ -Replace '_VERSION_', $ver} | ForEach-Object {$_ -Replace '_URL_', $zip} | ForEach-Object {$_ -Replace '_CRC_', $ziphash} | ForEach-Object {$_ -Replace '_armURL_', $zipARM} | ForEach-Object {$_ -Replace '_armCRC_', $zipARMhash} | Set-Content everything-powertoys.json
+          git add .
+          git commit -m "everything-powertoys@$ver: Update"
+          git push -f
+          gh pr create --base main --head EverythingPowerToys --title "everything-powertoys@$ver: Update" --body "- [X] I have read the [Contributing Guide](https://github.com/ScoopInstaller/.github/blob/main/.github/CONTRIBUTING.md).`r`n`r`n/verify"

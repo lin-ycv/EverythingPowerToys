@@ -222,6 +222,12 @@ Recommend using regex: in query instead of enabling this option</value>
   <data name="run_as_user" xml:space="preserve">
     <value>Run as different user (Ctrl+Shift+U)</value>
   </data>
+  <data name="ShowMore" xml:space="preserve">
+    <value>Show more</value>
+  </data>
+  <data name="ShowMore_Description" xml:space="preserve">
+    <value>Display a result that opens Everything with the current query.</value>
+  </data>
   <data name="Sort" xml:space="preserve">
     <value>Sort</value>
   </data>

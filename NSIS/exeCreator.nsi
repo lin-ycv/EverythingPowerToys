@@ -27,7 +27,7 @@ Name "${EPT}"
 OutFile ".\..\bin\${EPT}-${ver}-${platform}.exe"
 RequestExecutionLevel user
 SetCompressor /SOLID /FINAL lzma
-LicenseData "MIT.txt"
+LicenseData "..\LICENSE"
 
 ;--------------------------------
 
@@ -45,7 +45,7 @@ Section ""
   File /r "${direct}\*"
 
   IfErrors 0 +5
-  SetErrorlevel 2
+  SetErrorlevel 1
   IfSilent +2
   MessageBox MB_ICONEXCLAMATION "Unable to install, PowerToys is probably still running, please close it manually before install."
   Abort

@@ -370,6 +370,24 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show more.
+        /// </summary>
+        public static string ShowMore {
+            get {
+                return ResourceManager.GetString("ShowMore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display a result that opens Everything with the current query..
+        /// </summary>
+        public static string ShowMore_Description {
+            get {
+                return ResourceManager.GetString("ShowMore_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sort.
         /// </summary>
         public static string Sort {

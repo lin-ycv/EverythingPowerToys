@@ -188,6 +188,9 @@
   <data name="run_as_user" xml:space="preserve">
     <value>以不同的使用者身份运行(Ctrl+Shift+U)</value>
   </data>
+  <data name="ShowMore_Description" xml:space="preserve">
+    <value>显示一个使用当前搜寻词打开 Everything 的结果</value>
+  </data>
   <data name="Sort_Description" xml:space="preserve">
     <value>设定结果排序方法</value>
   </data>

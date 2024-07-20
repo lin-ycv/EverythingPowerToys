@@ -87,7 +87,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
             if (setting.Log > LogLevel.None)
                 Debugger.Write($"Results: {resultCount}");
 
-            bool showMore = !string.IsNullOrEmpty(exe) && resultCount == setting.Max;
+            bool showMore = setting.ShowMore && !string.IsNullOrEmpty(exe) && resultCount == setting.Max;
             if (showMore)
             {
                 var more = new Result()

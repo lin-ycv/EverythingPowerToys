@@ -74,6 +74,13 @@ namespace Community.PowerToys.Run.Plugin.Everything
             },
             new()
             {
+                Key = nameof(Settings.EnvVar),
+                DisplayLabel = Resources.EnvVar,
+                DisplayDescription = Resources.EnvVar_Description,
+                Value = _setting.EnvVar,
+            },
+            new()
+            {
                 Key = nameof(Settings.MatchPath),
                 DisplayLabel = Resources.Match_path,
                 DisplayDescription = Resources.Match_path_Description,
@@ -102,10 +109,10 @@ namespace Community.PowerToys.Run.Plugin.Everything
             },
             new()
             {
-                Key = nameof(Settings.EnvVar),
-                DisplayLabel = Resources.EnvVar,
-                DisplayDescription = Resources.EnvVar_Description,
-                Value = _setting.EnvVar,
+                Key = nameof(Settings.ShowMore),
+                DisplayLabel = Resources.ShowMore,
+                DisplayDescription = Resources.ShowMore_Description,
+                Value = _setting.ShowMore,
             },
             new()
             {
@@ -153,6 +160,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 _setting.Log = (LogLevel)settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Log)).ComboBoxValue;
                 _setting.Prefix = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Prefix)).TextValue;
                 _setting.EverythingPath = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.EverythingPath)).TextValue;
+                _setting.ShowMore = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.ShowMore)).Value;
 
                 _everything?.UpdateSettings(_setting);
                 _contextMenuLoader?.Update(_setting);

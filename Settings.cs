@@ -23,6 +23,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         public LogLevel Log { get; set; } = LogLevel.None;
         public string Prefix { get; set; }
         public string EverythingPath { get; set; }
+        public bool ShowMore { get; set; } = true;
 
         // Get Filters from settings.toml
         public Dictionary<string, string> Filters { get; } = [];
