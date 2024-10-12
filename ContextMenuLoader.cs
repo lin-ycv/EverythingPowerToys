@@ -1,7 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Security.AccessControl;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -21,10 +25,14 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         private bool _swapCopy;
         private string _options = options;
+        private string _customProgram;
+        private string _customArg;
         internal void Update(Settings s)
         {
             _swapCopy = s.Copy;
             _options = s.Context;
+            _customProgram = s.CustomProgram;
+            _customArg = s.CustomArg;
         }
 
         public List<ContextMenuResult> LoadContextMenus(Result selectedResult)
@@ -209,6 +217,35 @@ namespace Community.PowerToys.Run.Plugin.Everything
                                     catch (Exception e)
                                     {
                                         Log.Exception($"Failed to open {record.Path} in console, {e.Message}", e, GetType());
+                                        return false;
+                                    }
+                                },
+                            });
+                            break;
+                        case '6':
+                            // Pass to custom program as parameter
+                            contextMenus.Add(new ContextMenuResult
+                            {
+                                PluginName = Assembly.GetExecutingAssembly().GetName().Name,
+                                Title = Resources.open_in_custom,
+                                Glyph = "\xE8A7",
+                                FontFamily = "Segoe MDL2 Assets",
+                                AcceleratorKey = Key.N,
+                                AcceleratorModifiers = ModifierKeys.Control,
+
+                                Action = (context) =>
+                                {
+                                    using var process = new Process();
+                                    process.StartInfo.FileName = _customProgram;
+                                    process.StartInfo.Arguments = $"\"{_customArg.Replace("$P", record.Path)}\"";
+                                    try
+                                    {
+                                        process.Start();
+                                        return true;
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Log.Exception($"Failed to execute {_customProgram} with arguments {_customArg}", e, GetType());
                                         return false;
                                     }
                                 },

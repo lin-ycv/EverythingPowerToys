@@ -133,12 +133,6 @@
   <data name="copy_path" xml:space="preserve">
     <value>Kopiuj ścieżkę </value>
   </data>
-  <data name="copy_shortcut" xml:space="preserve">
-    <value>(Ctrl+C)</value>
-  </data>
-  <data name="copy_shortcutAlt" xml:space="preserve">
-    <value>(Ctrl+Alt+C)</value>
-  </data>
   <data name="EnvVar" xml:space="preserve">
     <value>Zmienne środowiskowe</value>
   </data>
@@ -175,9 +169,6 @@
   <data name="plugin_description" xml:space="preserve">
     <value>Pokazuj wyniki wyszukiwania z Everything</value>
   </data>
-  <data name="plugin_name" xml:space="preserve">
-    <value>Everything</value>
-  </data>
   <data name="Preview" xml:space="preserve">
     <value>Podgląd</value>
   </data>
@@ -189,9 +180,6 @@
   </data>
   <data name="QueryText_Description" xml:space="preserve">
     <value>Wybrany wynik może zmienić zapytanie. Pomaga wyświetlić dodatkowe informacje, ale może zmienić wyświetlane wyniki.</value>
-  </data>
-  <data name="RegEx" xml:space="preserve">
-    <value>RegEx</value>
   </data>
   <data name="RegEx_Description" xml:space="preserve">
     <value>Włącz wyrażenia regularne w wyszukiwaniu.</value>

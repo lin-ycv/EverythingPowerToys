@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if DEBUG
+using System;
 using System.IO;
 namespace Community.PowerToys.Run.Plugin.Everything
 {
@@ -12,3 +13,4 @@ namespace Community.PowerToys.Run.Plugin.Everything
         }
     }
 }
+#endif

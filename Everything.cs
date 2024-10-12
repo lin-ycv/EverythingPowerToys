@@ -33,12 +33,13 @@ namespace Community.PowerToys.Run.Plugin.Everything
             else if (string.IsNullOrEmpty(exe))
             {
                 exe = Path.Exists("C:\\Program Files\\Everything 1.5a\\Everything64.exe") ? "C:\\Program Files\\Everything 1.5a\\Everything64.exe" :
-                    (Path.Exists("C:\\Program Files\\Everything\\Everything64.exe") ? "C:\\Program Files\\Everything\\Everything64.exe" : string.Empty);
+                    (Path.Exists("C:\\Program Files\\Everything\\Everything.exe") ? "C:\\Program Files\\Everything\\Everything.exe" : string.Empty);
             }
         }
 
         internal IEnumerable<Result> Query(string query, Settings setting)
         {
+#if DEBUG
             if (setting.Log > LogLevel.None)
             {
                 Debugger.Write($"\r\n\r\nNew Query: {query}\r\n" +
@@ -48,6 +49,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     $"Match Path {setting.MatchPath}_{Everything_GetMatchPath()} | " +
                     $"Regex {setting.RegEx}_{Everything_GetRegex()}");
             }
+#endif
 
             if (!string.IsNullOrEmpty(setting.Prefix))
                 query = setting.Prefix + query;
@@ -57,8 +59,10 @@ namespace Community.PowerToys.Run.Plugin.Everything
             if (setting.EnvVar && orgqry.Contains('%'))
             {
                 query = Environment.ExpandEnvironmentVariables(query).Replace(';', '|');
+#if DEBUG
                 if (setting.Log > LogLevel.None)
                     Debugger.Write($"EnvVariable\r\n{query}");
+#endif
             }
 
             if (orgqry.Contains(':'))
@@ -68,8 +72,10 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     if (query.Contains(kv.Key, StringComparison.OrdinalIgnoreCase))
                     {
                         query = query.Replace(kv.Key, kv.Value);
+#if DEBUG
                         if (setting.Log > LogLevel.None)
                             Debugger.Write($"Contains Filter: {kv.Key}\r\n{query}");
+#endif
                     }
                 }
             }
@@ -77,15 +83,18 @@ namespace Community.PowerToys.Run.Plugin.Everything
             Everything_SetSearchW(query);
             if (!Everything_QueryW(true))
             {
+#if DEBUG
                 if (setting.Log > LogLevel.None)
                     Debugger.Write("\r\nUnable to Query\r\n");
-
+#endif
                 throw new Win32Exception("Unable to Query");
             }
 
             uint resultCount = Everything_GetNumResults();
+#if DEBUG
             if (setting.Log > LogLevel.None)
                 Debugger.Write($"Results: {resultCount}");
+#endif
 
             bool showMore = setting.ShowMore && !string.IsNullOrEmpty(exe) && resultCount == setting.Max;
             if (showMore)
@@ -119,23 +128,25 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
             for (uint i = 0; i < resultCount; i++)
             {
+#if DEBUG
                 if (setting.Log > LogLevel.None)
                     Debugger.Write($"\r\n===== RESULT #{i} =====");
-
+#endif
                 string name = Marshal.PtrToStringUni(Everything_GetResultFileNameW(i));
                 string path = Marshal.PtrToStringUni(Everything_GetResultPathW(i));
                 string fullPath = Path.Combine(path, name);
-
+#if DEBUG
                 if (setting.Log > LogLevel.None)
                     Debugger.Write($"{fullPath.Length} {(setting.Log == LogLevel.Verbose ? fullPath : string.Empty)}");
-
+#endif
                 bool isFolder = Everything_IsFolderResult(i);
                 if (isFolder)
                     path = fullPath;
                 string ext = Path.GetExtension(fullPath.Replace(".lnk", string.Empty));
+#if DEBUG
                 if (setting.Log > LogLevel.None)
                     Debugger.Write($"Folder: {isFolder}\r\nFile Path {(setting.Log == LogLevel.Verbose ? path : path.Length)}\r\nFile Name {(setting.Log == LogLevel.Verbose ? name : name.Length)}\r\nExt: {ext}");
-
+#endif
                 var r = new Result()
                 {
                     Title = name,

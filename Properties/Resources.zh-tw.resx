@@ -122,7 +122,7 @@
   </data>
   <data name="Context_Description" xml:space="preserve">
     <value>配置選單選項與順序
-0_開啟資料夾、1_以管理員身分執行、2_以其他使用者身分執行、3_複製、4_複製路徑、5_在命令提示字元中開啟</value>
+0_開啟資料夾、1_以管理員身分執行、2_以其他使用者身分執行、3_複製、4_複製路徑、5_在命令提示字元中開啟、6_在指定軟體中開啟</value>
   </data>
   <data name="copy_file" xml:space="preserve">
     <value>複製</value>
@@ -134,7 +134,7 @@
     <value>搜尋時可用環境變數，但會增加搜尋時間</value>
   </data>
   <data name="EverythingPath_Description" xml:space="preserve">
-    <value>若Everything安裝位置非預設的Program Files，請提供Everything64.exe的位置</value>
+    <value>若Everything安裝位置非預設的Program Files，請提供Everything.exe的位置</value>
   </data>
   <data name="Everything_ini" xml:space="preserve">
     <value>是否有安裝 Everything?</value>
@@ -166,9 +166,6 @@
   <data name="plugin_description" xml:space="preserve">
     <value>利用 Everything 搜尋電腦上的檔案</value>
   </data>
-  <data name="plugin_name" xml:space="preserve">
-    <value>Everything 搜尋</value>
-  </data>
   <data name="Prefix_Description" xml:space="preserve">
     <value>為收尋詞增加固定的前綴，在收詢時不用再自行打修飾詞/篩選詞
 前綴與收尋詞之間不會自動加入空格</value>
@@ -189,8 +186,8 @@
   <data name="run_as_user" xml:space="preserve">
     <value>以其他使用者身分執行 (Ctrl+Shift+U)</value>
   </data>
-  <data name="ShowMore_Descripton" xml:space="preserve">
-    <value>顯示一個以用目前搜尋詞打開 Everything的結果</value>
+  <data name="ShowMore_Description" xml:space="preserve">
+    <value>在Everything裡顯示剩餘的收尋結果</value>
   </data>
   <data name="Sort_Description" xml:space="preserve">
     <value>設定結果排序方法</value>
@@ -198,14 +195,23 @@
   <data name="SwapCopy_Description" xml:space="preserve">
     <value>使用 Ctrl+C 複製檔案，Ctrl+Alt+C 複製路徑</value>
   </data>
-  <data name="Updates" xml:space="preserve">
-    <value>啟用時檢查是否有更新</value>
-  </data>
-  <data name="UpdatesAvailable" xml:space="preserve">
+  <data name="UpdateAvailable" xml:space="preserve">
     <value>更新EverythingPowerToys?
 按 '否' 不再通知這版的更新
 
 安裝版本：{0}
 最新版本：{1}</value>
+  </data>
+  <data name="Updates" xml:space="preserve">
+    <value>啟用時檢查是否有更新</value>
+  </data>
+  <data name="CustomProgram_Description" xml:space="preserve">
+    <value>要使用的指定軟體路徑</value>
+  </data>
+  <data name="CustomArg_Description" xml:space="preserve">
+    <value>執行參數 [$P=收尋結果路徑]</value>
+  </data>
+  <data name="open_in_custom" xml:space="preserve">
+    <value>在指定軟體裡開起 (Ctrl+N)</value>
   </data>
 </root>

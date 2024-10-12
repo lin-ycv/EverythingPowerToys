@@ -120,6 +120,10 @@
   <data name="clipboard_failed" xml:space="preserve">
     <value>无法设置剪贴板中的文本</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Context" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
   <data name="Context_Description" xml:space="preserve">
     <value>配置选单选项与顺序
 0_打开所在文件夹、1_以管理员身分运行、2_以不同的使用者身分运行、3_复制、4_复制路径、5_在控制台中开启</value>
@@ -134,7 +138,7 @@
     <value>搜索时可以使用环境变量，但会增加搜索时间</value>
   </data>
   <data name="EverythingPath_Description" xml:space="preserve">
-    <value>若Everything安装位置非预设的Program Files，请提供Everything64exe的位置</value>
+    <value>若Everything安装位置非预设的Program Files，请提供Everything.exe的位置</value>
   </data>
   <data name="Everything_ini" xml:space="preserve">
     <value>是否安装了 Everything?</value>
@@ -166,9 +170,6 @@
   <data name="plugin_description" xml:space="preserve">
     <value>利用 Everything 搜索磁盘文件</value>
   </data>
-  <data name="plugin_name" xml:space="preserve">
-    <value>Everything</value>
-  </data>
   <data name="Prefix_Description" xml:space="preserve">
     <value>为搜索词添加固定的前缀，搜索时无需再手动输入修饰词/筛选词
 前缀与搜索词之间不会自动加入空格</value>
@@ -197,14 +198,14 @@
   <data name="SwapCopy_Description" xml:space="preserve">
     <value>使用 Ctrl+C 复制档案，Ctrl+Alt+C 复制路径</value>
   </data>
-  <data name="Updates" xml:space="preserve">
-    <value>检查是否有更新</value>
-  </data>
-  <data name="UpdatesAvailable" xml:space="preserve">
+  <data name="UpdateAvailable" xml:space="preserve">
     <value>更新EverythingPowerToys吗？
 点击 '否' 将不再收到有关此版本更新的通知
 
 安装版本：{0}
 最新版本：{1}</value>
+  </data>
+  <data name="Updates" xml:space="preserve">
+    <value>检查是否有更新</value>
   </data>
 </root>

@@ -80,7 +80,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Configure context menu options and order.
-        ///0_Open folder, 1_Run as Admin, 2_Run as User, 3_Copy, 4_Copy Path, 5_Open in Console.
+        ///0_Open folder, 1_Run as Admin, 2_Run as User, 3_Copy, 4_Copy Path, 5_Open in Console, 6_Open in custom program.
         /// </summary>
         public static string Context_Description {
             get {
@@ -121,6 +121,42 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         public static string copy_shortcutAlt {
             get {
                 return ResourceManager.GetString("copy_shortcutAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launch argument.
+        /// </summary>
+        public static string CustomArg {
+            get {
+                return ResourceManager.GetString("CustomArg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Argument to pass to the program when launching. [$P=path of the selected result ].
+        /// </summary>
+        public static string CustomArg_Description {
+            get {
+                return ResourceManager.GetString("CustomArg_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom Program.
+        /// </summary>
+        public static string CustomProgram {
+            get {
+                return ResourceManager.GetString("CustomProgram", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path to a external program that&apos;ll open the selected result.
+        /// </summary>
+        public static string CustomProgram_Description {
+            get {
+                return ResourceManager.GetString("CustomProgram_Description", resourceCulture);
             }
         }
         
@@ -170,7 +206,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Location of Everything64.exe if it&apos;s not installed in &quot;Program Files&quot;.
+        ///   Looks up a localized string similar to Location of Everything.exe if it&apos;s not installed in &quot;Program Files&quot;.
         /// </summary>
         public static string EverythingPath_Description {
             get {
@@ -256,6 +292,15 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         public static string open_in_console {
             get {
                 return ResourceManager.GetString("open_in_console", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open path in custom program (Ctrl+N).
+        /// </summary>
+        public static string open_in_custom {
+            get {
+                return ResourceManager.GetString("open_in_custom", resourceCulture);
             }
         }
         

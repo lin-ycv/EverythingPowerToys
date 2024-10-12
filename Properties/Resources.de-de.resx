@@ -156,9 +156,6 @@
   <data name="plugin_description" xml:space="preserve">
     <value>Everything-Suchergebnisse anzeigen</value>
   </data>
-  <data name="plugin_name" xml:space="preserve">
-    <value>Everything</value>
-  </data>
   <data name="Preview" xml:space="preserve">
     <value>Vorschau</value>
   </data>
@@ -170,9 +167,6 @@
   </data>
   <data name="QueryText_Description" xml:space="preserve">
     <value>Ausgewählte Ergebnisse können den Abfragetext aktualisieren. Hilft bei der Anzeige zusätzlicher Informationen, kann aber die Anzeigeergebnisse verändern.</value>
-  </data>
-  <data name="RegEx" xml:space="preserve">
-    <value>RegEx</value>
   </data>
   <data name="RegEx_Description" xml:space="preserve">
     <value>Aktiviert reguläre Ausdrücke in der Suche.</value>

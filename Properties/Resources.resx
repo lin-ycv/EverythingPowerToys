@@ -125,7 +125,7 @@
   </data>
   <data name="Context_Description" xml:space="preserve">
     <value>Configure context menu options and order.
-0_Open folder, 1_Run as Admin, 2_Run as User, 3_Copy, 4_Copy Path, 5_Open in Console</value>
+0_Open folder, 1_Run as Admin, 2_Run as User, 3_Copy, 4_Copy Path, 5_Open in Console, 6_Open in custom program</value>
   </data>
   <data name="copy_file" xml:space="preserve">
     <value>Copy </value>
@@ -149,7 +149,7 @@
     <value>Everything64.exe</value>
   </data>
   <data name="EverythingPath_Description" xml:space="preserve">
-    <value>Location of Everything64.exe if it's not installed in "Program Files"</value>
+    <value>Location of Everything.exe if it's not installed in "Program Files"</value>
   </data>
   <data name="Everything_ini" xml:space="preserve">
     <value>Install Everything if not installed</value>
@@ -249,5 +249,20 @@ Latest:		{1}</value>
   </data>
   <data name="Updates" xml:space="preserve">
     <value>Check for updates</value>
+  </data>
+  <data name="CustomProgram" xml:space="preserve">
+    <value>Custom Program</value>
+  </data>
+  <data name="CustomProgram_Description" xml:space="preserve">
+    <value>Path to a external program that'll open the selected result</value>
+  </data>
+  <data name="CustomArg" xml:space="preserve">
+    <value>Launch argument</value>
+  </data>
+  <data name="CustomArg_Description" xml:space="preserve">
+    <value>Argument to pass to the program when launching. [$P=path of the selected result ]</value>
+  </data>
+  <data name="open_in_custom" xml:space="preserve">
+    <value>Open path in custom program (Ctrl+N)</value>
   </data>
 </root>

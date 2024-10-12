@@ -126,12 +126,6 @@
   <data name="copy_path" xml:space="preserve">
     <value>Copier le chemin </value>
   </data>
-  <data name="copy_shortcut" xml:space="preserve">
-    <value>(Ctrl+C)</value>
-  </data>
-  <data name="copy_shortcutAlt" xml:space="preserve">
-    <value>(Ctrl+Alt+C)</value>
-  </data>
   <data name="Everything_ini" xml:space="preserve">
     <value>Installer Everything s'il n'est pas installé</value>
   </data>
@@ -156,9 +150,6 @@
   <data name="plugin_description" xml:space="preserve">
     <value>Afficher les résultats de recherche Everything</value>
   </data>
-  <data name="plugin_name" xml:space="preserve">
-    <value>Everything</value>
-  </data>
   <data name="Preview" xml:space="preserve">
     <value>Aperçu</value>
   </data>
@@ -170,9 +161,6 @@
   </data>
   <data name="QueryText_Description" xml:space="preserve">
     <value>Les résultats sélectionnés peuvent mettre à jour le texte de la requête. Aide à afficher des informations supplémentaires, mais peut modifier les résultats de l'affichage. Permet d'afficher des informations supplémentaires, mais peut modifier les résultats de l'affichage.</value>
-  </data>
-  <data name="RegEx" xml:space="preserve">
-    <value>RegEx</value>
   </data>
   <data name="RegEx_Description" xml:space="preserve">
     <value>Active les expressions régulières dans la recherche.</value>

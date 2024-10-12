@@ -67,6 +67,22 @@ namespace Community.PowerToys.Run.Plugin.Everything
             },
             new()
             {
+                Key = nameof(Settings.CustomProgram),
+                DisplayLabel = Resources.CustomProgram,
+                DisplayDescription = Resources.CustomProgram_Description,
+                PluginOptionType = PluginAdditionalOption.AdditionalOptionType.Textbox,
+                TextValue = _setting.CustomProgram,
+            },
+            new()
+            {
+                Key = nameof(Settings.CustomArg),
+                DisplayLabel = Resources.CustomArg,
+                DisplayDescription = Resources.CustomArg_Description,
+                PluginOptionType = PluginAdditionalOption.AdditionalOptionType.Textbox,
+                TextValue = _setting.CustomArg,
+            },
+            new()
+            {
                 Key = nameof(Settings.Copy),
                 DisplayLabel = Resources.SwapCopy,
                 DisplayDescription = Resources.SwapCopy_Description,
@@ -121,6 +137,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 DisplayDescription = $"v{Assembly.GetExecutingAssembly().GetName().Version}",
                 Value = _setting.Updates,
             },
+#if DEBUG
             new()
             {
                 Key = nameof(Settings.Log),
@@ -129,6 +146,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 ComboBoxItems = Enum.GetValues(typeof(LogLevel)).Cast<int>().Select(d => new KeyValuePair<string, string>(((LogLevel)d).ToString(), d + string.Empty)).ToList(),
                 ComboBoxValue = (int)_setting.Log,
             },
+#endif
         ];
 
         public void Init(PluginInitContext context)
@@ -139,8 +157,10 @@ namespace Community.PowerToys.Run.Plugin.Everything
             _everything = new Everything(_setting);
             _contextMenuLoader = new ContextMenuLoader(context, _setting.Context);
             _contextMenuLoader.Update(_setting);
+#if DEBUG
             if (_setting.Log > LogLevel.None)
                 Debugger.Write("Init Complete\r\n");
+#endif
         }
 
         public void UpdateSettings(PowerLauncherPluginSettings settings)
@@ -157,10 +177,14 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 _setting.QueryText = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.QueryText)).Value;
                 _setting.EnvVar = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.EnvVar)).Value;
                 _setting.Updates = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Updates)).Value;
-                _setting.Log = (LogLevel)settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Log)).ComboBoxValue;
                 _setting.Prefix = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Prefix)).TextValue;
                 _setting.EverythingPath = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.EverythingPath)).TextValue;
+                _setting.CustomProgram = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.CustomProgram)).TextValue;
+                _setting.CustomArg = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.CustomArg)).TextValue;
                 _setting.ShowMore = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.ShowMore)).Value;
+#if DEBUG
+                _setting.Log = (LogLevel)settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Log)).ComboBoxValue;
+#endif
 
                 _everything?.UpdateSettings(_setting);
                 _contextMenuLoader?.Update(_setting);
@@ -196,10 +220,12 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 }
                 catch (Exception e)
                 {
+#if DEBUG
                     if (_setting.Log > LogLevel.None)
                         Debugger.Write($"Everything Exception: {e.Message}\r\n{e.StackTrace}\r\n");
+#endif
 
-                    Log.Exception("Everything Exception", e, GetType());
+                    Log.Exception("Everything Exception: {e.Message}\r\n{e.StackTrace}\r\n", e, GetType());
                 }
             }
 
