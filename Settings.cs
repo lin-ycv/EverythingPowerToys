@@ -46,7 +46,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 if (Log > LogLevel.None)
                     Debugger.Write($"\r\nERROR: {e.Message}\r\n");
 #endif
-                Log.Error($"Error reading settings.toml: {e.Message}", GetType());
+                Wox.Plugin.Logger.Log.Error($"Error reading settings.toml: {e.Message}", GetType());
                 return;
             }
 

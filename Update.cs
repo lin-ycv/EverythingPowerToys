@@ -88,8 +88,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
             {
                 if (s.Log > LogLevel.None)
                     Debugger.Write($"\r\nERROR: {e.Message}\r\n{e.StackTrace}\r\n");
-            
             }
+
             if (s.Log > LogLevel.None)
                 Debugger.Write("  Checking Update...Done");
 #endif
