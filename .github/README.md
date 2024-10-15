@@ -1,6 +1,6 @@
 <div align="center">
 
-# Everything for PowerToys Run
+# ![](https://rawcdn.githack.com/lin-ycv/EverythingPowerToys/69b10312bfb596089d1f54c9977b8cceca549221/Images/Everything.light.png?min=1) Everything for PowerToys Run
 
 [![GitHub repo size](https://img.shields.io/github/repo-size/lin-ycv/everythingpowertoys?style=flat-square)](#)
 [![GitHub release (release name instead of tag name)](https://img.shields.io/github/v/release/lin-ycv/everythingpowertoys?style=flat-square)](https://github.com/lin-ycv/EverythingPowerToys/releases/latest)
@@ -12,26 +12,32 @@
 
 </div>
 
-This plugin adds Everything search results to PowerToys Run.<br>
-This repo is to be used with the [PowerToys repo](https://github.com/microsoft/PowerToys), this will not compile when used standalone, as it's missing references from PowerToys.<br>
-Dev instructions are in the [wiki](/wiki).
+EverythingPowerToys (EPT) is a plugin for the program [PowerToys Run (PTR)](https://learn.microsoft.com/en-us/windows/powertoys/run)<br>
+This adds the ability to search the computer for files and folders using [Everything](https://www.voidtools.com/) inside PTR
 
 #### Install instructions
 There are 5 different methods of installation, chose the one you prefer:
-1) WinGet : `winget install lin-ycv.EverythingPowerToys`
-2) Chocolatey : `choco install everythingpowertoys`
-3) Scoop : `scoop bucket add extras | scoop install extras/everything-powertoys`
-4) Self-Extraction Installer (EXE) : [Download from release page](https://github.com/lin-ycv/EverythingPowerToys/releases/latest)
-5) Manual Installation (ZIP) : [Download from release page](https://github.com/lin-ycv/EverythingPowerToys/releases/latest)
+1) WinGet
+2) Chocolatey
+3) Scoop
+4) Self-Extraction Installer (EXE)
+5) Manual Installation (ZIP)
 
-Detailed explanations and instructions are on the [release page](https://github.com/lin-ycv/EverythingPowerToys/releases/latest)
+Detailed explanations and instructions are on the [wiki page](https://github.com/lin-ycv/EverythingPowerToys/wiki)
+
+#### Plugin Features
+For an explanation of all the features and settings of this plugin, please visit the [features page](https://github.com/lin-ycv/EverythingPowerToys/wiki/Features)
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/linycv)
 
-#### Requirements
-* [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/)
-* [Everything](https://www.voidtools.com/) (non-lite version) needs to be installed separately and **running**.
-  * *if you are on 1.5 alpha, you need to [Disable alpha Instance](https://github.com/lin-ycv/EverythingPowerToys/issues/74#issuecomment-1892511067)*
+## Support and Feedback
 
+You can report bugs via [GitHub Issues](https://github.com/lin-ycv/EverythingPowerToys/issues). Alternatively, if you're familiar with coding, you can address the bug yourself and submit a [Pull Request](https://github.com/lin-ycv/EverythingPowerToys/pulls) with the fix.
+
+For support or feedback, please utilize [GitHub Discussions](https://github.com/lin-ycv/EverythingPowerToys/discussions).
+
+## Developers and Contributors
+
+If you want to contribute to this project, visit the [developer page](https://github.com/lin-ycv/EverythingPowerToys/wiki/Developer) to get started.
 
 [![Stargazers over time](https://starchart.cc/lin-ycv/EverythingPowerToys.svg?variant=adaptive&axis=%23797979)](https://starchart.cc/lin-ycv/EverythingPowerToys)
