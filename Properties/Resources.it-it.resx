@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="clipboard_failed" xml:space="preserve">
+    <value>Impossibile copiare il testo negli appunti</value>
+  </data>
+  <data name="Context" xml:space="preserve">
+    <value>Menu contestuale</value>
+  </data>
+  <data name="Context_Description" xml:space="preserve">
+    <value>Configura le opzioni e l'ordine del menu contestuale.
+0_Apri cartella, 1_Esegui come Amministratore, 2_Esegui come Utente, 3_Copia, 4_Copia Percorso, 5_Apri nella Console, 6_Apri con programma esterno</value>
+  </data>
+  <data name="copy_file" xml:space="preserve">
+    <value>Copia </value>
+  </data>
+  <data name="copy_path" xml:space="preserve">
+    <value>Copia percorso </value>
+  </data>
+  <data name="EnvVar" xml:space="preserve">
+    <value>Variabili di ambiente</value>
+  </data>
+  <data name="EnvVar_Description" xml:space="preserve">
+    <value>Espandi le variabili d'ambiente (es. %appdata%) in modo che funzionino correttamente, a costo di un tempo di ricerca maggiore.</value>
+  </data>
+  <data name="EverythingPath_Description" xml:space="preserve">
+    <value>Il percorso di Everything.exe se non è installato in "Programmi".</value>
+  </data>
+  <data name="Everything_ini" xml:space="preserve">
+    <value>Installa Everything se non è installato</value>
+  </data>
+  <data name="Everything_not_running" xml:space="preserve">
+    <value>Everything non è in esecuzione</value>
+  </data>
+  <data name="folder_open_failed" xml:space="preserve">
+    <value>Impossibile aprire la cartella:</value>
+  </data>
+  <data name="Match_path" xml:space="preserve">
+    <value>Ricerca percorso</value>
+  </data>
+  <data name="Match_path_Description" xml:space="preserve">
+    <value>Cerca corrispondenze nei percorsi oltre che nei nomi di file e cartelle.</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Numero risultati</value>
+  </data>
+  <data name="Max_Description" xml:space="preserve">
+    <value>Il numero massimo di elementi da mostrare nell'elenco dei risultati.</value>
+  </data> 
+  <data name="more_results" xml:space="preserve">
+    <value>Vedi altro...</value>
+  </data>
+  <data name="more_results_Subtitle" xml:space="preserve">
+    <value>Apri Everything e mostra tutti i risultati</value>
+  </data>
+  <data name="open_containing_folder" xml:space="preserve">
+    <value>Apri cartella corrispondente (Ctrl+Maiusc+E)</value>
+  </data>
+  <data name="open_in_console" xml:space="preserve">
+    <value>Apri percorso nella console (Ctrl+Maiusc+C)</value>
+  </data>
+  <data name="plugin_description" xml:space="preserve">
+    <value>Ottieni risultati di ricerca da Everything</value>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>Prefisso query</value>
+  </data>
+  <data name="Prefix_Description" xml:space="preserve">
+    <value>Aggiungi un prefisso a tutte le query, in modo da aggiungere filtri e/o modificatori senza doverli digitare ogni volta.
+Lo spazio non viene aggiunto automaticamente tra prefisso e query.</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Anteprima</value>
+  </data>
+  <data name="Preview_Description" xml:space="preserve">
+    <value>Mostra l'anteprima del file come icona, potrebbe causare blocchi se il file non è salvato in locale.</value>
+  </data>
+  <data name="QueryText" xml:space="preserve">
+    <value>Testo query</value>
+  </data>
+  <data name="QueryText_Description" xml:space="preserve">
+    <value>Il risultato selezionato aggiorna il testo della query. Permette di visualizzare ulteriori informazioni, ma potrebbe cambiare i risultati mostrati.</value>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>Espressioni regolari</value>
+  </data>
+  <data name="RegEx_Description" xml:space="preserve">
+    <value>Permette l'utilizzo di espressioni regolari nella ricerca.
+Si consiglia di utilizzare 'regex:' nella query invece di abilitare questa opzione.</value>
+  </data>
+  <data name="run_as_admin" xml:space="preserve">
+    <value>Esegui come amministratore (Ctrl+Maiusc+Invio)</value>
+  </data>
+  <data name="run_as_user" xml:space="preserve">
+    <value>Esegui come altro utente (Ctrl+Maiusc+U)</value>
+  </data>
+  <data name="ShowMore" xml:space="preserve">
+    <value>Vedi altro</value>
+  </data>
+  <data name="ShowMore_Description" xml:space="preserve">
+    <value>Mostra un risultato che permette di aprire Everything con la query corrente.</value>
+  </data>
+  <data name="Sort" xml:space="preserve">
+    <value>Ordina</value>
+  </data>
+  <data name="Sort_Description" xml:space="preserve">
+    <value>Stabilisce il metodo di ordinamento dei risultati.</value>
+  </data>
+  <data name="SwapCopy" xml:space="preserve">
+    <value>Inverti scorciatoie Copia</value>
+  </data>
+  <data name="SwapCopy_Description" xml:space="preserve">
+    <value>Usa Ctrl+C per copiare il file o la cartella, Ctrl+Alt+C per copiare il percorso.</value>
+  </data>
+  <data name="UpdateAvailable" xml:space="preserve">
+    <value>Vuoi installare una nuova versione di EverythingPowerToys?
+Scegliendo 'No' disabiliterai ulteriori avvisi per questa versione.
+
+Installata:		{0}
+Ultima:		{1}</value>
+  </data>
+  <data name="Updates" xml:space="preserve">
+    <value>Controlla aggiornamenti</value>
+  </data>
+  <data name="CustomProgram" xml:space="preserve">
+    <value>Programma esterno</value>
+  </data>
+  <data name="CustomProgram_Description" xml:space="preserve">
+    <value>Il percorso del programma esterno che aprirà il risultato selezionato</value>
+  </data>
+  <data name="CustomArg" xml:space="preserve">
+    <value>Argomento di avvio</value>
+  </data>
+  <data name="CustomArg_Description" xml:space="preserve">
+    <value>Argomento da passare al programma all'avvio. [$P=percorso del risultato selezionato]</value>
+  </data>
+  <data name="open_in_custom" xml:space="preserve">
+    <value>Apri percorso nel programma esterno (Ctrl+N)</value>
+  </data>
+</root>
