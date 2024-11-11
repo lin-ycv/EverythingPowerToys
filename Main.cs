@@ -153,7 +153,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         {
             if (_setting.Updates)
                 Task.Run(() => new Update().UpdateAsync(Assembly.GetExecutingAssembly().GetName().Version, _setting));
-            _setting.Getfilters();
+            if (Everything_GetMinorVersion() < 5) _setting.Getfilters();
             _everything = new Everything(_setting);
             _contextMenuLoader = new ContextMenuLoader(context, _setting.Context);
             _contextMenuLoader.Update(_setting);
@@ -225,7 +225,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         Debugger.Write($"Everything Exception: {e.Message}\r\n{e.StackTrace}\r\n");
 #endif
 
-                    Log.Exception("Everything Exception: {e.Message}\r\n{e.StackTrace}\r\n", e, GetType());
+                    Log.Exception($"Everything Exception: {e.Message}\r\n{e.StackTrace}\r\n", e, GetType());
                 }
             }
 

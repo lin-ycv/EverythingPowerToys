@@ -1,3 +1,4 @@
+# This file is for Everything 1.4 support, if you're using 1.5a or above, this file fill have no effect
 # Lines starting with # are comments 
 # Search filters, filters result with extension type, seperated by ;
 Audio: = ext:aac;ac3;aif;aifc;aiff;amr;ape;au;cda;dts;fla;flac;it;m1a;m2a;m3u;m4a;m4b;m4p;mid;midi;mka;mod;mp2;mp3;mpa;ogg;opus;ra;rmi;spc;rmi;snd;umx;voc;wav;weba;wma;xm;

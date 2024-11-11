@@ -34,6 +34,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
         public Dictionary<string, string> Filters { get; } = [];
         internal void Getfilters()
         {
+            Log.Info("User on Everything 1.4", GetType());
 #if DEBUG
             if (Log > LogLevel.None)
                 Debugger.Write("2.Getting Filters...");

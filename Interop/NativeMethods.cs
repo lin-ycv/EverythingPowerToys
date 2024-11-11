@@ -114,6 +114,8 @@ namespace Community.PowerToys.Run.Plugin.Everything.Interop
         [DllImport(dllName)]
         internal static extern uint Everything_GetMax();
         [DllImport(dllName)]
+        internal static extern uint Everything_GetMinorVersion();
+        [DllImport(dllName)]
         internal static extern bool Everything_GetRegex();
         [DllImport(dllName, CharSet = CharSet.Unicode)]
         internal static extern IntPtr Everything_GetResultFileNameW(uint nIndex);

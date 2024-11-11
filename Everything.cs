@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Community.PowerToys.Run.Plugin.Everything.Properties;
 using Wox.Plugin;
+using Wox.Plugin.Logger;
 using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
 
 namespace Community.PowerToys.Run.Plugin.Everything
@@ -33,7 +34,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
             else if (string.IsNullOrEmpty(exe))
             {
                 exe = Path.Exists("C:\\Program Files\\Everything 1.5a\\Everything64.exe") ? "C:\\Program Files\\Everything 1.5a\\Everything64.exe" :
-                    (Path.Exists("C:\\Program Files\\Everything\\Everything.exe") ? "C:\\Program Files\\Everything\\Everything.exe" : string.Empty);
+                    (Path.Exists("C:\\Program Files\\Everything\\Everything.exe") ? "C:\\Program Files\\Everything\\Everything.exe" :
+                    (Path.Exists("C:\\Program Files (x86)\\Everything 1.5a\\Everything.exe") ? "C:\\Program Files (x86)\\Everything 1.5a\\Everything.exe" :
+                    (Path.Exists("C:\\Program Files (x86)\\Everything\\Everything.exe") ? "C:\\Program Files (x86)\\Everything\\Everything.exe" : string.Empty)));
             }
         }
 
@@ -65,7 +68,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
 #endif
             }
 
-            if (orgqry.Contains(':'))
+            if (Everything_GetMinorVersion() < 5 && orgqry.Contains(':'))
             {
                 foreach (var kv in setting.Filters)
                 {
@@ -109,7 +112,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         using var process = new Process();
                         process.StartInfo.FileName = exe;
                         process.StartInfo.UseShellExecute = true;
-                        process.StartInfo.Arguments = $@"-s {query}";
+                        process.StartInfo.Arguments = $@"-s ""{query.Replace("\"", "\"\"\"")}""";
                         try
                         {
                             process.Start();
@@ -134,6 +137,11 @@ namespace Community.PowerToys.Run.Plugin.Everything
 #endif
                 string name = Marshal.PtrToStringUni(Everything_GetResultFileNameW(i));
                 string path = Marshal.PtrToStringUni(Everything_GetResultPathW(i));
+                if (name == null || path == null)
+                {
+                    Log.Warn($"Result {i} is null for {name} and/or {path}, query: {query}", GetType());
+                    continue;
+                }
                 string fullPath = Path.Combine(path, name);
 #if DEBUG
                 if (setting.Log > LogLevel.None)
