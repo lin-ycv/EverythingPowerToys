@@ -54,10 +54,10 @@ namespace Community.PowerToys.Run.Plugin.Everything
             }
 #endif
 
+            string orgqry = query;
+
             if (!string.IsNullOrEmpty(setting.Prefix))
                 query = setting.Prefix + query;
-
-            string orgqry = query;
 
             if (setting.EnvVar && orgqry.Contains('%'))
             {
@@ -142,6 +142,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     Log.Warn($"Result {i} is null for {name} and/or {path}, query: {query}", GetType());
                     continue;
                 }
+
                 string fullPath = Path.Combine(path, name);
 #if DEBUG
                 if (setting.Log > LogLevel.None)

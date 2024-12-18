@@ -38,7 +38,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 DisplayLabel = Resources.Sort,
                 DisplayDescription = Resources.Sort_Description,
                 PluginOptionType = PluginAdditionalOption.AdditionalOptionType.Combobox,
-                ComboBoxItems = Enum.GetValues(typeof(Sort)).Cast<int>().Select(v => new KeyValuePair<string, string>(((Sort)v).ToString(), v + string.Empty)).ToList(),
+                ComboBoxItems = Enum.GetValues<Sort>().Cast<int>().Select(v => new KeyValuePair<string, string>(((Sort)v).ToString(), v + string.Empty)).ToList(),
                 ComboBoxValue = (int)_setting.Sort,
             },
             new()

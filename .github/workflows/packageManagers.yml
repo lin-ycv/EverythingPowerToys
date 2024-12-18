@@ -45,15 +45,15 @@ jobs:
           choco push everythingpowertoys.$ver.nupkg --source https://push.chocolatey.org/
 
           # winget
-          $wingetPackage = "lin-ycv.EverythingPowerToys"
-          echo $wingetPackage $ver $exe $exehash $exeARM $exeARMhash
-          rm -Path .\* -Recurse -Force
-          git clone -b winget https://github.com/lin-ycv/EverythingPowerToys.git --depth 1
-          Invoke-WebRequest https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
-          cd .\EverythingPowerToys
-          rm .git -Recurse -Force -Confirm:$false
-          Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $ver} | ForEach  {$_ -Replace '_URL_', $exe} | ForEach  {$_ -Replace '_CRC_', $exehash} | ForEach  {$_ -Replace '_armURL_', $exeARM} | ForEach  {$_ -Replace '_armCRC_', $exeARMhash} |  Set-Content $_ }
-          ..\wingetcreate submit -p "New version: lin-ycv.EverythingPowerToys version $ver" -t ${{ secrets.EVERYTHINGPT }} .
+          # $wingetPackage = "lin-ycv.EverythingPowerToys"
+          # echo $wingetPackage $ver $exe $exehash $exeARM $exeARMhash
+          # rm -Path .\* -Recurse -Force
+          # git clone -b winget https://github.com/lin-ycv/EverythingPowerToys.git --depth 1
+          # Invoke-WebRequest https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
+          # cd .\EverythingPowerToys
+          # rm .git -Recurse -Force -Confirm:$false
+          # Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $ver} | ForEach  {$_ -Replace '_URL_', $exe} | ForEach  {$_ -Replace '_CRC_', $exehash} | ForEach  {$_ -Replace '_armURL_', $exeARM} | ForEach  {$_ -Replace '_armCRC_', $exeARMhash} |  Set-Content $_ }
+          # ..\wingetcreate submit -p "New version: lin-ycv.EverythingPowerToys version $ver" -t ${{ secrets.EVERYTHINGPT }} .
 
           # scoop
           # cd ..
