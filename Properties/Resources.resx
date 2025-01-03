@@ -195,7 +195,7 @@
   </data>
   <data name="Prefix_Description" xml:space="preserve">
     <value>Adds prefix to all queries, so that you can always include certain filters/modifiers without typing it every time.
-Space is not added automatically between prfix and query.</value>
+Space is not added automatically between prefix and query.</value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Preview</value>
