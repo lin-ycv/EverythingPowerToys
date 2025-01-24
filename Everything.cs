@@ -4,7 +4,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Community.PowerToys.Run.Plugin.Everything.Properties;
+using Community.PowerToys.Run.Plugin.Everything.SearchHelper;
+using NLog;
 using Wox.Plugin;
 using Wox.Plugin.Logger;
 using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
@@ -40,19 +43,19 @@ namespace Community.PowerToys.Run.Plugin.Everything
             }
         }
 
-        internal IEnumerable<Result> Query(string query, Settings setting)
+        internal IEnumerable<Result> Query(string query, Settings setting, CancellationToken token)
         {
-#if DEBUG
-            if (setting.Log > LogLevel.None)
+            if (setting.LoggingLevel <= LogLevel.Debug)
             {
-                Debugger.Write($"\r\n\r\nNew Query: {query}\r\n" +
-                    $"Prefix {setting.Prefix} | " +
-                    $"Sort {(int)setting.Sort}_{Everything_GetSort()} | " +
-                    $"Max {setting.Max}_{Everything_GetMax()} | " +
-                    $"Match Path {setting.MatchPath}_{Everything_GetMatchPath()} | " +
-                    $"Regex {setting.RegEx}_{Everything_GetRegex()}");
+                Log.Info(
+                    $"EPT:\nNew Query: {query}\n" +
+                    $"Prefix {setting.Prefix}\n" +
+                    $"Sort {(int)setting.Sort}_{Everything_GetSort()}\n" +
+                    $"Max {setting.Max}_{Everything_GetMax()}\n" +
+                    $"Match Path {setting.MatchPath}_{Everything_GetMatchPath()}\n" +
+                    $"Regex {setting.RegEx}_{Everything_GetRegex()}",
+                    GetType());
             }
-#endif
 
             string orgqry = query;
 
@@ -62,43 +65,37 @@ namespace Community.PowerToys.Run.Plugin.Everything
             if (setting.EnvVar && orgqry.Contains('%'))
             {
                 query = Environment.ExpandEnvironmentVariables(query).Replace(';', '|');
-#if DEBUG
-                if (setting.Log > LogLevel.None)
-                    Debugger.Write($"EnvVariable\r\n{query}");
-#endif
+                if (setting.LoggingLevel <= LogLevel.Debug)
+                    Log.Info($"EPT:EnvVariable\n{query}", GetType());
             }
 
-            if (Everything_GetMinorVersion() < 5 && orgqry.Contains(':'))
+            if (setting.Is1_4 && orgqry.Contains(':'))
             {
                 foreach (var kv in setting.Filters)
                 {
                     if (query.Contains(kv.Key, StringComparison.OrdinalIgnoreCase))
                     {
-                        query = query.Replace(kv.Key, kv.Value);
-#if DEBUG
-                        if (setting.Log > LogLevel.None)
-                            Debugger.Write($"Contains Filter: {kv.Key}\r\n{query}");
-#endif
+                        query = query.Replace(kv.Key, string.Empty).Trim() + $" {kv.Value}";
+                        if (setting.LoggingLevel <= LogLevel.Debug)
+                            Log.Info($"EPT: Contains Filter: {kv.Key}\n{query}", GetType());
                     }
                 }
             }
 
+            token.ThrowIfCancellationRequested();
             Everything_SetSearchW(query);
             if (!Everything_QueryW(true))
             {
-#if DEBUG
-                if (setting.Log > LogLevel.None)
-                    Debugger.Write("\r\nUnable to Query\r\n");
-#endif
+                if (setting.LoggingLevel < LogLevel.Error)
+                    Log.Warn($"EPT: Unable to Query ({Everything_GetLastError()})", GetType());
                 throw new Win32Exception("Unable to Query");
             }
 
             uint resultCount = Everything_GetNumResults();
-#if DEBUG
-            if (setting.Log > LogLevel.None)
-                Debugger.Write($"Results: {resultCount}");
-#endif
+            if (setting.LoggingLevel <= LogLevel.Debug)
+                Log.Info($"EPT: Results = {resultCount}", GetType());
 
+            token.ThrowIfCancellationRequested();
             bool showMore = setting.ShowMore && !string.IsNullOrEmpty(exe) && resultCount == setting.Max;
             if (showMore)
             {
@@ -131,31 +128,32 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
             for (uint i = 0; i < resultCount; i++)
             {
-#if DEBUG
-                if (setting.Log > LogLevel.None)
-                    Debugger.Write($"\r\n===== RESULT #{i} =====");
-#endif
+                token.ThrowIfCancellationRequested();
                 string name = Marshal.PtrToStringUni(Everything_GetResultFileNameW(i));
                 string path = Marshal.PtrToStringUni(Everything_GetResultPathW(i));
-                if (name == null || path == null)
+                if (setting.LoggingLevel < LogLevel.Error && (name == null || path == null))
                 {
-                    Log.Warn($"Result {i} is null for {name} and/or {path}, query: {query}", GetType());
+                    Log.Warn($"EPT: Result {i} is null for {name} and/or {path}, query: {query}", GetType());
                     continue;
                 }
 
                 string fullPath = Path.Combine(path, name);
-#if DEBUG
-                if (setting.Log > LogLevel.None)
-                    Debugger.Write($"{fullPath.Length} {(setting.Log == LogLevel.Verbose ? fullPath : string.Empty)}");
-#endif
+
                 bool isFolder = Everything_IsFolderResult(i);
                 if (isFolder)
                     path = fullPath;
-                string ext = Path.GetExtension(fullPath.Replace(".lnk", string.Empty));
-#if DEBUG
-                if (setting.Log > LogLevel.None)
-                    Debugger.Write($"Folder: {isFolder}\r\nFile Path {(setting.Log == LogLevel.Verbose ? path : path.Length)}\r\nFile Name {(setting.Log == LogLevel.Verbose ? name : name.Length)}\r\nExt: {ext}");
-#endif
+
+                if (setting.LoggingLevel <= LogLevel.Debug)
+                {
+                    Log.Info(
+                        $"=====EPT: RESULT #{i} =====\n" +
+                        $"Folder    : {isFolder}\n" +
+                        $"File Path : ({path.Length}) {(setting.LoggingLevel == LogLevel.Trace ? path : string.Empty)}\n" +
+                        $"File Name : ({name.Length}) {(setting.LoggingLevel == LogLevel.Trace ? name : string.Empty)}\n" +
+                        $"Ext       : {Path.GetExtension(fullPath)}",
+                        GetType());
+                }
+
                 var r = new Result()
                 {
                     Title = name,
@@ -180,7 +178,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         try
                         {
                             process.Start();
-                            _ = Everything_IncRunCountFromFileName(fullPath);
+                            _ = Everything_IncRunCountFromFileNameW(fullPath);
                             return true;
                         }
                         catch (Win32Exception)

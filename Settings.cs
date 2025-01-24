@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using NLog;
 using Wox.Plugin.Logger;
 using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
 
@@ -9,44 +10,39 @@ namespace Community.PowerToys.Run.Plugin.Everything
 {
     public class Settings
     {
+        internal bool Is1_4 { get; set; }
+
         // Settings from PTR settings
-        public Sort Sort { get; set; } = Sort.NAME_ASCENDING;
-        public uint Max { get; set; } = 10;
-        public string Context { get; set; } = "0123456";
-        public bool Copy { get; set; }
-        public bool MatchPath { get; set; }
-        public bool Preview { get; set; } = true;
-        public bool QueryText { get; set; }
-        public bool RegEx { get; set; }
-        public bool EnvVar { get; set; }
-        public bool Updates { get; set; } = true;
-        public string Skip { get; set; }
-        public string Prefix { get; set; }
-        public string EverythingPath { get; set; }
-        public bool ShowMore { get; set; } = true;
-        public string CustomProgram { get; set; } = "notepad.exe";
-        public string CustomArg { get; set; } = "$P";
-#if DEBUG
-        public LogLevel Log { get; set; } = LogLevel.None;
-#endif
+        internal Sort Sort { get; set; } = Sort.NAME_ASCENDING;
+        internal uint Max { get; set; } = 10;
+        internal string Context { get; set; } = "01234568";
+        internal bool Copy { get; set; }
+        internal bool MatchPath { get; set; }
+        internal bool Preview { get; set; } = true;
+        internal bool QueryText { get; set; }
+        internal bool RegEx { get; set; }
+        internal bool EnvVar { get; set; }
+        internal bool Updates { get; set; } = true;
+        internal string Prefix { get; set; }
+        internal string EverythingPath { get; set; }
+        internal bool ShowMore { get; set; } = true;
+        internal string CustomProgram { get; set; } = "notepad.exe";
+        internal string CustomArg { get; set; } = "$P";
+        internal LogLevel LoggingLevel { get; set; } = LogLevel.Error;
 
         // Get Filters from settings.toml
         public Dictionary<string, string> Filters { get; } = [];
+
         internal void Getfilters()
         {
-            Log.Info("User on Everything 1.4", GetType());
-#if DEBUG
-            if (Log > LogLevel.None)
-                Debugger.Write("2.Getting Filters...");
-#endif
+            Is1_4 = true;
+            if (LoggingLevel <= LogLevel.Info)
+                Log.Info("User on Everything 1.4, GettingFilters...", GetType());
+
             string[] strArr;
             try { strArr = File.ReadAllLines(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "settings.toml")); }
             catch (Exception e)
             {
-#if DEBUG
-                if (Log > LogLevel.None)
-                    Debugger.Write($"\r\nERROR: {e.Message}\r\n");
-#endif
                 Log.Error($"Error reading settings.toml: {e.Message}", GetType());
                 return;
             }
@@ -60,18 +56,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 if (kv[0].Contains(':'))
                     Filters.TryAdd(kv[0].ToLowerInvariant(), kv[1] + (kv[1].EndsWith(';') ? ' ' : string.Empty));
             }
-#if DEBUG
-            if (Log > LogLevel.None)
-                Debugger.Write(Log > LogLevel.Debug ? string.Join(Environment.NewLine, Filters) + "\r\n" : string.Empty + "  GettingFilters...Done");
-#endif
+
+            if (LoggingLevel <= LogLevel.Info)
+                Log.Info(LoggingLevel < LogLevel.Debug ? string.Join(Environment.NewLine, Filters) : "  GettingFilters...Done", GetType());
         }
     }
-#if DEBUG
-    public enum LogLevel
-    {
-        None,
-        Debug,
-        Verbose,
-    }
-#endif
 }

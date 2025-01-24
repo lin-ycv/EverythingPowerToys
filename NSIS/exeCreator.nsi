@@ -26,7 +26,7 @@ InstallDir "$LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins\Everything"
 Name "${EPT}"
 OutFile ".\..\bin\${EPT}-${ver}-${platform}.exe"
 RequestExecutionLevel user
-SetCompressor /SOLID /FINAL lzma
+;SetCompressor /SOLID /FINAL lzma ; this increases chances of AV FP?
 LicenseData "..\LICENSE"
 
 ;--------------------------------
@@ -47,7 +47,7 @@ Section ""
   IfErrors 0 +5
   SetErrorlevel 1
   IfSilent +2
-  MessageBox MB_ICONEXCLAMATION "Unable to install, PowerToys is probably still running, please close it manually before install."
+  MessageBox MB_ICONEXCLAMATION "Unable to (un)install, PowerToys is probably still running, please close it manually before (un)install."
   Abort
   
 SectionEnd

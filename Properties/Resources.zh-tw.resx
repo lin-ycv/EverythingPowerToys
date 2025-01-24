@@ -122,13 +122,17 @@
   </data>
   <data name="Context_Description" xml:space="preserve">
     <value>配置選單選項與順序
-0_開啟資料夾、1_以管理員身分執行、2_以其他使用者身分執行、3_複製、4_複製路徑、5_在命令提示字元中開啟、6_在指定軟體中開啟</value>
+0_開啟資料夾、1_以管理員身分執行、2_以其他使用者身分執行、3_複製、4_複製路徑、5_在命令提示字元中開啟、6_在指定軟體中開啟、 7_刪除檔案/資料夾、 8_右鍵選單</value>
   </data>
   <data name="copy_file" xml:space="preserve">
     <value>複製</value>
   </data>
   <data name="copy_path" xml:space="preserve">
     <value>複製路徑</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="EnvVar" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
   <data name="EnvVar_Description" xml:space="preserve">
     <value>搜尋時可用環境變數，但會增加搜尋時間</value>
@@ -213,5 +217,17 @@
   </data>
   <data name="open_in_custom" xml:space="preserve">
     <value>在指定軟體裡開起 (Ctrl+N)</value>
+  </data>
+  <data name="MissingLib" xml:space="preserve">
+    <value>缺少 Everything.64.dll，是否自動下載？</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>已啟用「包含全域結果中」選項於History插件，可能會與 EPT 發生衝突。</value>
+  </data>
+  <data name="right_click" xml:space="preserve">
+    <value>右鍵選單 (Ctrl+M)</value>
+  </data>
+  <data name="delete_result" xml:space="preserve">
+    <value>刪除檔案/資料夾 (Ctrl+Del)</value>
   </data>
 </root>

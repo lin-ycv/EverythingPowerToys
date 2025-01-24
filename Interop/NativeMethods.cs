@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Community.PowerToys.Run.Plugin.Everything.Interop
 {
-    public sealed class NativeMethods
+    public sealed partial class NativeMethods
     {
         #region FlagsEnums
         [Flags]
@@ -56,90 +56,48 @@ namespace Community.PowerToys.Run.Plugin.Everything.Interop
             DATE_RUN_ASCENDING,
             DATE_RUN_DESCENDING,
         }
-
-        [Flags]
-        internal enum AssocF
-        {
-            NONE = 0x00000000,
-            INIT_NOREMAPCLSID = 0x00000001,
-            INIT_BYEXENAME = 0x00000002,
-            INIT_DEFAULTTOSTAR = 0x00000004,
-            INIT_DEFAULTTOFOLDER = 0x00000008,
-            NOUSERSETTINGS = 0x00000010,
-            NOTRUNCATE = 0x00000020,
-            VERIFY = 0x00000040,
-            REMAPRUNDLL = 0x00000080,
-            NOFIXUPS = 0x00000100,
-            IGNOREBASECLASS = 0x00000200,
-            INIT_IGNOREUNKNOWN = 0x00000400,
-            INIT_FIXED_PROGID = 0x00000800,
-            IS_PROTOCOL = 0x00001000,
-            INIT_FOR_FILE = 0x00002000,
-        }
-
-        internal enum AssocStr
-        {
-            COMMAND = 1,
-            EXECUTABLE,
-            FRIENDLYDOCNAME,
-            FRIENDLYAPPNAME,
-            NOOPEN,
-            SHELLNEWVALUE,
-            DDECOMMAND,
-            DDEIFEXEC,
-            DDEAPPLICATION,
-            DDETOPIC,
-            INFOTIP,
-            QUICKTIP,
-            TILEINFO,
-            CONTENTTYPE,
-            DEFAULTICON,
-            SHELLEXTENSION,
-            DROPTARGET,
-            DELEGATEEXECUTE,
-            SUPPORTED_URI_PROTOCOLS,
-            PROGID,
-            APPID,
-            APPPUBLISHER,
-            APPICONREFERENCE,
-            MAX,
-        }
         #endregion
         internal const string dllName = "Everything64.dll";
-        [DllImport(dllName)]
-        internal static extern uint Everything_GetNumResults();
-        [DllImport(dllName)]
+        [LibraryImport(dllName)]
+        internal static partial uint Everything_GetLastError();
+        [LibraryImport(dllName)]
+        internal static partial uint Everything_GetNumResults(); //Everything3_GetResultListCount
+        [LibraryImport(dllName)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool Everything_GetMatchPath();
-        [DllImport(dllName)]
-        internal static extern uint Everything_GetMax();
-        [DllImport(dllName)]
-        internal static extern uint Everything_GetMinorVersion();
-        [DllImport(dllName)]
-        internal static extern bool Everything_GetRegex();
-        [DllImport(dllName, CharSet = CharSet.Unicode)]
-        internal static extern IntPtr Everything_GetResultFileNameW(uint nIndex);
-        [DllImport(dllName, CharSet = CharSet.Unicode)]
-        internal static extern IntPtr Everything_GetResultPathW(uint nIndex);
-        [DllImport(dllName)]
-        internal static extern uint Everything_GetSort();
-        [DllImport(dllName, CharSet = CharSet.Unicode)]
-        internal static extern uint Everything_IncRunCountFromFileName(string lpFileName);
-        [DllImport(dllName)]
-        internal static extern bool Everything_IsFolderResult(uint index);
-        [DllImport(dllName)]
-        internal static extern bool Everything_QueryW([MarshalAs(UnmanagedType.Bool)] bool bWait);
-        [DllImport(dllName)]
-        internal static extern void Everything_SetMax(uint dwMax);
-        [DllImport(dllName)]
-        internal static extern void Everything_SetRegex([MarshalAs(UnmanagedType.Bool)] bool bEnable);
-        [DllImport(dllName)]
-        internal static extern void Everything_SetRequestFlags(Request RequestFlags);
-        [DllImport(dllName, CharSet = CharSet.Unicode)]
-        internal static extern void Everything_SetSearchW(string lpSearchString);
-        [DllImport(dllName)]
-        internal static extern bool Everything_SetMatchPath([MarshalAs(UnmanagedType.Bool)] bool bEnable);
-        [DllImport(dllName)]
-        internal static extern void Everything_SetSort(Sort SortType);
+        internal static partial bool Everything_GetMatchPath();
+        [LibraryImport(dllName)]
+        internal static partial uint Everything_GetMax();
+        [LibraryImport(dllName)]
+        internal static partial uint Everything_GetMinorVersion();
+        [LibraryImport(dllName)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static partial bool Everything_GetRegex();
+        [LibraryImport(dllName)]
+        internal static partial IntPtr Everything_GetResultFileNameW(uint nIndex);
+        [LibraryImport(dllName)]
+        internal static partial IntPtr Everything_GetResultPathW(uint nIndex);
+        [LibraryImport(dllName)]
+        internal static partial uint Everything_GetSort();
+        [LibraryImport(dllName, StringMarshalling = StringMarshalling.Utf16)]
+        internal static partial uint Everything_IncRunCountFromFileNameW(string lpFileName);
+        [LibraryImport(dllName)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static partial bool Everything_IsFolderResult(uint index);
+        [LibraryImport(dllName)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static partial bool Everything_QueryW([MarshalAs(UnmanagedType.Bool)] bool bWait);
+        [LibraryImport(dllName)]
+        internal static partial void Everything_SetMax(uint dwMax);
+        [LibraryImport(dllName)]
+        internal static partial void Everything_SetRegex([MarshalAs(UnmanagedType.Bool)] bool bEnable);
+        [LibraryImport(dllName)]
+        internal static partial void Everything_SetRequestFlags(Request RequestFlags);
+        [LibraryImport(dllName, StringMarshalling = StringMarshalling.Utf16)]
+        internal static partial void Everything_SetSearchW(string lpSearchString);
+        [LibraryImport(dllName)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static partial bool Everything_SetMatchPath([MarshalAs(UnmanagedType.Bool)] bool bEnable);
+        [LibraryImport(dllName)]
+        internal static partial void Everything_SetSort(Sort SortType);
     }
 }

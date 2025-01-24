@@ -28,7 +28,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)'=='Release'">
-		<DefineConstants>TRACE</DefineConstants>
+		<DefineConstants></DefineConstants>
 		<OutputPath>bin\$(Platform)\$(Configuration)\Everything\</OutputPath>
 		<Optimize>true</Optimize>
 		<DebugType>none</DebugType>
@@ -49,12 +49,19 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\..\settings-ui\Settings.UI.Library\Settings.UI.Library.csproj">
 		  <Private>false</Private>
+		  <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+	  </ProjectReference>
+	  <ProjectReference Include="..\..\PowerLauncher\PowerLauncher.csproj">
+	    <Private>False</Private>
+	    <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
 	  </ProjectReference>
 	  <ProjectReference Include="..\..\Wox.Infrastructure\Wox.Infrastructure.csproj">
 		  <Private>false</Private>
+		  <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
 	  </ProjectReference>
 	  <ProjectReference Include="..\..\Wox.Plugin\Wox.Plugin.csproj">
 		  <Private>false</Private>
+		  <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
 	  </ProjectReference>
 	</ItemGroup>
 
@@ -88,11 +95,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="Everything64.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<None Update="lib\Everything64.dll">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
-		<None Update="EverythingARM64.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<None Update="lib\EverythingARM64.dll">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\Everything.dark.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -117,7 +124,7 @@
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="if $(Platform) == ARM64 (&#xD;&#xA;del /Q &quot;$(TargetDir)Everything64.dll&quot;&#xD;&#xA;copy /y &quot;$(TargetDir)EverythingARM64.dll&quot; &quot;$(TargetDir)Everything64.dll&quot;&#xD;&#xA;)&#xD;&#xA;rmdir /S /Q &quot;$(TargetDir)amd64&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)TraceReloggerLib.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)EverythingARM64.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Dia2Lib.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;.\bin\$(Platform)_CHECKSUM.txt&quot;&#xD;&#xA;copy /y &quot;LICENSE&quot; &quot;$(TargetDir)LICENSE.txt&quot;&#xD;&#xA;powershell Compress-Archive -Path $(TargetDir) -DestinationPath .\bin\EverythingPT-$(Version)-$(Platform).zip -Force&#xD;&#xA;&quot;C:\Program Files (x86)\NSIS\makensis&quot; /Dver=$(Version) /Ddirect=$(TargetDir) /Dplatform=$(Platform) .\NSIS\exeCreator.nsi&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-$(Platform).zip SHA256 &gt;&gt; .\bin\$(Platform)_CHECKSUM.txt&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-$(Platform).exe SHA256 &gt;&gt; .\bin\$(Platform)_CHECKSUM.txt&#xD;&#xA;rd /Q /S &quot;$(TargetDir)&quot;" />
+		<Exec Command="rmdir /S /Q &quot;$(TargetDir)amd64&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)TraceReloggerLib.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Dia2Lib.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;.\bin\$(Platform)_CHECKSUM.txt&quot;&#xD;&#xA;copy /y &quot;LICENSE&quot; &quot;$(TargetDir)LICENSE.txt&quot;&#xD;&#xA;powershell Compress-Archive -Path $(TargetDir) -DestinationPath .\bin\EverythingPT-$(Version)-$(Platform).zip -Force&#xD;&#xA;&quot;C:\Program Files (x86)\NSIS\makensis&quot; /Dver=$(Version) /Ddirect=$(TargetDir) /Dplatform=$(Platform) .\NSIS\exeCreator.nsi&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-$(Platform).zip SHA256 &gt;&gt; .\bin\$(Platform)_CHECKSUM.txt&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-$(Platform).exe SHA256 &gt;&gt; .\bin\$(Platform)_CHECKSUM.txt&#xD;&#xA;rd /Q /S &quot;$(TargetDir)&quot;" />
 	</Target>
 
 </Project>
