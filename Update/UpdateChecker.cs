@@ -8,28 +8,28 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using Community.PowerToys.Run.Plugin.Everything.Properties;
+using NLog;
+using Wox.Plugin.Logger;
 
-namespace Community.PowerToys.Run.Plugin.Everything
+namespace Community.PowerToys.Run.Plugin.Everything.Update
 {
-    internal sealed class Update
+    internal sealed class UpdateChecker
     {
         private readonly CompositeFormat updateAvailable = CompositeFormat.Parse(Resources.UpdateAvailable);
-        internal async Task UpdateAsync(Version v, Settings s)
+
+        internal async Task Async(Version v, Settings s, UpdateSettings us, bool isArm)
         {
             string apiUrl = "https://api.github.com/repos/lin-ycv/EverythingPowerToys/releases/latest";
-#if DEBUG
-            if (s.Log > LogLevel.None)
-                Debugger.Write("1.Checking Update...");
-#endif
+            if (s.LoggingLevel <= LogLevel.Info) Log.Info("EPT: Checking Update...", GetType());
+
             try
             {
                 using HttpClient httpClient = new();
                 httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
 
                 HttpResponseMessage response = await httpClient.GetAsync(apiUrl);
-#if DEBUG
-                if (s.Log == LogLevel.Verbose) Debugger.Write($"\tResponse: {response.StatusCode}");
-#endif
+                if (s.LoggingLevel <= LogLevel.Debug) Log.Info($"EPT:  Response: {response.StatusCode}", GetType());
+
                 if (response.IsSuccessStatusCode)
                 {
                     using JsonDocument jsonDocument = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync());
@@ -37,19 +37,17 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     Version latest = Version.TryParse(root.GetProperty("tag_name").GetString().AsSpan(1), out var vNumber)
                         ? vNumber
                         : Version.Parse(root.GetProperty("tag_name").GetString());
-                    if (latest > v && latest.ToString() != s.Skip)
+                    if (s.LoggingLevel <= LogLevel.Debug) Log.Info($"EPT:\n\tLastest: {latest}\n\tSkip: {us.Skip}", GetType());
+
+                    if (latest > v && latest != us.Skip)
                     {
-                        MessageBoxResult mbox = MessageBox.Show(string.Format(CultureInfo.InvariantCulture, updateAvailable, v, latest), "Updater", MessageBoxButton.YesNoCancel);
+                        MessageBoxResult mbox = MessageBox.Show(string.Format(CultureInfo.InvariantCulture, updateAvailable, v, latest), "EPT: Updater", MessageBoxButton.YesNoCancel);
                         if (mbox == MessageBoxResult.Yes && root.TryGetProperty("assets", out JsonElement assets))
                         {
                             string[] nameUrl = [string.Empty, string.Empty];
                             foreach (JsonElement asset in assets.EnumerateArray())
                             {
-#if X64
-                                if (asset.TryGetProperty("browser_download_url", out JsonElement downUrl) && downUrl.ToString().EndsWith("x64.exe", StringComparison.OrdinalIgnoreCase))
-#elif ARM64
-                                if (asset.TryGetProperty("browser_download_url", out JsonElement downUrl) && downUrl.ToString().EndsWith("ARM64.exe", StringComparison.OrdinalIgnoreCase))
-#endif
+                                if (asset.TryGetProperty("browser_download_url", out JsonElement downUrl) && downUrl.ToString().EndsWith(isArm ? "ARM64.exe" : "x64.exe", StringComparison.OrdinalIgnoreCase))
                                 {
                                     nameUrl[0] = asset.GetProperty("name").ToString();
                                     nameUrl[1] = downUrl.ToString();
@@ -62,6 +60,9 @@ namespace Community.PowerToys.Run.Plugin.Everything
                                 string fileName = Path.Combine(Path.GetTempPath(), nameUrl[0]);
                                 File.WriteAllBytes(fileName, fileContent);
                                 Process.Start(fileName);
+
+                                //foreach (Process pt in Process.GetProcessesByName("PowerToys"))
+                                //    pt.Kill();
                             }
                             else
                             {
@@ -75,24 +76,19 @@ namespace Community.PowerToys.Run.Plugin.Everything
                         }
                         else if (mbox == MessageBoxResult.No)
                         {
-                            s.Skip = latest.ToString();
+                            us.Skip = latest;
                         }
                     }
                 }
             }
-#if RELEASE
-            catch
-            { }
-#else
             catch (Exception e)
             {
-                if (s.Log > LogLevel.None)
-                    Debugger.Write($"\r\nERROR: {e.Message}\r\n{e.StackTrace}\r\n");
-            
+                if (s.LoggingLevel < LogLevel.Error)
+                    Log.Exception($"EPT: Unable to check for update", e, GetType());
             }
-            if (s.Log > LogLevel.None)
-                Debugger.Write("  Checking Update...Done");
-#endif
+
+            if (s.LoggingLevel < LogLevel.Error)
+                Log.Info("EPT:  Checking Update...Done", GetType());
         }
     }
 }

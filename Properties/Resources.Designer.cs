@@ -80,7 +80,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Configure context menu options and order.
-        ///0_Open folder, 1_Run as Admin, 2_Run as User, 3_Copy, 4_Copy Path, 5_Open in Console, 6_Open in custom program.
+        ///0_Open folder, 1_Run as Admin, 2_Run as User, 3_Copy, 4_Copy Path, 5_Open in Console, 6_Open in custom program, 7_Delete file/folder, 8_Right click context menu.
         /// </summary>
         public static string Context_Description {
             get {
@@ -161,6 +161,15 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete file/folder (Ctrl+Del).
+        /// </summary>
+        public static string delete_result {
+            get {
+                return ResourceManager.GetString("delete_result", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enviroment Variables.
         /// </summary>
         public static string EnvVar {
@@ -224,6 +233,15 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &quot;Include inglobal result&quot; option is turned on for the History plugin, which could lead to conflicts with EPT..
+        /// </summary>
+        public static string History {
+            get {
+                return ResourceManager.GetString("History", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Match Path.
         /// </summary>
         public static string Match_path {
@@ -256,6 +274,15 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         public static string Max_Description {
             get {
                 return ResourceManager.GetString("Max_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Everything64.dll is missing, automatically download this file?.
+        /// </summary>
+        public static string MissingLib {
+            get {
+                return ResourceManager.GetString("MissingLib", resourceCulture);
             }
         }
         
@@ -333,7 +360,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Adds prefix to all queries, so that you can always include certain filters/modifiers without typing it every time.
-        ///Space is not added automatically between prfix and query..
+        ///Space is not added automatically between prefix and query..
         /// </summary>
         public static string Prefix_Description {
             get {
@@ -393,6 +420,15 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         public static string RegEx_Description {
             get {
                 return ResourceManager.GetString("RegEx_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right click context menu (Ctrl+M).
+        /// </summary>
+        public static string right_click {
+            get {
+                return ResourceManager.GetString("right_click", resourceCulture);
             }
         }
         

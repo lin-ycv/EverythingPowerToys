@@ -1,25 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using Community.PowerToys.Run.Plugin.Everything.ContextMenu;
 using Community.PowerToys.Run.Plugin.Everything.Properties;
 using Microsoft.PowerToys.Settings.UI.Library;
+using NLog;
+using PowerLauncher.Plugin;
+using Wox.Infrastructure.Storage;
 using Wox.Plugin;
 using Wox.Plugin.Logger;
 using static Community.PowerToys.Run.Plugin.Everything.Interop.NativeMethods;
 
 namespace Community.PowerToys.Run.Plugin.Everything
 {
-    public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider, IPluginI18n
+    public class Main : IPlugin, IDisposable, IDelayedExecutionPlugin, IContextMenu, ISettingProvider, IPluginI18n, ISavable
     {
         public static string PluginID => "A86867E2D932459CBD77D176373DD657";
         public string Name => Resources.plugin_name;
         public string Description => Resources.plugin_description;
         private readonly Settings _setting = new();
+        private readonly PluginJsonStorage<Update.UpdateSettings> _storage = new();
+        private readonly bool _isArm = RuntimeInformation.ProcessArchitecture == Architecture.Arm64;
         private Everything _everything;
         private ContextMenuLoader _contextMenuLoader;
+        private CancellationTokenSource cts = new();
         private bool _disposed;
 
         public IEnumerable<PluginAdditionalOption> AdditionalOptions =>
@@ -137,30 +149,56 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 DisplayDescription = $"v{Assembly.GetExecutingAssembly().GetName().Version}",
                 Value = _setting.Updates,
             },
-#if DEBUG
             new()
             {
-                Key = nameof(Settings.Log),
-                DisplayLabel = "Debug Mode",
+                Key = nameof(Settings.LoggingLevel),
+                DisplayLabel = "Log Level",
                 PluginOptionType = PluginAdditionalOption.AdditionalOptionType.Combobox,
-                ComboBoxItems = Enum.GetValues(typeof(LogLevel)).Cast<int>().Select(d => new KeyValuePair<string, string>(((LogLevel)d).ToString(), d + string.Empty)).ToList(),
-                ComboBoxValue = (int)_setting.Log,
+                ComboBoxItems = LogLevel.AllLoggingLevels.Select(d => new KeyValuePair<string, string>(d.ToString(), d.Ordinal + string.Empty)).ToList(),
+                ComboBoxValue = _setting.LoggingLevel.Ordinal,
             },
-#endif
         ];
 
         public void Init(PluginInitContext context)
         {
+            string dll = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Everything64.dll");
+
+            if (!File.Exists(dll))
+            {
+                MessageBoxResult mbox = MessageBox.Show(Resources.MissingLib, "EPT: Downloader", MessageBoxButton.YesNo);
+                if (mbox == MessageBoxResult.Yes)
+                {
+                    using HttpClient httpClient = new();
+                    httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
+                    string url = $"https://github.com/lin-ycv/EverythingPowerToys/raw/refs/heads/main/lib/Everything{(_isArm ? "ARM" : string.Empty)}64.dll";
+                    byte[] fileContent = httpClient.GetByteArrayAsync(url).Result;
+                    string fileName = dll;
+                    File.WriteAllBytes(fileName, fileContent);
+                }
+                else
+                {
+                    throw new FileNotFoundException("EPT: Everything64.dll not found, either press Yes on the download prompt, or manually load in the dll @ %LOCALAPPDATA%\\Microsoft\\PowerToys\\PowerToys Run\\Plugins\\Everything");
+                }
+            }
+
+            if (_setting.LoggingLevel <= LogLevel.Debug)
+                Log.Info("EPT: Init", GetType());
             if (_setting.Updates)
-                Task.Run(() => new Update().UpdateAsync(Assembly.GetExecutingAssembly().GetName().Version, _setting));
+            {
+                Update.UpdateSettings upSettings;
+                upSettings = _storage.Load();
+                Task.Run(() => new Update.UpdateChecker().Async(Assembly.GetExecutingAssembly().GetName().Version, _setting, upSettings, _isArm));
+            }
+
             if (Everything_GetMinorVersion() < 5) _setting.Getfilters();
             _everything = new Everything(_setting);
             _contextMenuLoader = new ContextMenuLoader(context, _setting.Context);
             _contextMenuLoader.Update(_setting);
-#if DEBUG
-            if (_setting.Log > LogLevel.None)
-                Debugger.Write("Init Complete\r\n");
-#endif
+            var history = PluginManager.GlobalPlugins.FirstOrDefault(p => p.Metadata.ID == "C88512156BB74580AADF7252E130BA8D" && !p.Metadata.Disabled);
+            if (history != null)
+                Task.Run(() => MessageBox.Show(Resources.History, "EPT: History Conflict", MessageBoxButton.OK, MessageBoxImage.Warning));
+            if (_setting.LoggingLevel <= LogLevel.Debug)
+                Log.Info("EPT: Init Complete", GetType());
         }
 
         public void UpdateSettings(PowerLauncherPluginSettings settings)
@@ -182,9 +220,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 _setting.CustomProgram = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.CustomProgram)).TextValue;
                 _setting.CustomArg = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.CustomArg)).TextValue;
                 _setting.ShowMore = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.ShowMore)).Value;
-#if DEBUG
-                _setting.Log = (LogLevel)settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Log)).ComboBoxValue;
-#endif
+                _setting.LoggingLevel = LogLevel.FromOrdinal(settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.LoggingLevel)).ComboBoxValue);
 
                 _everything?.UpdateSettings(_setting);
                 _contextMenuLoader?.Update(_setting);
@@ -193,8 +229,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         public List<Result> Query(Query query)
         {
-            List<Result> results = [];
-            return results;
+            return null;
         }
 
         public List<Result> Query(Query query, bool delayedExecution)
@@ -206,7 +241,14 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
                 try
                 {
-                    results.AddRange(_everything.Query(searchQuery, _setting));
+                    cts.Cancel();
+                    cts = new();
+                    results.AddRange(_everything.Query(searchQuery, _setting, cts.Token));
+                }
+                catch (OperationCanceledException)
+                {
+                    if (_setting.LoggingLevel <= LogLevel.Debug)
+                        Log.Info("EPT: Query Cancelled", GetType());
                 }
                 catch (System.ComponentModel.Win32Exception)
                 {
@@ -220,12 +262,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 }
                 catch (Exception e)
                 {
-#if DEBUG
-                    if (_setting.Log > LogLevel.None)
-                        Debugger.Write($"Everything Exception: {e.Message}\r\n{e.StackTrace}\r\n");
-#endif
-
-                    Log.Exception($"Everything Exception: {e.Message}\r\n{e.StackTrace}\r\n", e, GetType());
+                    Log.Exception($"EPT: Exception! {e.Message}\n", e, GetType());
                 }
             }
 
@@ -238,6 +275,8 @@ namespace Community.PowerToys.Run.Plugin.Everything
             {
                 if (disposing)
                 {
+                    cts.Cancel();
+                    cts.Dispose();
                 }
 
                 _disposed = true;
@@ -255,5 +294,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
         public Control CreateSettingPanel() => throw new NotImplementedException();
         public string GetTranslatedPluginTitle() => Resources.plugin_name;
         public string GetTranslatedPluginDescription() => Resources.plugin_description;
+        public void Save() => _storage.Save();
     }
 }
