@@ -7,11 +7,11 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
-using Community.PowerToys.Run.Plugin.Everything.Properties;
+using Community.PowerToys.Run.Plugin.Everything3.Properties;
 using NLog;
 using Wox.Plugin.Logger;
 
-namespace Community.PowerToys.Run.Plugin.Everything.Update
+namespace Community.PowerToys.Run.Plugin.Everything3.Update
 {
     internal sealed class UpdateChecker
     {
@@ -47,7 +47,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Update
                             string[] nameUrl = [string.Empty, string.Empty];
                             foreach (JsonElement asset in assets.EnumerateArray())
                             {
-                                if (asset.TryGetProperty("browser_download_url", out JsonElement downUrl) && downUrl.ToString().EndsWith(isArm ? "ARM64.exe" : "x64.exe", StringComparison.OrdinalIgnoreCase))
+                                if (asset.TryGetProperty("browser_download_url", out JsonElement downUrl) && downUrl.ToString().EndsWith("x64-SDK3.exe", StringComparison.OrdinalIgnoreCase))
                                 {
                                     nameUrl[0] = asset.GetProperty("name").ToString();
                                     nameUrl[1] = downUrl.ToString();

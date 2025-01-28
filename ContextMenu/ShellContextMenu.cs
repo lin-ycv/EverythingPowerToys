@@ -17,7 +17,7 @@ using System.Windows.Forms;
 #pragma warning disable SA1617
 #pragma warning disable SA1642
 #pragma warning disable SA1643
-namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
+namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
 {
     /// <summary>
     /// "Stand-alone" shell context menu

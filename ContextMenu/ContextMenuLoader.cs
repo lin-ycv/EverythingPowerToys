@@ -6,22 +6,23 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Community.PowerToys.Run.Plugin.Everything.Properties;
-using Community.PowerToys.Run.Plugin.Everything.SearchHelper;
+using Community.PowerToys.Run.Plugin.Everything3.Interop;
+using Community.PowerToys.Run.Plugin.Everything3.Properties;
+using Community.PowerToys.Run.Plugin.Everything3.SearchHelper;
 using Wox.Infrastructure;
 using Wox.Plugin;
 using Wox.Plugin.Logger;
 using wf = System.Windows.Forms;
 
-namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
+namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
 {
-    internal sealed class ContextMenuLoader(PluginInitContext context, string options) : IContextMenu
+    internal sealed class ContextMenuLoader(PluginInitContext context, string options, IntPtr client) : IContextMenu
     {
         private readonly PluginInitContext _context = context;
 
         // Extensions for adding run as admin context menu item for applications
         private readonly string[] _appExtensions = [".exe", ".bat", ".appref-ms", ".lnk"];
-
+        private IntPtr _client = client;
         private bool _swapCopy;
         private string _options = options;
         private string _customProgram;
@@ -56,7 +57,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                     FontFamily = "Segoe MDL2 Assets",
                                     AcceleratorKey = Key.E,
                                     AcceleratorModifiers = ModifierKeys.Control | ModifierKeys.Shift,
-                                    Action = _ =>
+                                    Action = (context) =>
                                     {
                                         if (!Helper.OpenInShell("explorer.exe", $"/select,\"{record.Path}\""))
                                         {
@@ -65,6 +66,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                             return false;
                                         }
 
+                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(_client, record.Path);
                                         return true;
                                     },
                                 });
@@ -83,11 +85,12 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                     FontFamily = "Segoe MDL2 Assets",
                                     AcceleratorKey = Key.Enter,
                                     AcceleratorModifiers = ModifierKeys.Control | ModifierKeys.Shift,
-                                    Action = _ =>
+                                    Action = (context) =>
                                     {
                                         try
                                         {
                                             Task.Run(() => Helper.RunAsAdmin(record.Path));
+                                            _ = NativeMethods.Everything3_IncRunCountFromFilenameW(_client, record.Path);
                                             return true;
                                         }
                                         catch (Exception e)
@@ -112,11 +115,12 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                     FontFamily = "Segoe MDL2 Assets",
                                     AcceleratorKey = Key.U,
                                     AcceleratorModifiers = ModifierKeys.Control | ModifierKeys.Shift,
-                                    Action = _ =>
+                                    Action = (context) =>
                                     {
                                         try
                                         {
                                             Task.Run(() => Helper.RunAsUser(record.Path));
+                                            _ = NativeMethods.Everything3_IncRunCountFromFilenameW(_client, record.Path);
                                             return true;
                                         }
                                         catch (Exception e)
@@ -145,6 +149,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                     try
                                     {
                                         Clipboard.SetData(DataFormats.FileDrop, new string[] { record.Path });
+                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(_client, record.Path);
                                         return true;
                                     }
                                     catch (Exception e)
@@ -174,6 +179,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                     try
                                     {
                                         Clipboard.SetDataObject(record.Path);
+                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(_client, record.Path);
                                         return true;
                                     }
                                     catch (Exception e)
@@ -203,14 +209,11 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                     try
                                     {
                                         if (isFile)
-                                        {
                                             Helper.OpenInConsole(Path.GetDirectoryName(record.Path));
-                                        }
                                         else
-                                        {
                                             Helper.OpenInConsole(record.Path);
-                                        }
 
+                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(_client, record.Path);
                                         return true;
                                     }
                                     catch (Exception e)
@@ -240,6 +243,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                     try
                                     {
                                         process.Start();
+                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(_client, record.Path);
                                         return true;
                                     }
                                     catch (Exception e)

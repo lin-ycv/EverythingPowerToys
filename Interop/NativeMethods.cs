@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Community.PowerToys.Run.Plugin.Everything.Interop
+namespace Community.PowerToys.Run.Plugin.Everything3.Interop
 {
     public sealed class NativeMethods
     {
@@ -9,91 +9,69 @@ namespace Community.PowerToys.Run.Plugin.Everything.Interop
         [Flags]
         internal enum Request
         {
-            FILE_NAME = 0x00000001,
-            PATH = 0x00000002,
-            FULL_PATH_AND_FILE_NAME = 0x00000004,
-            EXTENSION = 0x00000008,
-            SIZE = 0x00000010,
-            DATE_CREATED = 0x00000020,
-            DATE_MODIFIED = 0x00000040,
-            DATE_ACCESSED = 0x00000080,
-            ATTRIBUTES = 0x00000100,
-            FILE_LIST_FILE_NAME = 0x00000200,
-            RUN_COUNT = 0x00000400,
-            DATE_RUN = 0x00000800,
-            DATE_RECENTLY_CHANGED = 0x00001000,
-            HIGHLIGHTED_FILE_NAME = 0x00002000,
-            HIGHLIGHTED_PATH = 0x00004000,
-            HIGHLIGHTED_FULL_PATH_AND_FILE_NAME = 0x00008000,
+            NAME,
+            PATH,
+            SIZE,
+            EXTENSION,
+            TYPE_NAME,
+            DATE_MODIFIED,
+            DATE_CREATED,
+            DATE_ACCESSED,
+            ATTRIBUTES,
+            DATE_RECENTLY_CHANGED,
+            RUN_COUNT,
+            DATE_RUN,
+            FILE_LIST_FILENAME,
+            FULL_PATH = 240,
         }
 
         public enum Sort
         {
-            NAME_ASCENDING = 1,
-            NAME_DESCENDING,
-            PATH_ASCENDING,
-            PATH_DESCENDING,
-            SIZE_ASCENDING,
-            SIZE_DESCENDING,
-            EXTENSION_ASCENDING,
-            EXTENSION_DESCENDING,
-            TYPE_NAME_ASCENDING,
-            TYPE_NAME_DESCENDING,
-            DATE_CREATED_ASCENDING,
-            DATE_CREATED_DESCENDING,
-            DATE_MODIFIED_ASCENDING,
-            DATE_MODIFIED_DESCENDING,
-            ATTRIBUTES_ASCENDING,
-            ATTRIBUTES_DESCENDING,
-            FILE_LIST_FILENAME_ASCENDING,
-            FILE_LIST_FILENAME_DESCENDING,
-            RUN_COUNT_ASCENDING,
-            RUN_COUNT_DESCENDING,
-            DATE_RECENTLY_CHANGED_ASCENDING,
-            DATE_RECENTLY_CHANGED_DESCENDING,
-            DATE_ACCESSED_ASCENDING,
-            DATE_ACCESSED_DESCENDING,
-            DATE_RUN_ASCENDING,
-            DATE_RUN_DESCENDING,
+            NAME,
+            PATH,
+            SIZE,
+            EXTENSION,
+            TYPE_NAME,
+            DATE_MODIFIED,
+            DATE_CREATED,
+            DATE_ACCESSED,
+            ATTRIBUTES,
+            DATE_RECENTLY_CHANGED,
+            RUN_COUNT,
+            DATE_RUN,
+            FILE_LIST_FILENAME,
         }
         #endregion
-        internal const string dllName = "Everything64.dll";
-        [DllImport(dllName)]
-        internal static extern uint Everything_GetLastError();
-        [DllImport(dllName)]
-        internal static extern uint Everything_GetNumResults();
-        [DllImport(dllName)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool Everything_GetMatchPath();
-        [DllImport(dllName)]
-        internal static extern uint Everything_GetMax();
-        [DllImport(dllName)]
-        internal static extern uint Everything_GetMinorVersion();
-        [DllImport(dllName)]
-        internal static extern bool Everything_GetRegex();
+        internal const string dllName = "Everything3_x64.dll";
         [DllImport(dllName, CharSet = CharSet.Unicode)]
-        internal static extern IntPtr Everything_GetResultFileNameW(uint nIndex);
+        internal static extern IntPtr Everything3_ConnectW(string instance_name);
+        [DllImport(dllName)]
+        internal static extern IntPtr Everything3_CreateSearchState();
+        [DllImport(dllName)]
+        internal static extern bool Everything3_DestroySearchState(IntPtr search_state);
         [DllImport(dllName, CharSet = CharSet.Unicode)]
-        internal static extern IntPtr Everything_GetResultPathW(uint nIndex);
+        internal static extern bool Everything3_SetSearchTextW(IntPtr search_state, string search);
         [DllImport(dllName)]
-        internal static extern uint Everything_GetSort();
+        internal static extern IntPtr Everything3_Search(IntPtr client, IntPtr search_state);
+        [DllImport(dllName)]
+        internal static extern uint Everything3_GetResultListCount(IntPtr result_list);
         [DllImport(dllName, CharSet = CharSet.Unicode)]
-        internal static extern uint Everything_IncRunCountFromFileName(string lpFileName);
+        internal static extern uint Everything3_GetResultFullPathNameW(IntPtr result_list, uint result_index, [Out] char[] wbuf, uint wbuf_size_in_wchars);
         [DllImport(dllName)]
-        internal static extern bool Everything_IsFolderResult(uint index);
+        internal static extern bool Everything3_DestroyClient(IntPtr client);
         [DllImport(dllName)]
-        internal static extern bool Everything_QueryW([MarshalAs(UnmanagedType.Bool)] bool bWait);
+        internal static extern bool Everything3_DestroyResultList(IntPtr result_list);
         [DllImport(dllName)]
-        internal static extern void Everything_SetMax(uint dwMax);
-        [DllImport(dllName)]
-        internal static extern void Everything_SetRegex([MarshalAs(UnmanagedType.Bool)] bool bEnable);
-        [DllImport(dllName)]
-        internal static extern void Everything_SetRequestFlags(Request RequestFlags);
+        internal static extern bool Everything3_IsFolderResult(IntPtr result_list, uint result_index);
         [DllImport(dllName, CharSet = CharSet.Unicode)]
-        internal static extern void Everything_SetSearchW(string lpSearchString);
+        internal static extern uint Everything3_IncRunCountFromFilenameW(IntPtr client, string filename);
         [DllImport(dllName)]
-        internal static extern bool Everything_SetMatchPath([MarshalAs(UnmanagedType.Bool)] bool bEnable);
+        internal static extern bool Everything3_AddSearchSort(IntPtr search_state, Sort sort, bool ascending);
         [DllImport(dllName)]
-        internal static extern void Everything_SetSort(Sort SortType);
+        internal static extern bool Everything3_ClearSearchSorts(IntPtr search_state);
+        [DllImport(dllName)]
+        internal static extern bool Everything3_SetSearchRegex(IntPtr search_state, bool match_regex);
+        [DllImport(dllName)]
+        internal static extern bool Everything3_SetSearchMatchPath(IntPtr search_state, bool match_path);
     }
 }

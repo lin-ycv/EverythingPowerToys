@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Community.PowerToys.Run.Plugin.Everything.Update
+namespace Community.PowerToys.Run.Plugin.Everything3.Update
 {
     public class UpdateSettings
     {

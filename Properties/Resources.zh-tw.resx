@@ -219,7 +219,7 @@
     <value>在指定軟體裡開起 (Ctrl+N)</value>
   </data>
   <data name="MissingLib" xml:space="preserve">
-    <value>缺少 Everything.64.dll，是否自動下載？</value>
+    <value>缺少 Everything3_x.64.dll，是否自動下載？</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>已啟用「包含全域結果中」選項於History插件，可能會與 EPT 發生衝突。</value>

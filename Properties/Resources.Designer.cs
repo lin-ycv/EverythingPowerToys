@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Community.PowerToys.Run.Plugin.Everything.Properties {
+namespace Community.PowerToys.Run.Plugin.Everything3.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Community.PowerToys.Run.Plugin.Everything.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Community.PowerToys.Run.Plugin.Everything3.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -278,7 +278,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Everything64.dll is missing, automatically download this file?.
+        ///   Looks up a localized string similar to Everything3_x64.dll is missing, automatically download this file?.
         /// </summary>
         public static string MissingLib {
             get {
@@ -341,7 +341,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Everything.
+        ///   Looks up a localized string similar to Everything3.
         /// </summary>
         public static string plugin_name {
             get {
@@ -469,7 +469,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sort.
+        ///   Looks up a localized string similar to Sort by.
         /// </summary>
         public static string Sort {
             get {
@@ -483,6 +483,33 @@ namespace Community.PowerToys.Run.Plugin.Everything.Properties {
         public static string Sort_Description {
             get {
                 return ResourceManager.GetString("Sort_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Descending.
+        /// </summary>
+        public static string SortDescending {
+            get {
+                return ResourceManager.GetString("SortDescending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Whether sort order should be descending or not..
+        /// </summary>
+        public static string SortDescending_Description {
+            get {
+                return ResourceManager.GetString("SortDescending_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Then by.
+        /// </summary>
+        public static string SortThen {
+            get {
+                return ResourceManager.GetString("SortThen", resourceCulture);
             }
         }
         

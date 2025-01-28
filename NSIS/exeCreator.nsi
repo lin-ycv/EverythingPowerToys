@@ -10,7 +10,7 @@ LoadLanguageFile "${NSISDIR}\Contrib\Language files\English.nlf"
 ;--------------------------------
 ;Version Information
   VIProductVersion "${ver}.0"
-  VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${EPT} Setup"
+  VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${EPT}3 Setup"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "lin-ycv"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "lin-ycv"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "Everything search plugin for PowerToys Run"
@@ -18,13 +18,13 @@ LoadLanguageFile "${NSISDIR}\Contrib\Language files\English.nlf"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "${ver}"
 ;--------------------------------
 
-BrandingText "${EPT} v${ver}"
+BrandingText "${EPT}3 v${ver}"
 CRCCheck force
 FileErrorText "Can't write: $\r$\n$\r$\n$0$\r$\n$\r$\nPowerToys is probably still running, please close it and retry."
 Icon Everything.ico
-InstallDir "$LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins\Everything"
-Name "${EPT}"
-OutFile ".\..\bin\${EPT}-${ver}-${platform}.exe"
+InstallDir "$LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins\Everything3"
+Name "${EPT}3"
+OutFile ".\..\bin\${EPT}-${ver}-${platform}-SDK3.exe"
 RequestExecutionLevel user
 ;SetCompressor /SOLID /FINAL lzma ; this increases chances of AV FP?
 LicenseData "..\LICENSE"

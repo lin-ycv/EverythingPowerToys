@@ -1,6 +1,6 @@
 ﻿using Wox.Plugin.Interfaces;
 
-namespace Community.PowerToys.Run.Plugin.Everything.SearchHelper
+namespace Community.PowerToys.Run.Plugin.Everything3.SearchHelper
 {
     public class SearchResult : IFileDropResult
     {

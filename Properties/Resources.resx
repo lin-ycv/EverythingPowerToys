@@ -188,7 +188,7 @@
     <value>Get search results from Everything</value>
   </data>
   <data name="plugin_name" xml:space="preserve">
-    <value>Everything</value>
+    <value>Everything3</value>
   </data>
   <data name="Prefix" xml:space="preserve">
     <value>Query Prefix</value>
@@ -229,7 +229,7 @@ Recommend using regex: in query instead of enabling this option</value>
     <value>Display a result that opens Everything with the current query.</value>
   </data>
   <data name="Sort" xml:space="preserve">
-    <value>Sort</value>
+    <value>Sort by</value>
   </data>
   <data name="Sort_Description" xml:space="preserve">
     <value>Set result sorting method.</value>
@@ -266,7 +266,7 @@ Latest:		{1}</value>
     <value>Open path in custom program (Ctrl+N)</value>
   </data>
   <data name="MissingLib" xml:space="preserve">
-    <value>Everything64.dll is missing, automatically download this file?</value>
+    <value>Everything3_x64.dll is missing, automatically download this file?</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>The "Include inglobal result" option is turned on for the History plugin, which could lead to conflicts with EPT.</value>
@@ -276,5 +276,14 @@ Latest:		{1}</value>
   </data>
   <data name="delete_result" xml:space="preserve">
     <value>Delete file/folder (Ctrl+Del)</value>
+  </data>
+  <data name="SortThen" xml:space="preserve">
+    <value>Then by</value>
+  </data>
+  <data name="SortDescending" xml:space="preserve">
+    <value>Descending</value>
+  </data>
+  <data name="SortDescending_Description" xml:space="preserve">
+    <value>Whether sort order should be descending or not.</value>
   </data>
 </root>
