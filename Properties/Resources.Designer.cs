@@ -80,7 +80,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Configure context menu options and order.
-        ///0_Open folder, 1_Run as Admin, 2_Run as User, 3_Copy, 4_Copy Path, 5_Open in Console, 6_Open in custom program, 7_Delete file/folder, 8_Right click context menu.
+        ///0_Open folder, 1_Run as Admin, 2_Run as User, 3_Copy, 4_Copy Path, 5_Open in Console, 6_Open in custom program, 7_Delete file/folder, 8_Shell context menu.
         /// </summary>
         public static string Context_Description {
             get {
@@ -238,6 +238,24 @@ namespace Community.PowerToys.Run.Plugin.Everything3.Properties {
         public static string History {
             get {
                 return ResourceManager.GetString("History", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instance Name.
+        /// </summary>
+        public static string InstanceName {
+            get {
+                return ResourceManager.GetString("InstanceName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name of Everything 1.5 instance to connect to, changes takes effect after restarting  PT. Default is &quot;1.5a&quot; (without quotation marks).
+        /// </summary>
+        public static string InstanceName_Description {
+            get {
+                return ResourceManager.GetString("InstanceName_Description", resourceCulture);
             }
         }
         
@@ -424,15 +442,6 @@ namespace Community.PowerToys.Run.Plugin.Everything3.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Right click context menu (Ctrl+M).
-        /// </summary>
-        public static string right_click {
-            get {
-                return ResourceManager.GetString("right_click", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Run as administrator (Ctrl+Shift+Enter).
         /// </summary>
         public static string run_as_admin {
@@ -447,6 +456,15 @@ namespace Community.PowerToys.Run.Plugin.Everything3.Properties {
         public static string run_as_user {
             get {
                 return ResourceManager.GetString("run_as_user", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shell context menu (Ctrl+M).
+        /// </summary>
+        public static string scm {
+            get {
+                return ResourceManager.GetString("scm", resourceCulture);
             }
         }
         

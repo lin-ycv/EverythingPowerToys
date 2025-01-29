@@ -126,7 +126,7 @@
   </data>
   <data name="Context_Description" xml:space="preserve">
     <value>配置选单选项与顺序
-0_打开所在文件夹、1_以管理员身分运行、2_以不同的使用者身分运行、3_复制、4_复制路径、5_在控制台中开启</value>
+0_打开所在文件夹、1_以管理员身分运行、2_以不同的使用者身分运行、3_复制、4_复制路径、5_在控制台中开启、6_在指定軟體中開啟、 7_刪除檔案/資料夾、 8_右鍵選單</value>
   </data>
   <data name="copy_file" xml:space="preserve">
     <value>复制</value>
@@ -207,5 +207,8 @@
   </data>
   <data name="Updates" xml:space="preserve">
     <value>检查是否有更新</value>
+  </data>
+  <data name="InstanceName" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
 </root>

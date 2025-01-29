@@ -1,10 +1,10 @@
 ﻿{
   "ID": "9240993D2A80417BAA1963D106C79E77",
-  "ActionKeyword": "`",
+  "ActionKeyword": "``",
   "IsGlobal": true,
   "Name": "Everything3",
   "Author": "Yu Chieh (Victor) Lin",
-  "Version": "0.0.2",
+  "Version": "0.88.0.1",
   "Language": "csharp",
   "Website": "https://github.com/Lin-ycv/EverythingPowerToys",
   "ExecuteFileName": "Community.PowerToys.Run.Plugin.Everything3.dll",

@@ -27,7 +27,6 @@ namespace Community.PowerToys.Run.Plugin.Everything3
         public string Name => Resources.plugin_name;
         public string Description => Resources.plugin_description;
         private readonly Settings _setting = new();
-
         private readonly PluginJsonStorage<Update.UpdateSettings> _storage = new();
         private readonly bool _isArm = RuntimeInformation.ProcessArchitecture == Architecture.Arm64;
         private Everything _everything;
@@ -37,6 +36,14 @@ namespace Community.PowerToys.Run.Plugin.Everything3
 
         public IEnumerable<PluginAdditionalOption> AdditionalOptions =>
         [
+            new()
+            {
+                Key = nameof(Settings.InstanceName),
+                DisplayLabel = Resources.InstanceName,
+                DisplayDescription = Resources.InstanceName_Description,
+                PluginOptionType = PluginAdditionalOption.AdditionalOptionType.Textbox,
+                TextValue = _setting.InstanceName,
+            },
             new()
             {
                 Key = nameof(Settings.Context),
@@ -202,25 +209,22 @@ namespace Community.PowerToys.Run.Plugin.Everything3
                     httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
                     string url = $"https://github.com/lin-ycv/EverythingPowerToys/raw/refs/heads/lib/Everything3_x64.dll";
                     byte[] fileContent = httpClient.GetByteArrayAsync(url).Result;
-                    string fileName = dll;
-                    File.WriteAllBytes(fileName, fileContent);
+                    File.WriteAllBytes(dll, fileContent);
                 }
                 else
                 {
-                    throw new DllNotFoundException("EPT3: Everything3_x64.dll not found, either press Yes on the download prompt, or manually load in the dll @ %LOCALAPPDATA%\\Microsoft\\PowerToys\\PowerToys Run\\Plugins\\Everything");
+                    throw new DllNotFoundException("EPT3: Everything3_x64.dll not found, either press Yes on the download prompt, or manually load in the dll @ %LOCALAPPDATA%\\Microsoft\\PowerToys\\PowerToys Run\\Plugins\\Everything3");
                 }
             }
 
             if (_setting.LoggingLevel <= LogLevel.Debug)
                 Log.Info("EPT3: Init", GetType());
 
+            Update.UpdateSettings upSettings = _storage.Load();
             if (_setting.Updates)
-            {
-                Update.UpdateSettings upSettings;
-                upSettings = _storage.Load();
                 Task.Run(() => new Update.UpdateChecker().Async(Assembly.GetExecutingAssembly().GetName().Version, _setting, upSettings, _isArm));
-            }
 
+            Thread.Sleep(500); // Wait for Everything to start
             _everything = new Everything(_setting);
             _contextMenuLoader = new ContextMenuLoader(context, _setting.Context, _everything.Client);
             _contextMenuLoader.Update(_setting);
@@ -235,6 +239,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3
         {
             if (settings.AdditionalOptions != null)
             {
+                _setting.InstanceName = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.InstanceName)).TextValue;
                 _setting.Sort = (Sort)settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Sort)).ComboBoxValue;
                 _setting.Descending = settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Descending)).Value;
                 _setting.Sort2 = (Sort)settings.AdditionalOptions.FirstOrDefault(x => x.Key == nameof(_setting.Sort2)).ComboBoxValue;

@@ -193,6 +193,9 @@
   <data name="ShowMore_Description" xml:space="preserve">
     <value>在Everything裡顯示剩餘的收尋結果</value>
   </data>
+  <data name="Sort" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
   <data name="Sort_Description" xml:space="preserve">
     <value>設定結果排序方法</value>
   </data>
@@ -224,10 +227,19 @@
   <data name="History" xml:space="preserve">
     <value>已啟用「包含全域結果中」選項於History插件，可能會與 EPT 發生衝突。</value>
   </data>
-  <data name="right_click" xml:space="preserve">
+  <data name="scm" xml:space="preserve">
     <value>右鍵選單 (Ctrl+M)</value>
   </data>
   <data name="delete_result" xml:space="preserve">
     <value>刪除檔案/資料夾 (Ctrl+Del)</value>
+  </data>
+  <data name="SortDescending_Description" xml:space="preserve">
+    <value>遞減排序</value>
+  </data>
+  <data name="InstanceName" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="InstanceName_Description" xml:space="preserve">
+    <value>要連接到的Everything 1.5 實例名稱，更改後需重啓 PT 才會生效. 預設為 "1.5a" (不包含括號)</value>
   </data>
 </root>

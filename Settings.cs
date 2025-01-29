@@ -5,9 +5,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3
 {
     public class Settings
     {
-        internal bool Is1_4 { get; set; }
-
-        // Settings from PTR settings
+        internal string InstanceName { get; set; } = "1.5a";
         internal Sort Sort { get; set; } = Sort.RUN_COUNT;
         internal Sort Sort2 { get; set; } = Sort.DATE_MODIFIED;
         internal bool Descending { get; set; }

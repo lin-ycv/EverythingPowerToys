@@ -15,6 +15,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3
 {
     internal sealed class Everything
     {
+        private readonly string subHeader;
         private string exe = string.Empty;
 #pragma warning disable SA1401 // Fields should be private
         internal IntPtr Client;
@@ -22,21 +23,28 @@ namespace Community.PowerToys.Run.Plugin.Everything3
 #pragma warning restore SA1401 // Fields should be private
         internal Everything(Settings setting)
         {
-            Client = Everything3_ConnectW("1.5a");
-            if (Client == IntPtr.Zero)
+            Client = Everything3_ConnectW(setting.InstanceName);
+            if (Client != IntPtr.Zero)
             {
-                Client = Everything3_ConnectW(string.Empty);
+                bool isDefault = setting.InstanceName == string.Empty || setting.InstanceName == "1.5a";
+                subHeader = isDefault ? Resources.plugin_name : setting.InstanceName;
+            }
+            else
+            {
+                Client = Everything3_ConnectW("1.5a");
                 if (Client == IntPtr.Zero)
                 {
-                    throw new InvalidOperationException("Failed to connect to Everything service");
+                    Client = Everything3_ConnectW(string.Empty);
+                    if (Client == IntPtr.Zero)
+                        throw new InvalidOperationException("Failed to connect to Everything service");
                 }
+
+                subHeader = Resources.plugin_name;
             }
 
             SearchState = Everything3_CreateSearchState();
             if (SearchState == IntPtr.Zero)
-            {
                 throw new InvalidOperationException("Failed to create search state");
-            }
 
             UpdateSettings(setting);
         }
@@ -98,7 +106,12 @@ namespace Community.PowerToys.Run.Plugin.Everything3
             if (setting.LoggingLevel <= LogLevel.Debug)
                 Log.Info($"EPT3: Results = {resultCount}", GetType());
 
-            token.ThrowIfCancellationRequested();
+            if (token.IsCancellationRequested)
+            {
+                Everything3_DestroyResultList(resultList);
+                token.ThrowIfCancellationRequested();
+            }
+
             bool showMore = setting.ShowMore && !string.IsNullOrEmpty(exe) && resultCount >= setting.Max;
             if (showMore)
             {
@@ -132,7 +145,12 @@ namespace Community.PowerToys.Run.Plugin.Everything3
             char[] pathBuffer = new char[1024];
             for (uint i = 0; i < Math.Min(resultCount, setting.Max); i++)
             {
-                token.ThrowIfCancellationRequested();
+                if (token.IsCancellationRequested)
+                {
+                    Everything3_DestroyResultList(resultList);
+                    token.ThrowIfCancellationRequested();
+                }
+
                 uint length = Everything3_GetResultFullPathNameW(resultList, i, pathBuffer, (uint)pathBuffer.Length);
                 string fullPath = new(pathBuffer, 0, (int)length);
                 string name = Path.GetFileName(fullPath);
@@ -162,7 +180,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3
                 {
                     Title = name,
                     ToolTipData = new ToolTipData(name, fullPath),
-                    SubTitle = Resources.plugin_name + ": " + fullPath,
+                    SubTitle = subHeader + ": " + fullPath,
 
                     IcoPath = isFolder ? "Images/folder.png" : (setting.Preview ?
                         fullPath : "Images/file.png"),

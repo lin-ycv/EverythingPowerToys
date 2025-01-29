@@ -22,7 +22,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
 
         // Extensions for adding run as admin context menu item for applications
         private readonly string[] _appExtensions = [".exe", ".bat", ".appref-ms", ".lnk"];
-        private IntPtr _client = client;
+        private readonly IntPtr _client = client;
         private bool _swapCopy;
         private string _options = options;
         private string _customProgram;
@@ -63,6 +63,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                         {
                                             var message = $"{Resources.folder_open_failed} {Path.GetDirectoryName(record.Path)}";
                                             _context.API.ShowMsg(message);
+                                            Log.Exception($"ETP3: Failed to open folder {Path.GetDirectoryName(record.Path)}", new IOException(), GetType());
                                             return false;
                                         }
 
@@ -95,7 +96,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                         }
                                         catch (Exception e)
                                         {
-                                            Log.Exception($"Failed to run {record.Path} as admin, {e.Message}", e, MethodBase.GetCurrentMethod().DeclaringType);
+                                            Log.Exception($"EPT3: Failed to run {record.Path} as admin,", e, GetType());
                                             return false;
                                         }
                                     },
@@ -125,7 +126,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                         }
                                         catch (Exception e)
                                         {
-                                            Log.Exception($"Failed to run {record.Path} as different user, {e.Message}", e, MethodBase.GetCurrentMethod().DeclaringType);
+                                            Log.Exception($"EPT3: Failed to run {record.Path} as different user", e, GetType());
                                             return false;
                                         }
                                     },
@@ -155,7 +156,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                     catch (Exception e)
                                     {
                                         var message = Resources.clipboard_failed;
-                                        Log.Exception(message, e, GetType());
+                                        Log.Exception($"ETP3: Failed to copy {(_swapCopy ? "file" : "path")} ({record.Path}) to clipboard", e, GetType());
 
                                         _context.API.ShowMsg(message);
                                         return false;
@@ -185,7 +186,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                     catch (Exception e)
                                     {
                                         var message = Resources.clipboard_failed;
-                                        Log.Exception(message, e, GetType());
+                                        Log.Exception($"ETP3: Failed to copy {(_swapCopy ? "path" : "file")} ({record.Path}) to clipboard", e, GetType());
 
                                         _context.API.ShowMsg(message);
                                         return false;
@@ -218,7 +219,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                     }
                                     catch (Exception e)
                                     {
-                                        Log.Exception($"Failed to open {record.Path} in console, {e.Message}", e, GetType());
+                                        Log.Exception($"ETP3: Failed to open {record.Path} in console", e, GetType());
                                         return false;
                                     }
                                 },
@@ -248,7 +249,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                     }
                                     catch (Exception e)
                                     {
-                                        Log.Exception($"Failed to execute {_customProgram} with arguments {_customArg}", e, GetType());
+                                        Log.Exception($"ETP3: Failed to execute {_customProgram} with arguments {_customArg}", e, GetType());
                                         return false;
                                     }
                                 },
@@ -276,7 +277,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                     }
                                     catch (Exception e)
                                     {
-                                        Log.Exception($"Failed to delete {record.Path}", e, GetType());
+                                        Log.Exception($"ETP3: Failed to delete {record.Path}", e, GetType());
                                         return false;
                                     }
                                 },
@@ -287,7 +288,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                             contextMenus.Add(new ContextMenuResult
                             {
                                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
-                                Title = Resources.right_click,
+                                Title = Resources.scm,
                                 Glyph = "\xE712",
                                 FontFamily = "Segoe MDL2 Assets",
                                 AcceleratorKey = Key.M,
@@ -301,11 +302,12 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                             scm.ShowContextMenu(new FileInfo(record.Path), wf.Cursor.Position);
                                         else
                                             scm.ShowContextMenu(new DirectoryInfo(record.Path), wf.Cursor.Position);
+                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(_client, record.Path);
                                         return true;
                                     }
                                     catch (Exception e)
                                     {
-                                        Log.Exception($"Failed to open right click context menu for {record.Path}", e, GetType());
+                                        Log.Exception($"ETP3: Failed to open right click context menu for {record.Path}", e, GetType());
                                         return false;
                                     }
                                 },
@@ -327,9 +329,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
             {
                 // Using OrdinalIgnoreCase since this is internal
                 if (extension.Equals(fileExtension, StringComparison.OrdinalIgnoreCase))
-                {
                     return true;
-                }
             }
 
             return false;

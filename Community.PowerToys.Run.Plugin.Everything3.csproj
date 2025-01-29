@@ -4,7 +4,7 @@
 
 	<PropertyGroup>
 		<LangVersion>12</LangVersion>
-		<ProjectGuid>{64467D32-4786-4ADD-9B77-FBF3C965D3D1}</ProjectGuid>
+		<ProjectGuid>{D0B07128-7983-4780-9AEA-30E7955FA520}</ProjectGuid>
 		<AppDesignerFolder>Properties</AppDesignerFolder>
 		<RootNamespace>Community.PowerToys.Run.Plugin.Everything3</RootNamespace>
 		<AssemblyName>Community.PowerToys.Run.Plugin.Everything3</AssemblyName>
@@ -80,27 +80,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Update="Properties\Resources.es-es.resx">
-		</EmbeddedResource>
-		<EmbeddedResource Update="Properties\Resources.de-de.resx">
-		</EmbeddedResource>
-		<EmbeddedResource Update="Properties\Resources.zh-cn.resx">
-		</EmbeddedResource>
 		<EmbeddedResource Update="Properties\Resources.resx">
 			<Generator>PublicResXFileCodeGenerator</Generator>
 			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
 		</EmbeddedResource>
-		<EmbeddedResource Update="Properties\Resources.zh-tw.resx">
-		</EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="lib\Everything64.dll">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</None>
-		<None Update="lib\EverythingARM64.dll">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</None>
 		<None Update="Images\Everything.dark.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -121,7 +107,7 @@
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="rmdir /S /Q &quot;$(TargetDir)amd64&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)TraceReloggerLib.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Dia2Lib.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;.\bin\$(Platform)_CHECKSUM.txt&quot;&#xD;&#xA;copy /y &quot;LICENSE&quot; &quot;$(TargetDir)LICENSE.txt&quot;&#xD;&#xA;powershell Compress-Archive -Path $(TargetDir) -DestinationPath .\bin\EverythingPT-$(Version)-$(Platform)-SDK3.zip -Force&#xD;&#xA;&quot;C:\Program Files (x86)\NSIS\makensis&quot; /Dver=$(Version) /Ddirect=$(TargetDir) /Dplatform=$(Platform) .\NSIS\exeCreator.nsi&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-$(Platform)-SDK3.zip SHA256 &gt;&gt; .\bin\$(Platform)_CHECKSUM.txt&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-$(Platform)-SDK3.exe SHA256 &gt;&gt; .\bin\$(Platform)_CHECKSUM.txt&#xD;&#xA;rd /Q /S &quot;$(TargetDir)&quot;" />
+		<Exec Command="rmdir /S /Q &quot;$(TargetDir)amd64&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)TraceReloggerLib.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Dia2Lib.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;.\bin\$(Platform)-SDK3._CHECKSUM.txt&quot;&#xD;&#xA;copy /y &quot;LICENSE&quot; &quot;$(TargetDir)LICENSE.txt&quot;&#xD;&#xA;powershell Compress-Archive -Path $(TargetDir) -DestinationPath .\bin\EverythingPT-$(Version)-$(Platform)-SDK3.zip -Force&#xD;&#xA;&quot;C:\Program Files (x86)\NSIS\makensis&quot; /Dver=$(Version) /Ddirect=$(TargetDir) /Dplatform=$(Platform) .\NSIS\exeCreator.nsi&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-$(Platform)-SDK3.zip SHA256 &gt;&gt; .\bin\$(Platform)-SDK3._CHECKSUM.txt&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-$(Platform)-SDK3.exe SHA256 &gt;&gt; .\bin\$(Platform)-SDK3._CHECKSUM.txt&#xD;&#xA;rd /Q /S &quot;$(TargetDir)&quot;" />
 	</Target>
 
 </Project>

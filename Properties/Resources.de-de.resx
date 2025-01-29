@@ -120,6 +120,10 @@
   <data name="clipboard_failed" xml:space="preserve">
     <value>Text konnte nicht in die Zwischenablage kopiert werden</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Context_Description" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
   <data name="copy_file" xml:space="preserve">
     <value>Kopieren </value>
   </data>
@@ -182,5 +186,8 @@
   </data>
   <data name="SwapCopy_Description" xml:space="preserve">
     <value>Strg+C zum Kopieren von Dateien/Ordnern, Strg+Alt+C zum Kopieren des Pfades.</value>
+  </data>
+  <data name="InstanceName" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
 </root>
