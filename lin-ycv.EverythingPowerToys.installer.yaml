@@ -12,6 +12,13 @@ InstallerSwitches:
   Silent: /S
   SilentWithProgress: /S
 UpgradeBehavior: install
+InstallationMetadata:
+  DefaultInstallLocation: '%LOCALAPPDATA%\Microsoft\PowerToys\PowerToys Run\Plugins\Everything'
+  Files:
+    - RelativeFilePath: plugin.json
+Dependencies:
+  PackageDependencies:
+  - PackageIdentifier: Microsoft.PowerToys
 Installers:
   - Architecture: x64
     InstallerUrl: _URL_
@@ -19,8 +26,5 @@ Installers:
   - Architecture: arm64
     InstallerUrl: _armURL_
     InstallerSha256: _armCRC_
-Dependencies:
-  PackageDependencies:
-  - PackageIdentifier: Microsoft.PowerToys
 ManifestType: installer
-ManifestVersion: 1.6.0
+ManifestVersion: 1.9.0

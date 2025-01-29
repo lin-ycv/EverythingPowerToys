@@ -14,7 +14,7 @@ ShortDescription: Plugin de búsqueda con Everything para PowerToys Run.
 Description: |
   Inclye los resultados de búsqueda de Everything en PowerToys Run.
   PowerToys se lista como una dependencia pero Everything necesita ser instalado de manera separada.
-Moniker: everythingpt
+Moniker: ept
 Tags:
 - "Everything"
 - "PowerToys"
@@ -22,8 +22,9 @@ Tags:
 - "Search"
 - "Launcher"
 - "PowerToysRun"
+- "PowerToys-Run"
 - "EverythingPT"
 - "EverythingPowerToys"
 ReleaseNotesUrl: https://github.com/lin-ycv/EverythingPowerToys/releases/tag/v_VERSION_
 ManifestType: locale
-ManifestVersion: 1.6.0
+ManifestVersion: 1.9.0
