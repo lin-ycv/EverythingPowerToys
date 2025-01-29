@@ -125,7 +125,7 @@
   </data>
   <data name="Context_Description" xml:space="preserve">
     <value>Configura le opzioni e l'ordine del menu contestuale.
-0_Apri cartella, 1_Esegui come Amministratore, 2_Esegui come Utente, 3_Copia, 4_Copia Percorso, 5_Apri nella Console, 6_Apri con programma esterno</value>
+0_Apri cartella, 1_Esegui come Amministratore, 2_Esegui come Utente, 3_Copia, 4_Copia Percorso, 5_Apri nella Console, 6_Apri con programma esterno, 7_Delete file/folder, 8_Shell context menu</value>
   </data>
   <data name="copy_file" xml:space="preserve">
     <value>Copia </value>

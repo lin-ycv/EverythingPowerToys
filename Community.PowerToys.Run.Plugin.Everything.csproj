@@ -80,27 +80,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Update="Properties\Resources.es-es.resx">
-		</EmbeddedResource>
-		<EmbeddedResource Update="Properties\Resources.de-de.resx">
-		</EmbeddedResource>
-		<EmbeddedResource Update="Properties\Resources.zh-cn.resx">
-		</EmbeddedResource>
 		<EmbeddedResource Update="Properties\Resources.resx">
 			<Generator>PublicResXFileCodeGenerator</Generator>
 			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
 		</EmbeddedResource>
-		<EmbeddedResource Update="Properties\Resources.zh-tw.resx">
-		</EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="lib\Everything64.dll">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</None>
-		<None Update="lib\EverythingARM64.dll">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</None>
 		<None Update="Images\Everything.dark.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

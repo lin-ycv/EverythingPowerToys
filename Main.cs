@@ -172,8 +172,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                     httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
                     string url = $"https://github.com/lin-ycv/EverythingPowerToys/raw/refs/heads/lib/Everything{(_isArm ? "ARM" : string.Empty)}64.dll";
                     byte[] fileContent = httpClient.GetByteArrayAsync(url).Result;
-                    string fileName = dll;
-                    File.WriteAllBytes(fileName, fileContent);
+                    File.WriteAllBytes(dll, fileContent);
                 }
                 else
                 {
@@ -183,13 +182,12 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
             if (_setting.LoggingLevel <= LogLevel.Debug)
                 Log.Info("EPT: Init", GetType());
-            if (_setting.Updates)
-            {
-                Update.UpdateSettings upSettings;
-                upSettings = _storage.Load();
-                Task.Run(() => new Update.UpdateChecker().Async(Assembly.GetExecutingAssembly().GetName().Version, _setting, upSettings, _isArm));
-            }
 
+            Update.UpdateSettings upSettings = _storage.Load();
+            if (_setting.Updates)
+                Task.Run(() => new Update.UpdateChecker().Async(Assembly.GetExecutingAssembly().GetName().Version, _setting, upSettings, _isArm));
+
+            Thread.Sleep(500); // Wait for Everything to start
             if (Everything_GetMinorVersion() < 5) _setting.Getfilters();
             _everything = new Everything(_setting);
             _contextMenuLoader = new ContextMenuLoader(context, _setting.Context);
@@ -277,6 +275,7 @@ namespace Community.PowerToys.Run.Plugin.Everything
                 {
                     cts.Cancel();
                     cts.Dispose();
+                    Everything_CleanUp();
                 }
 
                 _disposed = true;

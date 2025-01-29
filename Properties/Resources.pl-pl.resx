@@ -125,7 +125,7 @@
   </data>
   <data name="Context_Description" xml:space="preserve">
     <value>Skonfiguruj opcje i kolejność menu kontekstowego.
-0_Otwórz folder, 1_Uruchom jako administrator, 2_Uruchom jako użytkownik, 3_Kopiuj plik, 4_Kopiuj ścieżkę, 5_Otwórz w konsoli</value>
+0_Otwórz folder, 1_Uruchom jako administrator, 2_Uruchom jako użytkownik, 3_Kopiuj plik, 4_Kopiuj ścieżkę, 5_Otwórz w konsoli, 6_Open in custom program, 7_Delete file/folder, 8_Shell context menu</value>
   </data>
   <data name="copy_file" xml:space="preserve">
     <value>Kopiuj plik </value>

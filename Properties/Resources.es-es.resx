@@ -125,7 +125,7 @@
   </data>
   <data name="Context_Description" xml:space="preserve">
     <value>Configurar las opciones del menú contextual y su orden.
-0_Abrir carpeta, 1_Ejecutar como administrador, 2_Ejecutar como usuario, 3_Copiar, 4_Copiar ruta, 5_Abrir en el terminal</value>
+0_Abrir carpeta, 1_Ejecutar como administrador, 2_Ejecutar como usuario, 3_Copiar, 4_Copiar ruta, 5_Abrir en el terminal, 6_Open in custom program, 7_Delete file/folder, 8_Shell context menu</value>
   </data>
   <data name="copy_file" xml:space="preserve">
     <value>Copiar </value>
