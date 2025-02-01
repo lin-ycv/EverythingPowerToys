@@ -1,6 +1,6 @@
 # Everything SDK Libraries
 
-Everything dll's are not included as part of the installer as of v0.87.1, this is to reduce AV FP.  
+Everything dll's are not included as part of the installer as of v0.88.0, this is to reduce AV FP.  
 On startup of the EPT, it'll check if `Everything64.dll` exists in the root folder, if not, it'll prompt you to download automatically from this folder.  
 Click Yes and it'll automatically download.  
 Click No and it won't download, but also won't load EPT into PTR. Use this option if you want to download the DLL yourself.
