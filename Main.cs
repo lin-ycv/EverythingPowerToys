@@ -187,7 +187,6 @@ namespace Community.PowerToys.Run.Plugin.Everything
             if (_setting.Updates)
                 Task.Run(() => new Update.UpdateChecker().Async(Assembly.GetExecutingAssembly().GetName().Version, _setting, upSettings, _isArm));
 
-            Thread.Sleep(500); // Wait for Everything to start
             if (Everything_GetMinorVersion() < 5) _setting.Getfilters();
             _everything = new Everything(_setting);
             _contextMenuLoader = new ContextMenuLoader(context, _setting.Context);
