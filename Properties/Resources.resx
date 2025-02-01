@@ -269,7 +269,7 @@ Latest:		{1}</value>
     <value>Everything3_x64.dll is missing, automatically download this file?</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>The "Include inglobal result" option is turned on for the History plugin, which could lead to conflicts with EPT.</value>
+    <value>The "Include in global result" option is turned on for the History plugin, which could lead to conflicts with EPT.</value>
   </data>
   <data name="scm" xml:space="preserve">
     <value>Shell context menu (Ctrl+M)</value>

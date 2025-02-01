@@ -17,10 +17,8 @@ namespace Community.PowerToys.Run.Plugin.Everything3
     {
         private readonly string subHeader;
         private string exe = string.Empty;
-#pragma warning disable SA1401 // Fields should be private
-        internal IntPtr Client;
-        internal IntPtr SearchState;
-#pragma warning restore SA1401 // Fields should be private
+        internal IntPtr Client { get; set; }
+        internal IntPtr SearchState { get; set; }
         internal Everything(Settings setting)
         {
             Client = Everything3_ConnectW(setting.InstanceName);
@@ -81,6 +79,8 @@ namespace Community.PowerToys.Run.Plugin.Everything3
             }
 
             string orgqry = query;
+
+            query = $"Count:{setting.Max} " + query;
 
             if (!string.IsNullOrEmpty(setting.Prefix))
                 query = setting.Prefix + query;

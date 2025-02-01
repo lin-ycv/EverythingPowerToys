@@ -233,7 +233,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &quot;Include inglobal result&quot; option is turned on for the History plugin, which could lead to conflicts with EPT..
+        ///   Looks up a localized string similar to The &quot;Include in global result&quot; option is turned on for the History plugin, which could lead to conflicts with EPT..
         /// </summary>
         public static string History {
             get {

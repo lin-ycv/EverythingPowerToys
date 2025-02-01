@@ -8,8 +8,8 @@ namespace Community.PowerToys.Run.Plugin.Everything3
         internal string InstanceName { get; set; } = "1.5a";
         internal Sort Sort { get; set; } = Sort.RUN_COUNT;
         internal Sort Sort2 { get; set; } = Sort.DATE_MODIFIED;
-        internal bool Descending { get; set; }
-        internal bool Descending2 { get; set; }
+        internal bool Descending { get; set; } = true;
+        internal bool Descending2 { get; set; } = true;
         internal uint Max { get; set; } = 10;
         internal string Context { get; set; } = "01234568";
         internal bool Copy { get; set; }

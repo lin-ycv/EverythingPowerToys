@@ -224,9 +224,8 @@ namespace Community.PowerToys.Run.Plugin.Everything3
             if (_setting.Updates)
                 Task.Run(() => new Update.UpdateChecker().Async(Assembly.GetExecutingAssembly().GetName().Version, _setting, upSettings, _isArm));
 
-            Thread.Sleep(500); // Wait for Everything to start
-            _everything = new Everything(_setting);
-            _contextMenuLoader = new ContextMenuLoader(context, _setting.Context, _everything.Client);
+            // _everything = new Everything(_setting); // Fail to initialize, starts up before Everything, #165
+            _contextMenuLoader = new ContextMenuLoader(context, _setting.Context);
             _contextMenuLoader.Update(_setting);
             var history = PluginManager.GlobalPlugins.FirstOrDefault(p => p.Metadata.ID == "C88512156BB74580AADF7252E130BA8D" && !p.Metadata.Disabled);
             if (history != null)
@@ -267,6 +266,12 @@ namespace Community.PowerToys.Run.Plugin.Everything3
 
         public List<Result> Query(Query query)
         {
+            if (_everything == null)
+            {
+                _everything = new Everything(_setting);
+                _contextMenuLoader.Client = _everything.Client;
+            }
+
             return null;
         }
 

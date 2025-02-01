@@ -61,8 +61,8 @@ namespace Community.PowerToys.Run.Plugin.Everything3.Update
                                 File.WriteAllBytes(fileName, fileContent);
                                 Process.Start(fileName);
 
-                                //foreach (Process pt in Process.GetProcessesByName("PowerToys"))
-                                //    pt.Kill();
+                                foreach (Process pt in Process.GetProcessesByName("PowerToys"))
+                                    pt.Kill();
                             }
                             else
                             {
@@ -83,11 +83,11 @@ namespace Community.PowerToys.Run.Plugin.Everything3.Update
             }
             catch (Exception e)
             {
-                if (s.LoggingLevel < LogLevel.Error)
+                if (s.LoggingLevel <= LogLevel.Info)
                     Log.Exception($"EPT: Unable to check for update", e, GetType());
             }
 
-            if (s.LoggingLevel < LogLevel.Error)
+            if (s.LoggingLevel <= LogLevel.Info)
                 Log.Info("EPT:  Checking Update...Done", GetType());
         }
     }

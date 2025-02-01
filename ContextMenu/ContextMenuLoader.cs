@@ -16,17 +16,18 @@ using wf = System.Windows.Forms;
 
 namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
 {
-    internal sealed class ContextMenuLoader(PluginInitContext context, string options, IntPtr client) : IContextMenu
+    internal sealed class ContextMenuLoader(PluginInitContext context, string options) : IContextMenu
     {
         private readonly PluginInitContext _context = context;
 
         // Extensions for adding run as admin context menu item for applications
         private readonly string[] _appExtensions = [".exe", ".bat", ".appref-ms", ".lnk"];
-        private readonly IntPtr _client = client;
+        internal IntPtr Client { get; set; }
         private bool _swapCopy;
         private string _options = options;
         private string _customProgram;
         private string _customArg;
+
         internal void Update(Settings s)
         {
             _swapCopy = s.Copy;
@@ -67,7 +68,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                             return false;
                                         }
 
-                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(_client, record.Path);
+                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(Client, record.Path);
                                         return true;
                                     },
                                 });
@@ -91,7 +92,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                         try
                                         {
                                             Task.Run(() => Helper.RunAsAdmin(record.Path));
-                                            _ = NativeMethods.Everything3_IncRunCountFromFilenameW(_client, record.Path);
+                                            _ = NativeMethods.Everything3_IncRunCountFromFilenameW(Client, record.Path);
                                             return true;
                                         }
                                         catch (Exception e)
@@ -121,7 +122,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                         try
                                         {
                                             Task.Run(() => Helper.RunAsUser(record.Path));
-                                            _ = NativeMethods.Everything3_IncRunCountFromFilenameW(_client, record.Path);
+                                            _ = NativeMethods.Everything3_IncRunCountFromFilenameW(Client, record.Path);
                                             return true;
                                         }
                                         catch (Exception e)
@@ -150,7 +151,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                     try
                                     {
                                         Clipboard.SetData(DataFormats.FileDrop, new string[] { record.Path });
-                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(_client, record.Path);
+                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(Client, record.Path);
                                         return true;
                                     }
                                     catch (Exception e)
@@ -180,7 +181,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                     try
                                     {
                                         Clipboard.SetDataObject(record.Path);
-                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(_client, record.Path);
+                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(Client, record.Path);
                                         return true;
                                     }
                                     catch (Exception e)
@@ -214,7 +215,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                         else
                                             Helper.OpenInConsole(record.Path);
 
-                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(_client, record.Path);
+                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(Client, record.Path);
                                         return true;
                                     }
                                     catch (Exception e)
@@ -244,7 +245,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                     try
                                     {
                                         process.Start();
-                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(_client, record.Path);
+                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(Client, record.Path);
                                         return true;
                                     }
                                     catch (Exception e)
@@ -302,7 +303,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.ContextMenu
                                             scm.ShowContextMenu(new FileInfo(record.Path), wf.Cursor.Position);
                                         else
                                             scm.ShowContextMenu(new DirectoryInfo(record.Path), wf.Cursor.Position);
-                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(_client, record.Path);
+                                        _ = NativeMethods.Everything3_IncRunCountFromFilenameW(Client, record.Path);
                                         return true;
                                     }
                                     catch (Exception e)
