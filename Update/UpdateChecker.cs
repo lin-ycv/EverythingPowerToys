@@ -17,10 +17,10 @@ namespace Community.PowerToys.Run.Plugin.Everything3.Update
     {
         private readonly CompositeFormat updateAvailable = CompositeFormat.Parse(Resources.UpdateAvailable);
 
-        internal async Task Async(Version v, Settings s, UpdateSettings us, bool isArm)
+        internal async Task Async(Version v, Settings s, UpdateSettings us)
         {
-            string apiUrl = "https://api.github.com/repos/lin-ycv/EverythingPowerToys/releases/latest";
-            if (s.LoggingLevel <= LogLevel.Info) Log.Info("EPT: Checking Update...", GetType());
+            string apiUrl = "https://api.github.com/repos/lin-ycv/EverythingPowerToys/releases?per_page=1";
+            if (s.LoggingLevel <= LogLevel.Info) Log.Info("EPT3: Checking Update...", GetType());
 
             try
             {
@@ -28,16 +28,16 @@ namespace Community.PowerToys.Run.Plugin.Everything3.Update
                 httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
 
                 HttpResponseMessage response = await httpClient.GetAsync(apiUrl);
-                if (s.LoggingLevel <= LogLevel.Debug) Log.Info($"EPT:  Response: {response.StatusCode}", GetType());
+                if (s.LoggingLevel <= LogLevel.Debug) Log.Info($"EPT3:  Response: {response.StatusCode}", GetType());
 
                 if (response.IsSuccessStatusCode)
                 {
                     using JsonDocument jsonDocument = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync());
-                    JsonElement root = jsonDocument.RootElement;
+                    JsonElement root = jsonDocument.RootElement[0];
                     Version latest = Version.TryParse(root.GetProperty("tag_name").GetString().AsSpan(1), out var vNumber)
                         ? vNumber
                         : Version.Parse(root.GetProperty("tag_name").GetString());
-                    if (s.LoggingLevel <= LogLevel.Debug) Log.Info($"EPT:\n\tLastest: {latest}\n\tSkip: {us.Skip}", GetType());
+                    if (s.LoggingLevel <= LogLevel.Debug) Log.Info($"EPT3:\n\tLastest: {latest}\n\tSkip: {us.Skip}", GetType());
 
                     if (latest > v && latest != us.Skip)
                     {
@@ -66,7 +66,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3.Update
                             }
                             else
                             {
-                                ProcessStartInfo p = new("https://github.com/lin-ycv/EverythingPowerToys/releases/latest")
+                                ProcessStartInfo p = new("https://github.com/lin-ycv/EverythingPowerToys/releases/")
                                 {
                                     UseShellExecute = true,
                                     Verb = "Open",
@@ -84,11 +84,11 @@ namespace Community.PowerToys.Run.Plugin.Everything3.Update
             catch (Exception e)
             {
                 if (s.LoggingLevel <= LogLevel.Info)
-                    Log.Exception($"EPT: Unable to check for update", e, GetType());
+                    Log.Exception($"EPT3: Unable to check for update", e, GetType());
             }
 
             if (s.LoggingLevel <= LogLevel.Info)
-                Log.Info("EPT:  Checking Update...Done", GetType());
+                Log.Info("EPT3:  Checking Update...Done", GetType());
         }
     }
 }

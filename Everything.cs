@@ -80,7 +80,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3
 
             string orgqry = query;
 
-            query = $"Count:{setting.Max} " + query;
+            //query = $"Count:{setting.Max} " + query; // Limits number of returned results, but does not work with sorting
 
             if (!string.IsNullOrEmpty(setting.Prefix))
                 query = setting.Prefix + query;

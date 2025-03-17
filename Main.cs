@@ -222,7 +222,7 @@ namespace Community.PowerToys.Run.Plugin.Everything3
 
             Update.UpdateSettings upSettings = _storage.Load();
             if (_setting.Updates)
-                Task.Run(() => new Update.UpdateChecker().Async(Assembly.GetExecutingAssembly().GetName().Version, _setting, upSettings, _isArm));
+                Task.Run(() => new Update.UpdateChecker().Async(Assembly.GetExecutingAssembly().GetName().Version, _setting, upSettings));
 
             // _everything = new Everything(_setting); // Fail to initialize, starts up before Everything, #165
             _contextMenuLoader = new ContextMenuLoader(context, _setting.Context);
@@ -268,8 +268,25 @@ namespace Community.PowerToys.Run.Plugin.Everything3
         {
             if (_everything == null)
             {
-                _everything = new Everything(_setting);
-                _contextMenuLoader.Client = _everything.Client;
+                try
+                {
+                    _everything = new Everything(_setting);
+                    _contextMenuLoader.Client = _everything.Client;
+                }
+                catch (InvalidOperationException)
+                {
+                    //Log.Warn("EPT3: Unable to create Everything instance", GetType());
+                    return
+                    [
+                        new Result()
+                        {
+                            Title = Resources.Everything_not_running,
+                            SubTitle = Resources.Everything_ini,
+                            IcoPath = "Images/warning.png",
+                            Score = int.MaxValue,
+                        },
+                    ];
+                }
             }
 
             return null;
@@ -277,6 +294,9 @@ namespace Community.PowerToys.Run.Plugin.Everything3
 
         public List<Result> Query(Query query, bool delayedExecution)
         {
+            if (_everything == null)
+                return null;
+
             List<Result> results = [];
             if (!string.IsNullOrEmpty(query.Search))
             {
@@ -320,8 +340,15 @@ namespace Community.PowerToys.Run.Plugin.Everything3
                 {
                     cts.Cancel();
                     cts.Dispose();
-                    Everything3_DestroySearchState(_everything.SearchState);
-                    Everything3_DestroyClient(_everything.Client);
+                    try
+                    {
+                        Everything3_DestroySearchState(_everything.SearchState);
+                        Everything3_DestroyClient(_everything.Client);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Exception("EPT3: Dispose", e, GetType());
+                    }
                 }
 
                 _disposed = true;
