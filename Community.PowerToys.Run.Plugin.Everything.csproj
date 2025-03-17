@@ -10,7 +10,7 @@
 		<AssemblyName>Community.PowerToys.Run.Plugin.Everything</AssemblyName>
 		<Version>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)plugin.json').Split(',')[5].Split(':')[1].Trim().Trim('"'))</Version>
 
-		<useWPF>true</useWPF>
+		<!--<useWPF>true</useWPF>-->
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 		<GenerateSatelliteAssembliesForCore>true</GenerateSatelliteAssembliesForCore>

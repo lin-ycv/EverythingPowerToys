@@ -19,6 +19,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
     internal sealed class ContextMenuLoader(PluginInitContext context, string options) : IContextMenu
     {
         private readonly PluginInitContext _context = context;
+        private readonly string font = "Segoe Fluent Icons,Segoe MDL2 Assets";
 
         // Extensions for adding run as admin context menu item for applications
         private readonly string[] _appExtensions = [".exe", ".bat", ".appref-ms", ".lnk"];
@@ -54,7 +55,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                     PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                                     Title = Resources.open_containing_folder,
                                     Glyph = "\xE838",
-                                    FontFamily = "Segoe MDL2 Assets",
+                                    FontFamily = font,
                                     AcceleratorKey = Key.E,
                                     AcceleratorModifiers = ModifierKeys.Control | ModifierKeys.Shift,
                                     Action = _ =>
@@ -83,7 +84,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                     PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                                     Title = Resources.run_as_admin,
                                     Glyph = "\xE7EF",
-                                    FontFamily = "Segoe MDL2 Assets",
+                                    FontFamily = font,
                                     AcceleratorKey = Key.Enter,
                                     AcceleratorModifiers = ModifierKeys.Control | ModifierKeys.Shift,
                                     Action = _ =>
@@ -113,7 +114,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                     PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                                     Title = Resources.run_as_user,
                                     Glyph = "\xE7EE",
-                                    FontFamily = "Segoe MDL2 Assets",
+                                    FontFamily = font,
                                     AcceleratorKey = Key.U,
                                     AcceleratorModifiers = ModifierKeys.Control | ModifierKeys.Shift,
                                     Action = _ =>
@@ -141,7 +142,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                                 Title = Resources.copy_file + (_swapCopy ? Resources.copy_shortcut : Resources.copy_shortcutAlt),
                                 Glyph = "\xE8C8",
-                                FontFamily = "Segoe MDL2 Assets",
+                                FontFamily = font,
                                 AcceleratorKey = Key.C,
                                 AcceleratorModifiers = _swapCopy ? ModifierKeys.Control : ModifierKeys.Control | ModifierKeys.Alt,
 
@@ -171,7 +172,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                                 Title = Resources.copy_path + (_swapCopy ? Resources.copy_shortcutAlt : Resources.copy_shortcut),
                                 Glyph = "\xE71B",
-                                FontFamily = "Segoe MDL2 Assets",
+                                FontFamily = font,
                                 AcceleratorKey = Key.C,
                                 AcceleratorModifiers = _swapCopy ? ModifierKeys.Control | ModifierKeys.Alt : ModifierKeys.Control,
 
@@ -201,7 +202,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                                 Title = Resources.open_in_console,
                                 Glyph = "\xE756",
-                                FontFamily = "Segoe MDL2 Assets",
+                                FontFamily = font,
                                 AcceleratorKey = Key.C,
                                 AcceleratorModifiers = ModifierKeys.Control | ModifierKeys.Shift,
 
@@ -232,7 +233,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                                 Title = Resources.open_in_custom,
                                 Glyph = "\xE8A7",
-                                FontFamily = "Segoe MDL2 Assets",
+                                FontFamily = font,
                                 AcceleratorKey = Key.N,
                                 AcceleratorModifiers = ModifierKeys.Control,
 
@@ -262,7 +263,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                                 Title = Resources.delete_result,
                                 Glyph = "\xE74D",
-                                FontFamily = "Segoe MDL2 Assets",
+                                FontFamily = font,
                                 AcceleratorKey = Key.Delete,
                                 AcceleratorModifiers = ModifierKeys.Control,
                                 Action = (context) =>
@@ -290,7 +291,7 @@ namespace Community.PowerToys.Run.Plugin.Everything.ContextMenu
                                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                                 Title = Resources.scm,
                                 Glyph = "\xE712",
-                                FontFamily = "Segoe MDL2 Assets",
+                                FontFamily = font,
                                 AcceleratorKey = Key.M,
                                 AcceleratorModifiers = ModifierKeys.Control,
                                 Action = (context) =>

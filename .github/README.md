@@ -15,8 +15,8 @@
 EverythingPowerToys (EPT) is a plugin for the program [PowerToys Run (PTR)](https://learn.microsoft.com/en-us/windows/powertoys/run)<br>
 This adds the ability to search the computer for files and folders using [Everything](https://www.voidtools.com/) inside PTR
 
-#### Install instructions
-There are 4 different methods of installation, chose the one you prefer:
+#### Install Methods
+Chose the one you prefer:
 1) Chocolatey
 2) Scoop
 3) WinGet
