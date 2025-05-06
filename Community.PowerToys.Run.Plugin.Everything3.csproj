@@ -87,6 +87,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Everything3_x64.dll">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Images\Everything.dark.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

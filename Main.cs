@@ -198,24 +198,24 @@ namespace Community.PowerToys.Run.Plugin.Everything3
                 throw new PlatformNotSupportedException("EPT3: ARM is not supported yet with Everything3 SDK, use stable release of EPT instead");
             }
 
-            string dll = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Everything3_x64.dll");
+            //string dll = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Everything3_x64.dll");
 
-            if (!File.Exists(dll))
-            {
-                MessageBoxResult mbox = MessageBox.Show(Resources.MissingLib, "EPT3: Downloader", MessageBoxButton.YesNo);
-                if (mbox == MessageBoxResult.Yes)
-                {
-                    using HttpClient httpClient = new();
-                    httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
-                    string url = $"https://github.com/lin-ycv/EverythingPowerToys/raw/refs/heads/lib/Everything3_x64.dll";
-                    byte[] fileContent = httpClient.GetByteArrayAsync(url).Result;
-                    File.WriteAllBytes(dll, fileContent);
-                }
-                else
-                {
-                    throw new DllNotFoundException("EPT3: Everything3_x64.dll not found, either press Yes on the download prompt, or manually load in the dll @ %LOCALAPPDATA%\\Microsoft\\PowerToys\\PowerToys Run\\Plugins\\Everything3");
-                }
-            }
+            //if (!File.Exists(dll))
+            //{
+            //    MessageBoxResult mbox = MessageBox.Show(Resources.MissingLib, "EPT3: Downloader", MessageBoxButton.YesNo);
+            //    if (mbox == MessageBoxResult.Yes)
+            //    {
+            //        using HttpClient httpClient = new();
+            //        httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
+            //        string url = $"https://github.com/lin-ycv/EverythingPowerToys/raw/refs/heads/lib/Everything3_x64.dll";
+            //        byte[] fileContent = httpClient.GetByteArrayAsync(url).Result;
+            //        File.WriteAllBytes(dll, fileContent);
+            //    }
+            //    else
+            //    {
+            //        throw new DllNotFoundException("EPT3: Everything3_x64.dll not found, either press Yes on the download prompt, or manually load in the dll @ %LOCALAPPDATA%\\Microsoft\\PowerToys\\PowerToys Run\\Plugins\\Everything3");
+            //    }
+            //}
 
             if (_setting.LoggingLevel <= LogLevel.Debug)
                 Log.Info("EPT3: Init", GetType());

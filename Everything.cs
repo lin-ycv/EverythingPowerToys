@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading;
 using Community.PowerToys.Run.Plugin.Everything3.Properties;
 using Community.PowerToys.Run.Plugin.Everything3.SearchHelper;
+using Microsoft.Win32;
 using NLog;
 using Wox.Plugin;
 using Wox.Plugin.Logger;
@@ -61,10 +62,82 @@ namespace Community.PowerToys.Run.Plugin.Everything3
             }
             else if (string.IsNullOrEmpty(exe))
             {
-                exe = Path.Exists("C:\\Program Files\\Everything 1.5a\\Everything64.exe") ? "C:\\Program Files\\Everything 1.5a\\Everything64.exe" :
-                    (Path.Exists("C:\\Program Files\\Everything\\Everything.exe") ? "C:\\Program Files\\Everything\\Everything.exe" :
-                    (Path.Exists("C:\\Program Files (x86)\\Everything 1.5a\\Everything.exe") ? "C:\\Program Files (x86)\\Everything 1.5a\\Everything.exe" :
-                    (Path.Exists("C:\\Program Files (x86)\\Everything\\Everything.exe") ? "C:\\Program Files (x86)\\Everything\\Everything.exe" : string.Empty)));
+                string a64 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Everything 1.5a", "Everything64.exe"),
+                     s64 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Everything", "Everything.exe"),
+                     a32 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Everything 1.5", "Everything.exe"),
+                     s32 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Everything", "Everything.exe");
+
+                if (Path.Exists(a64)) { exe = a64; }
+                else if (Path.Exists(s64)) { exe = s64; }
+                else if (Path.Exists(a32)) { exe = a32; }
+                else if (Path.Exists(s32)) { exe = s32; }
+                else
+                {
+                    try
+                    {
+                        // Check uninstall information in registry for installation locations
+                        string[] uninstallKeys =
+                        [
+                            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Everything",
+                         @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Everything 1.5a",
+                         @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Everything",
+                         @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Everything 1.5a"
+                        ];
+
+                        foreach (string subKey in uninstallKeys)
+                        {
+                            using RegistryKey key = Registry.LocalMachine.OpenSubKey(subKey);
+                            if (key != null)
+                            {
+                                // Check install location from registry
+                                if (key.GetValue("InstallLocation") is string installLocation && Path.Exists(installLocation))
+                                {
+                                    string exe32 = Path.Combine(installLocation, "Everything.exe");
+                                    string exe64 = Path.Combine(installLocation, "Everything64.exe");
+
+                                    if (File.Exists(exe64))
+                                    {
+                                        exe = exe64;
+                                        break;
+                                    }
+
+                                    if (File.Exists(exe32))
+                                    {
+                                        exe = exe32;
+                                        break;
+                                    }
+                                }
+
+                                // Try to extract location from uninstall string
+                                if (key.GetValue("UninstallString") is string uninstallString)
+                                {
+                                    string dir = Path.GetDirectoryName(uninstallString.Contains('"') ? uninstallString.Split('"')[1] : uninstallString);
+                                    if (dir != null)
+                                    {
+                                        string exe32 = Path.Combine(dir, "Everything.exe");
+                                        string exe64 = Path.Combine(dir, "Everything64.exe");
+
+                                        if (File.Exists(exe64))
+                                        {
+                                            exe = exe64;
+                                            break;
+                                        }
+
+                                        if (File.Exists(exe32))
+                                        {
+                                            exe = exe32;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        exe = string.Empty;
+                    }
+                }
             }
         }
 
