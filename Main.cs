@@ -161,24 +161,25 @@ namespace Community.PowerToys.Run.Plugin.Everything
 
         public void Init(PluginInitContext context)
         {
-            string dll = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Everything64.dll");
+            // Using self compiled dll to avoid signiture matching (https://github.com/lin-ycv/EverythingSDK/tree/main)
+            //string dll = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Everything64.dll");
 
-            if (!File.Exists(dll))
-            {
-                MessageBoxResult mbox = MessageBox.Show(Resources.MissingLib, "EPT: Downloader", MessageBoxButton.YesNo);
-                if (mbox == MessageBoxResult.Yes)
-                {
-                    using HttpClient httpClient = new();
-                    httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
-                    string url = $"https://github.com/lin-ycv/EverythingPowerToys/raw/refs/heads/lib/Everything{(_isArm ? "ARM" : string.Empty)}64.dll";
-                    byte[] fileContent = httpClient.GetByteArrayAsync(url).Result;
-                    File.WriteAllBytes(dll, fileContent);
-                }
-                else
-                {
-                    throw new DllNotFoundException("EPT: Everything64.dll not found, either press Yes on the download prompt, or manually load in the dll @ %LOCALAPPDATA%\\Microsoft\\PowerToys\\PowerToys Run\\Plugins\\Everything");
-                }
-            }
+            //if (!File.Exists(dll))
+            //{
+            //    MessageBoxResult mbox = MessageBox.Show(Resources.MissingLib, "EPT: Downloader", MessageBoxButton.YesNo);
+            //    if (mbox == MessageBoxResult.Yes)
+            //    {
+            //        using HttpClient httpClient = new();
+            //        httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
+            //        string url = $"https://github.com/lin-ycv/EverythingPowerToys/raw/refs/heads/lib/Everything{(_isArm ? "ARM" : string.Empty)}64.dll";
+            //        byte[] fileContent = httpClient.GetByteArrayAsync(url).Result;
+            //        File.WriteAllBytes(dll, fileContent);
+            //    }
+            //    else
+            //    {
+            //        throw new DllNotFoundException("EPT: Everything64.dll not found, either press Yes on the download prompt, or manually load in the dll @ %LOCALAPPDATA%\\Microsoft\\PowerToys\\PowerToys Run\\Plugins\\Everything");
+            //    }
+            //}
 
             if (_setting.LoggingLevel <= LogLevel.Debug)
                 Log.Info("EPT: Init", GetType());

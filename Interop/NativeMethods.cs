@@ -57,13 +57,17 @@ namespace Community.PowerToys.Run.Plugin.Everything.Interop
             DATE_RUN_DESCENDING,
         }
         #endregion
-        internal const string dllName = "Everything64.dll";
+#if X64
+        internal const string dllName = "Everything2_x64.dll";
+#else
+        internal const string dllName = "Everything2_ARM64.dll";
+#endif
         [LibraryImport(dllName)]
         internal static partial void Everything_CleanUp();
         [LibraryImport(dllName)]
         internal static partial uint Everything_GetLastError();
         [LibraryImport(dllName)]
-        internal static partial uint Everything_GetNumResults(); //Everything3_GetResultListCount
+        internal static partial uint Everything_GetNumResults();
         [LibraryImport(dllName)]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static partial bool Everything_GetMatchPath();

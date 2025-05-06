@@ -87,6 +87,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Everything2_ARM64.dll" Condition="'$(Platform)'=='ARM64'">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Everything2_x64.dll" Condition="'$(Platform)'=='x64'">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Images\Everything.dark.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -110,7 +116,7 @@
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="rmdir /S /Q &quot;$(TargetDir)amd64&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)TraceReloggerLib.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Dia2Lib.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;.\bin\$(Platform)_CHECKSUM.txt&quot;&#xD;&#xA;copy /y &quot;LICENSE&quot; &quot;$(TargetDir)LICENSE.txt&quot;&#xD;&#xA;powershell Compress-Archive -Path $(TargetDir) -DestinationPath .\bin\EverythingPT-$(Version)-$(Platform).zip -Force&#xD;&#xA;&quot;C:\Program Files (x86)\NSIS\makensis&quot; /Dver=$(Version) /Ddirect=$(TargetDir) /Dplatform=$(Platform) .\NSIS\exeCreator.nsi&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-$(Platform).zip SHA256 &gt;&gt; .\bin\$(Platform)_CHECKSUM.txt&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-$(Platform).exe SHA256 &gt;&gt; .\bin\$(Platform)_CHECKSUM.txt&#xD;&#xA;rd /Q /S &quot;$(TargetDir)&quot;" />
+		<Exec Command="rmdir /S /Q &quot;$(TargetDir)amd64&quot;&#xD;&#xA;rmdir /S /Q &quot;$(TargetDir)arm64&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)TraceReloggerLib.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)Dia2Lib.dll&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)*.pdb&quot;&#xD;&#xA;del /Q &quot;$(TargetDir)PowerToys*.dll&quot;&#xD;&#xA;del /Q &quot;.\bin\$(Platform)_CHECKSUM.txt&quot;&#xD;&#xA;copy /y &quot;LICENSE&quot; &quot;$(TargetDir)LICENSE.txt&quot;&#xD;&#xA;powershell Compress-Archive -Path $(TargetDir) -DestinationPath .\bin\EverythingPT-$(Version)-$(Platform).zip -Force&#xD;&#xA;&quot;C:\Program Files (x86)\NSIS\makensis&quot; /Dver=$(Version) /Ddirect=$(TargetDir) /Dplatform=$(Platform) .\NSIS\exeCreator.nsi&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-$(Platform).zip SHA256 &gt;&gt; .\bin\$(Platform)_CHECKSUM.txt&#xD;&#xA;certUtil -hashfile .\bin\EverythingPT-$(Version)-$(Platform).exe SHA256 &gt;&gt; .\bin\$(Platform)_CHECKSUM.txt&#xD;&#xA;rd /Q /S &quot;$(TargetDir)&quot;" />
 	</Target>
 
 </Project>
