@@ -1,4 +1,4 @@
-name: sync to package repos
+name: Push updates to package managers
 
 on:
   release:
@@ -12,60 +12,39 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4.1.1
-        with:
-          ref: chocolatey
       
       - name: Config and Push
         run: |
           rm .git -Recurse -Force -Confirm:$false
-          $response=curl.exe -s https://api.github.com/repos/lin-ycv/everythingpowertoys/releases/latest
           
-          $ver = ($response | select-string '"tag_name":').Line.split("`"")[3].Trim('v')
-          
-          $zip = ($response | Where-Object { $_ -like "*x64.zip`"" } | Select-Object -Last 1).Split("`"")[3]
-          $zipARM = ($response | Where-Object { $_ -like "*ARM64.zip`"" } | Select-Object -Last 1).Split("`"")[3]
-          $exe = ($response | Where-Object { $_ -like "*x64.exe`"" } | Select-Object -Last 1).Split("`"")[3]
-          $exeARM = ($response | Where-Object { $_ -like "*ARM64.exe`"" } | Select-Object -Last 1).Split("`"")[3]
-          
-          $pattern = '(?s)(?<=<!--HASH-->).*?(?=<!--ENDHASH-->)'
-          $hash = (($response | select-string '"body"').Line | Select-String -Pattern $pattern | ForEach-Object { $_.Matches.Value.Trim() }).Split("\r\n")
-          $ziphash = ($hash | select-string "x64-ZIP").Line.Split('|')[1]
-          $zipARMhash = ($hash | select-string "ARM64-ZIP").Line.Split('|')[1]
-          $exehash = ($hash | select-string "x64-EXE").Line.Split('|')[1]
-          $exeARMhash = ($hash | select-string "ARM64-EXE").Line.Split('|')[1]
-          
-          # chocolatey
-          echo $ver $zip $ziphash
-          Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $ver} | ForEach  {$_ -Replace '_URL_', $zip} | ForEach  {$_ -Replace '_CRC_', $ziphash} | Set-Content $_ }
-          if([System.IO.File]::Exists("$PWD\1")) { rm 1 }
-          choco pack
-          ls
-          choco apikey --key ${{ secrets.CHOCOLATEY }} --source https://push.chocolatey.org/
-          choco push everythingpowertoys.$ver.nupkg --source https://push.chocolatey.org/
+          # Get Chocolatey manifests
+          git clone --filter=blob:none --no-checkout --depth 1 https://github.com/lin-ycv/chocolatey-pkgs.git
+          cd chocolatey-pkgs
+          git sparse-checkout set --cone
+          git sparse-checkout set .\manifests\everythingpowertoys
+          git checkout main
 
-          # winget
-          $wingetPackage = "lin-ycv.EverythingPowerToys"
-          echo $wingetPackage $ver $exe $exehash $exeARM $exeARMhash
+          # Use Choco-AU to get the data
+          Install-Module Chocolatey-AU -Force
+          cd .\manifests\everythingpowertoys
+          $UpdateOutput = .\update.ps1
+          echo $Latest.Version $Latest.URL64 $Latest.Checksum64 $Latest.ARM64 $Latest.Checksuma64
+
+          # Chocolatey: Check (and Push)
+          $NupkgPath = (($UpdateOutput.Result | Where-Object {$_ -like '*.nupkg''*'}) -split "'")[1]
+          if ($NupkgPath){
+            Write-Output "Newer Version Available: push to Choco"
+            $ApiKey = '${{ secrets.CHOCOLATEY }}'
+            $ChocoServer = 'https://push.chocolatey.org/'
+            choco push $NupkgPath --source $ChocoServer --key $ApiKey
+          }
+          cd ..\..\..
+
+          # Winget
           rm -Path .\* -Recurse -Force
           git clone -b winget https://github.com/lin-ycv/EverythingPowerToys.git --depth 1
           Invoke-WebRequest https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
           cd .\EverythingPowerToys
           rm .git -Recurse -Force -Confirm:$false
-          Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $ver} | ForEach  {$_ -Replace '_URL_', $exe} | ForEach  {$_ -Replace '_CRC_', $exehash} | ForEach  {$_ -Replace '_armURL_', $exeARM} | ForEach  {$_ -Replace '_armCRC_', $exeARMhash} |  Set-Content $_ }
-          ..\wingetcreate submit -p "New version: lin-ycv.EverythingPowerToys version $ver" -t ${{ secrets.EVERYTHINGPT }} .
-
-          # scoop
-          # cd ..
-          # git clone -b EverythingPowerToys https://github.com/lin-ycv/ScoopExtras.git --depth 1
-          # cd .\ScoopExtras\bucket
-          # gh repo sync lin-ycv/ScoopExtras -b master
-          # git pull
-          # rm everything-powertoys.json -Force
-          # Invoke-WebRequest https://github.com/lin-ycv/EverythingPowerToys/raw/scoop/everything-powertoys.json -OutFile everything-powertoys.json
-          # (Get-Content everything-powertoys.json) | ForEach-Object {$_ -Replace '_VERSION_', $ver} | ForEach-Object {$_ -Replace '_URL_', $zip} | ForEach-Object {$_ -Replace '_CRC_', $ziphash} | ForEach-Object {$_ -Replace '_armURL_', $zipARM} | ForEach-Object {$_ -Replace '_armCRC_', $zipARMhash} | Set-Content everything-powertoys.json
-          # git add .
-          # git commit -m "everything-powertoys@$ver : update"
-          # git push -f
-          # gh repo set-default ScoopInstaller/Extras
-          # gh pr create --base master --title "everything-powertoys@$ver : update" --body "- [X] I have read the [Contributing Guide](https://github.com/ScoopInstaller/.github/blob/main/.github/CONTRIBUTING.md)."
+          Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $Latest.Version} | ForEach  {$_ -Replace '_X64_', $Latest.URL64} | ForEach  {$_ -Replace '_HASH64_', $Latest.Checksum64} | ForEach  {$_ -Replace '_ARM64_', $Latest.ARM64} | ForEach  {$_ -Replace '_HASHarm64_', $Latest.Checksuma64} | Set-Content $_ }
+          ..\wingetcreate submit -p "New version: EverythingPowerToys version $Latest.Version" -t ${{ secrets.EVERYTHINGPT }} .
