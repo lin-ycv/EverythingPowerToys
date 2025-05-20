@@ -36,7 +36,7 @@
   !insertmacro MUI_LANGUAGE "English"
 ;--------------------------------
 ;Version Information
-  VIProductVersion "${ver}.0"
+  VIProductVersion "${ver}"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${EPT}3 Setup"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "lin-ycv"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "lin-ycv"
@@ -52,7 +52,7 @@ Section "Installer"
 
   WriteRegStr HKCU "${SMWCUE}" "DisplayIcon" "$INSTDIR\uninstall.exe"
   WriteRegStr HKCU "${SMWCUE}" "DisplayName" "${EPT}3 (${platform})"
-  WriteRegStr HKCU "${SMWCUE}" "DisplayVersion" "${ver}.1"
+  WriteRegStr HKCU "${SMWCUE}" "DisplayVersion" "${ver}"
   WriteRegStr HKCU "${SMWCUE}" "InstallLocation" "$INSTDIR"
   WriteRegStr HKCU "${SMWCUE}" "Publisher" "Lin-ycv"
   WriteRegStr HKCU "${SMWCUE}" "UninstallString" "$INSTDIR\uninstall.exe"
