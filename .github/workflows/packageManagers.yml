@@ -41,10 +41,11 @@ jobs:
           cd ..\..\..
 
           # Winget
+          echo $Latest.Version $Latest.URL64e $Latest.Checksum64e $Latest.URLa64e $Latest.Checksuma64e
           rm -Path .\* -Recurse -Force
           git clone -b winget https://github.com/lin-ycv/EverythingPowerToys.git --depth 1
           Invoke-WebRequest https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
           cd .\EverythingPowerToys
           rm .git -Recurse -Force -Confirm:$false
-          Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $Latest.Version} | ForEach  {$_ -Replace '_URL_', $Latest.URL64} | ForEach  {$_ -Replace '_CRC_', $Latest.Checksum64} | ForEach  {$_ -Replace '_armURL_', $Latest.ARM64} | ForEach  {$_ -Replace '_armCRC_', $Latest.Checksuma64} | Set-Content $_ }
+          Get-ChildItem *.* -Recurse | ForEach { (Get-Content $_) | ForEach  {$_ -Replace '_VERSION_', $Latest.Version} | ForEach  {$_ -Replace '_URL_', $Latest.URL64e} | ForEach  {$_ -Replace '_CRC_', $Latest.Checksum64e} | ForEach  {$_ -Replace '_armURL_', $Latest.URLa64e} | ForEach  {$_ -Replace '_armCRC_', $Latest.Checksuma64e} | Set-Content $_ }
           ..\wingetcreate submit ".\\" -p "New version: EverythingPowerToys version $Latest.Version" -t ${{ secrets.EVERYTHINGPT }} .
