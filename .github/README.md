@@ -8,7 +8,7 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/downloads/lin-ycv/everythingpowertoys/latest/total?style=flat-square)](https://github.com/lin-ycv/EverythingPowerToys/releases/latest)<br>
 [![Chocolatey version](https://img.shields.io/chocolatey/v/everythingpowertoys?style=flat-square)](https://community.chocolatey.org/packages/everythingpowertoys)
 [![Scoop version](https://img.shields.io/scoop/v/everything-powertoys?bucket=extras&color=orange&style=flat-square)](https://scoop.sh/#/apps?q=everything-powertoys)
-[![Winget](https://img.shields.io/badge/dynamic/xml?label=winget&prefix=v&query=%2F%2Ftr%5B%40id%3D%27winget%27%5D%2Ftd%5B3%5D%2Fspan%2Fa&url=https%3A%2F%2Frepology.org%2Fproject%2Feverythingpowertoys%2Fversions&color=orange&style=flat-square)](https://github.com/microsoft/winget-pkgs/tree/master/manifests/l/lin-ycv/EverythingPowerToys)
+[![Winget](https://img.shields.io/winget/v/lin-ycv.EverythingPowerToys?style=flat-square)](https://github.com/microsoft/winget-pkgs/tree/master/manifests/l/lin-ycv/EverythingPowerToys)
 
 </div>
 
