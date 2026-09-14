@@ -40,4 +40,4 @@ For support or feedback, please utilize [GitHub Discussions](https://github.com/
 
 If you want to contribute to this project, visit the [developer page](https://github.com/lin-ycv/EverythingPowerToys/wiki/Developer) to get started.
 
-[![Stargazers over time](https://starchart.cc/lin-ycv/EverythingPowerToys.svg?variant=adaptive&axis=%23797979)](https://starchart.cc/lin-ycv/EverythingPowerToys)
+![Star History Chart](https://api.star-history.com/chart?repos=lin-ycv/everythingpowertoys&type=date&legend=top-left)
